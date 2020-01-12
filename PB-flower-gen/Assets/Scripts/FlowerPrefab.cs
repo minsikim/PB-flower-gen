@@ -35,23 +35,6 @@ public class FlowerPrefab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    for (int i = 0; i < Petals.transform.childCount; i++)
-        //    {
-        //        Animator anim = Petals.transform.GetChild(i).GetComponent<Animator>();
-        //        anim.SetBool("isOpen", !anim.GetBool("isOpen"));
-        //    }
-        //}
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    for (int i = 0; i < Petals.transform.childCount; i++)
-        //    {
-        //        Animator anim = Petals.transform.GetChild(i).GetComponent<Animator>();
-        //        anim.SetBool("isOpen", true);
-        //        timeState = true;
-        //    }
-        //}
         if (Input.GetKeyDown(KeyCode.D))
         {
             timeState = !timeState;

@@ -92,6 +92,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1428276751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128399198803985938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5cffe2c4e4e4549bdb45ff0a5c448d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathCreator: {fileID: 1201693605718158694}
 --- !u!1 &4583098648222379118
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +155,10 @@ MonoBehaviour:
   PetalAmount: 6
   PetalLayers: 4
   LayerDifference: 0.077
-  StemSpline: {fileID: 0}
+  StemSpline: {fileID: 1128399198803985938}
+  LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
+    type: 3}
+  LeafAmount: 5
 --- !u!1 &4583098648689924933
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,6 +221,36 @@ Transform:
   m_Father: {fileID: 4583098648689924932}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6583263127744290588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3521800034021829722}
+  m_Layer: 0
+  m_Name: Leaves
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3521800034021829722
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6583263127744290588}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8708829409333061537}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2771388206511912026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,6 +262,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Stem
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData._bezierPath.points.Array.data[2].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData.vertexPathMaxAngleError
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData.vertexPathMinVertexSpacing
+      value: 0.987
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData.showTransformTool
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6822400205948507131, guid: bc212670c39b84b4a810d55f6e5f7afe,
         type: 3}
@@ -274,9 +340,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc212670c39b84b4a810d55f6e5f7afe, type: 3}
+--- !u!1 &1128399198803985938 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3016589264878400072, guid: bc212670c39b84b4a810d55f6e5f7afe,
+    type: 3}
+  m_PrefabInstance: {fileID: 2771388206511912026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8708829409333061537 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6822400205948507131, guid: bc212670c39b84b4a810d55f6e5f7afe,
     type: 3}
   m_PrefabInstance: {fileID: 2771388206511912026}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1201693605718158694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+    type: 3}
+  m_PrefabInstance: {fileID: 2771388206511912026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128399198803985938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5ac92bc18f545cc84cd886ece82b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

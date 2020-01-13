@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -120,37 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1428276749 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1128399198803985938, guid: 572e8438a0ba60741ac6d605fad11c50,
-    type: 3}
-  m_PrefabInstance: {fileID: 4583098648056668315}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1428276751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428276749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e5cffe2c4e4e4549bdb45ff0a5c448d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathCreator: {fileID: 1428276752}
---- !u!114 &1428276752 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1201693605718158694, guid: 572e8438a0ba60741ac6d605fad11c50,
-    type: 3}
-  m_PrefabInstance: {fileID: 4583098648056668315}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428276749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e5ac92bc18f545cc84cd886ece82b4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1468110452
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,11 +303,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1201693605718158694, guid: 572e8438a0ba60741ac6d605fad11c50,
         type: 3}
-      propertyPath: editorData.vertexPathMaxAngleError
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201693605718158694, guid: 572e8438a0ba60741ac6d605fad11c50,
-        type: 3}
       propertyPath: editorData.tabIndex
       value: 0
       objectReference: {fileID: 0}
@@ -346,21 +310,6 @@ PrefabInstance:
         type: 3}
       propertyPath: editorData.vertexPathUpToDate
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201693605718158694, guid: 572e8438a0ba60741ac6d605fad11c50,
-        type: 3}
-      propertyPath: editorData.vertexPathMinVertexSpacing
-      value: 0.987
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201693605718158694, guid: 572e8438a0ba60741ac6d605fad11c50,
-        type: 3}
-      propertyPath: editorData._bezierPath.points.Array.data[2].x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201693605718158694, guid: 572e8438a0ba60741ac6d605fad11c50,
-        type: 3}
-      propertyPath: editorData.showTransformTool
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4583098648222379116, guid: 572e8438a0ba60741ac6d605fad11c50,
         type: 3}
@@ -416,11 +365,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583098648222379117, guid: 572e8438a0ba60741ac6d605fad11c50,
-        type: 3}
-      propertyPath: StemSpline
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4583098648222379118, guid: 572e8438a0ba60741ac6d605fad11c50,
         type: 3}

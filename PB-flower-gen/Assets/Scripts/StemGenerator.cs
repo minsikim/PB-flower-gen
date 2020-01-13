@@ -5,13 +5,14 @@ using PathCreation;
 
 public class StemGenerator : MonoBehaviour
 {
-    public PathCreator pathCreator;
+    public PathCreator pathCreator;
+
     void Start()
     {
-        foreach(Vector3 v in pathCreator.path.localPoints)
-        {
-            Debug.Log(v);
-        }
+        //foreach(Vector3 v in pathCreator.path.localPoints)
+        //{
+        //    Debug.Log(v);
+        //}
 
     }
 

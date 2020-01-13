@@ -141,7 +141,7 @@ MonoBehaviour:
     type: 3}
   PetalAmount: 6
   PetalLayers: 4
-  LayerDifference: 0.1
+  LayerDifference: 0.077
 --- !u!1 &4583098648689924933
 GameObject:
   m_ObjectHideFlags: 0

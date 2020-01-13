@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FlowerPrefab : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] public GameObject PetalPrefab;
 
     [Header("Flower Part")]
@@ -14,20 +13,22 @@ public class FlowerPrefab : MonoBehaviour
     [SerializeField] public float LayerDifference;
 
     private GameObject Petals;
+    private GameObject petalLayer;
     private bool timeState = false;
     void Start()
     {
         Petals = transform.GetChild(0).GetChild(0).gameObject;
         for (int i = 0; i < PetalLayers; ++i)
         {
-            GameObject petalLayer = Instantiate(new GameObject(), Petals.transform);
-            petalLayer.name = "PetalLayer" + i;
+            GameObject petalLayer = new GameObject("PetalLayer" + i);
+            petalLayer.transform.SetParent(Petals.transform);
+            petalLayer.transform.localPosition = new Vector3(0, 0, 0);
 
             for (int j = 0; j < PetalAmount; ++j)
             {
                 GameObject petal = Instantiate(PetalPrefab, petalLayer.transform);
                 petal.transform.Rotate(new Vector3(0, (360 / PetalAmount * j) + i * 30, 0));
-                petal.GetComponent<Animator>().SetFloat("Time", 0.0f + ((PetalLayers-i) * 0.05f) );
+                petal.GetComponent<Animator>().SetFloat("Time", 0.0f + ((PetalLayers-i) * LayerDifference) );
             }
         }
     }

@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class FlowerPrefab : MonoBehaviour
 {
-    [SerializeField] public GameObject PetalPrefab;
-
+   
     [Header("Flower Part")]
+    [SerializeField] public GameObject PetalPrefab;
     [SerializeField] public int PetalAmount;
     [SerializeField] public int PetalLayers;
     [Range(0.0f, 0.2f)]
     [SerializeField] public float LayerDifference;
+
+    [Header("Stem Part")]
+    [SerializeField] public GameObject StemSpline;
 
     private GameObject Petals;
     private GameObject petalLayer;

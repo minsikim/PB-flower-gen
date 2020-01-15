@@ -105,6 +105,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 1201693605718158694}
+  vertexCount: 8
+  radius: 0.1
+--- !u!23 &160071038
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128399198803985938}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: ab8bc2ad27470a448b9fdde70e125f4c, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &2140491819491945070
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128399198803985938}
+  m_Mesh: {fileID: 0}
 --- !u!1 &4583098648222379118
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +204,7 @@ MonoBehaviour:
   PetalLayers: 4
   LayerDifference: 0.077
   StemSpline: {fileID: 1128399198803985938}
+  RandomizeSpline: 0
   LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
     type: 3}
   LeafAmount: 5
@@ -282,6 +331,11 @@ PrefabInstance:
         type: 3}
       propertyPath: editorData.showTransformTool
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData.globalDisplaySettingsFoldout
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6822400205948507131, guid: bc212670c39b84b4a810d55f6e5f7afe,
         type: 3}

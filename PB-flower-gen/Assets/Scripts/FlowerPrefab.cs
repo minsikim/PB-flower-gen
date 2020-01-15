@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
 
+
 public class FlowerPrefab : MonoBehaviour
 {
    
@@ -102,7 +103,6 @@ public class FlowerPrefab : MonoBehaviour
             Vector3 tempRotation = stemPath.GetNormalAtDistance(1f / LeafAmount * i * 10);
             
             //Quaternion tempRotation = stemPath.GetRotationAtDistance(1f / LeafAmount * i * 10);
-            Debug.Log("Leaf" + i + " : " + tempRotation.x+ " " + tempRotation.y+" "+ tempRotation.z+"angle"+ Vector3.Angle(tempRotation, Vector3.right));
             leaf.transform.position = tempPosition;
             float normalAngle = Vector3.Angle(tempRotation, Vector3.right);
             normalAngle = tempRotation.y > 0 ? normalAngle : -normalAngle;

@@ -62,11 +62,6 @@ public class StemGenerator : MonoBehaviour
         //assign triangles to mesh
         StemMesh.SetTriangles(meshTriangles, 0);
 
-        for (int i = 0; i < vPath.NumPoints; i++)
-        {
-
-        }
-
             //Recalculate stuff
         StemMesh.RecalculateNormals();
         StemMesh.RecalculateBounds();
@@ -78,23 +73,13 @@ public class StemGenerator : MonoBehaviour
 
     private Vector3[] GenerateCircleVertices(Vector3 centerPoint )
     {
-
-        //Generate Vertices Array Count
         Vector3[] circleVertexList = new Vector3[vertexCount];
-
         Vector3 firstPoint = new Vector3(radius, 0, 0);
 
         for (int i = 0; i < vertexCount; i++)
         {
             Vector3 p = Quaternion.AngleAxis(360 / vertexCount * -i, Vector3.up) * firstPoint + centerPoint - transform.position;
             circleVertexList[i] = p;
-            //Generate a sphere on points for Test 
-            //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            //sphere.transform.position = p;
-            //sphere.transform.localScale = Vector3.one * .1f;
-            //float tempColor = .8f / vertexCount * (i + 1);
-            //sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1f, tempColor, tempColor));
-
         }
 
         return circleVertexList;

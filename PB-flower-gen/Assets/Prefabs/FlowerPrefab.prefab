@@ -30,8 +30,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 0.7, y: 0.3, z: 0.7}
   m_Children: []
-  m_Father: {fileID: 4583098648689924932}
-  m_RootOrder: 1
+  m_Father: {fileID: 4583098648799212271}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &26577235
 MeshFilter:
@@ -92,21 +92,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1428276751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128399198803985938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e5cffe2c4e4e4549bdb45ff0a5c448d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathCreator: {fileID: 1201693605718158694}
-  vertexCount: 8
-  radius: 0.1
 --- !u!23 &160071038
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -153,6 +138,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1128399198803985938}
   m_Mesh: {fileID: 0}
+--- !u!114 &1428276751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128399198803985938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5cffe2c4e4e4549bdb45ff0a5c448d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathCreator: {fileID: 1201693605718158694}
+  vertexCount: 8
+  radius: 0.1
 --- !u!1 &4583098648222379118
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,11 +198,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd43992a8a2978042a629f20a713720d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PetalPrefab: {fileID: 2447095657092369944, guid: ea5e8200f40463648b8c6031497a4b5c,
+  PetalPrefab: {fileID: 3193613396651603626, guid: 41f4cba8be4f445458e94f5275f7ce16,
     type: 3}
   PetalAmount: 6
   PetalLayers: 4
-  LayerDifference: 0.077
+  OpenLayerDifference: 0.1
+  CloseLayerDifference: 0.1
   StemSpline: {fileID: 1128399198803985938}
   RandomizeSpline: 0
   LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
@@ -236,7 +237,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4583098648799212271}
-  - {fileID: 26577232}
   m_Father: {fileID: 4583098648222379116}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -266,7 +266,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 26577232}
   m_Father: {fileID: 4583098648689924932}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -178,7 +178,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4583098648222379118}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.6472547, y: 0.00000011920929, z: -3.4228716}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4583098648689924932}
@@ -204,11 +204,12 @@ MonoBehaviour:
   PetalLayers: 4
   OpenLayerDifference: 0.1
   CloseLayerDifference: 0.1
+  BloomSpeed: 15
   StemSpline: {fileID: 1128399198803985938}
   RandomizeSpline: 0
   LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
     type: 3}
-  LeafAmount: 5
+  LeafAmount: 10
 --- !u!1 &4583098648689924933
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +321,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
         type: 3}
+      propertyPath: editorData._bezierPath.points.Array.data[2].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData._bezierPath.points.Array.data[3].y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
       propertyPath: editorData.vertexPathMaxAngleError
       value: 0.1
       objectReference: {fileID: 0}
@@ -338,6 +349,11 @@ PrefabInstance:
       propertyPath: editorData.globalDisplaySettingsFoldout
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3952109971128785212, guid: bc212670c39b84b4a810d55f6e5f7afe,
+        type: 3}
+      propertyPath: editorData.tabIndex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6822400205948507131, guid: bc212670c39b84b4a810d55f6e5f7afe,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -346,7 +362,7 @@ PrefabInstance:
     - target: {fileID: 6822400205948507131, guid: bc212670c39b84b4a810d55f6e5f7afe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6822400205948507131, guid: bc212670c39b84b4a810d55f6e5f7afe,
         type: 3}

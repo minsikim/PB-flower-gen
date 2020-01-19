@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnFlower : MonoBehaviour
 {
     [SerializeField] GameObject SpawnPrefab;
+    [SerializeField] GameObject FlowerCount;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +26,28 @@ public class SpawnFlower : MonoBehaviour
             {
                 Instantiate(SpawnPrefab);
                 SpawnPrefab.transform.position = hit.point;
+
+                int currentFlowerCount = Convert.ToInt32(FlowerCount.GetComponent<Text>().text);
+                FlowerCount.GetComponent<Text>().text = (currentFlowerCount + 1).ToString();
             }
+
+        }
+    }
+
+    public void SetGrowState()
+    {
+        GameObject[] Flowers = GameObject.FindGameObjectsWithTag("Flower");
+        foreach(GameObject f in Flowers)
+        {
+            f.GetComponent<FlowerPrefab>().ToggleGrowState();
+        }
+    }
+    public void SetBloomState()
+    {
+        GameObject[] Flowers = GameObject.FindGameObjectsWithTag("Flower");
+        foreach (GameObject f in Flowers)
+        {
+            f.GetComponent<FlowerPrefab>().ToggleBloomState();
         }
     }
 }

@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 4583098648222379117}
   m_Layer: 0
   m_Name: FlowerPrefab
-  m_TagString: Untagged
+  m_TagString: Flower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +178,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4583098648222379118}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.6472547, y: 0.00000011920929, z: -3.4228716}
+  m_LocalPosition: {x: 3.263514, y: 0.00000011920929, z: -1.8385963}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4583098648689924932}

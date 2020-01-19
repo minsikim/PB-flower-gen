@@ -51,9 +51,9 @@ public class FlowerPrefab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currPath = StemSpline.GetComponent<PathCreator>().path;
+        currPath = StemSpline.GetComponent<StemGenerator>().GetVPath();
 
-        if (Input.GetKeyDown(KeyCode.B)) timeState = !timeState;
+        if (Input.GetKeyDown(KeyCode.B)) ToggleBloomState();
         if (Input.GetKeyDown(KeyCode.G)) growState = !growState;
 
         BloomFlower();
@@ -61,13 +61,15 @@ public class FlowerPrefab : MonoBehaviour
 
         if (LeafAmount != lastLeafAmount) GenerateLeaves();
         
-        //Debug.Log(currPath.GetHashCode() + ", " + stemPath.GetHashCode());
-        //Debug.Log(currPath.GetHashCode() == stemPath.GetHashCode());
-        if (currPath.GetHashCode() != stemPath.GetHashCode()) {
-            UpdateLeaves();
-            UpdateFlowerAngle();
-        }
-        
+    }
+
+    public void ToggleBloomState()
+    {
+        timeState = !timeState;
+    }
+    public void ToggleGrowState()
+    {
+        growState = !growState;
     }
     private void BloomFlower()
     {
@@ -104,11 +106,21 @@ public class FlowerPrefab : MonoBehaviour
     {
         if(growState == true)
         {
+            //Grow Bezier Curve
             Vector3 currV = StemSpline.GetComponent<PathCreator>().bezierPath.GetPoint(3);
             StemSpline.GetComponent<PathCreator>().bezierPath.MovePoint(3, currV + Vector3.up * 5f / BloomSpeed * Time.deltaTime);
-            StemSpline.GetComponent<StemGenerator>().pathCreator.bezierPath.NotifyPathModified();
-            currPath = StemSpline.GetComponent<PathCreator>().path;
+            //Get current Vertex Path
             if (currPath.length > 10) growState = false;
+
+            //Generate Stem Mesh
+            StemSpline.GetComponent<StemGenerator>().GenerateStemMesh();
+
+            //Update path to current Path
+            stemPath = StemSpline.GetComponent<StemGenerator>().GetVPath();
+
+            //Update rest
+            UpdateLeaves();
+            UpdateFlowerAngle();
         }
     }
     private void GeneratePetals()
@@ -156,13 +168,8 @@ public class FlowerPrefab : MonoBehaviour
         lastLeafAmount = LeafAmount;
         stemPath = StemSpline.GetComponent<PathCreator>().path;
     }
-
     private void UpdateLeaves()
     {
-        //foreach (Transform child in Leaves.transform)
-        //{
-        //    GameObject.Destroy(child.gameObject);
-        //}
 
         for (int i = 0; i < LeafAmount; ++i)
         {
@@ -174,12 +181,9 @@ public class FlowerPrefab : MonoBehaviour
             leaf.transform.position = tempPosition;
             float normalAngle = Vector3.Angle(tempRotation, Vector3.right);
             normalAngle = tempRotation.y > 0 ? normalAngle : -normalAngle;
-            //float[] currAngle = new float[] { Random.Range(0, 360), normalAngle };
             leaf.transform.rotation.SetEulerAngles(0, 0, normalAngle - leaf.transform.localRotation.z);
-            //leaf.transform.Rotate(new Vector3(0, 0, normalAngle - leaf.transform.localRotation.z));
         }
         lastLeafAmount = LeafAmount;
-        stemPath = StemSpline.GetComponent<PathCreator>().path;
     }
 
     private void UpdateFlowerAngle()

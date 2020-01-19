@@ -22,20 +22,16 @@ public class StemGenerator : MonoBehaviour
         GenerateStemMesh();
     }
 
-    void Update()
+    public VertexPath GetVPath()
     {
-        GenerateStemMesh();
+        return new VertexPath(pathCreator.bezierPath, transform);
     }
-
-    void GetVPath()
+    public Mesh GenerateStemMesh()
     {
-        vPath = pathCreator.path;
-    }
-    Mesh GenerateStemMesh()
-    {
-        GetVPath();
+        vPath = GetVPath();
         StemMesh.Clear();
 
+        //Debug.Log("Generating Stem Mesh: " + vPath.GetHashCode());
         //Generate Vertex List
         List<Vector3> meshVertices = new List<Vector3>();
         //Generate Triangle List

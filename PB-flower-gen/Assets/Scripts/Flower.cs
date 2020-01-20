@@ -1,47 +1,138 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Flower : MonoBehaviour
 {
+    #region Information
+    // ---- 컨트롤러 클래스에서 수행 ----
+    // 1. 위치를 잡는다
+    // 2. 해당 위치에 Instantiate
+    #endregion
 
+    #region Basic Serializable Info
+    public enum PlantType { TypeA, TypeB, TypeC, TypeD };
+    public PlantType plantType;
+    #endregion
 
-    private float timeFromLastState = 0f;
-    // Start is called before the first frame update
+    #region Private Fields
+    //Initial Datas
+    private Time initialTime;
+    private Vector3 initialPosition;
+    
+    //Animation Process Trackers
+    private float initAnimationPosition = 0f;
+    private float growAnimationPosition = 0f;
+    private float bloomAnimationPosition = 0f;
+    private float fallAnimationPosition = 0f;
+    private float rebloomAnimationPosition = 0f;
+    #endregion
+
+    #region Life Cycles
     void Start()
     {
-        
-    }
+        InitializeFlowerData();
+        // 1. PlantType과 FlowerType에 따라서 전체 형태에 대한 데이터 저장(FlowerFormData)
 
-    // Update is called once per frame
-    void Update()
+    }
+    #endregion
+
+    #region Basic Functions
+    void InitializeFlowerData()
     {
-        //Control time from state;
-        timeFromLastState += Time.deltaTime;
-
-        //Control Actions
-        if (Input.GetKeyUp(KeyCode.I)) Init();
+        // Distribute Data to private variables
+        //    -> FlowerFormData 저장 필요 정보
+        //       MainStemSpline, BranchSpline의 갯수/위치/Y축각도(Semi-Random)
+        //       Spline들의 조정값(보통 한쪽+모든 핸들 고정, 마지막 포인트 상하 랜덤)
+        //       Leaves의 각 Leaf 갯수/위치/Y축각도(Semi-Random)
+        //       SproutSpline, SproutAnimationDurationValues 등 받아옴
     }
-
-    void Init()
-    {
-
-    }
-
-    void Grow()
+    void SaveInitialFlowerData()
     {
 
     }
-    void Bloom()
+    #endregion
+
+    #region Public Animation Functions
+    /// <summary> 처음 심었을때 새싹까지 Animation Controller의 OnStateUpdate에서 실행됨(약5초) </summary>
+    public void Init()
+    {
+        // 1. SproutSpline 값을 받아서 현재 시각에 따라 Mesh 만듦(Animation)
+        // 2. FlowerFormData에서 정해진 위치와 각도를 받아와 그에 따라 새싹이 남
+        //    -> 예시: SproutAnimationDurationValues = [ [ 0f, 0.5f ], [ 0.5f, 0.8f ], [ 0.7f, 1.0f ] ]
+        // 3. SproutParticleAnimation 실행
+        // 4. Finish Init -> Trigger Grow State
+    }
+    /// <summary> Grow 단계 이전에 처리할 것들 </summary>
+    public void OnGrowStart()
+    {
+        // 1. stemSpline 정의
+        // 2. FlowerBud Initialize
+    }
+    /// <summary> 새싹에서 봉우리까지의 성장 (약1시간) </summary>
+    public void Grow()
+    {
+        // Stem/Leaf/Flower의 성장을 각각 실행해야할듯
+        // GrowStem ->
+        // 1. SproutSpline에서 StemSpline으로의 점진적인 BezierCurve Lurp
+        // 2. StemSpline에서 Mesh 생성 (시작, 끝 두께 및 상단 끝처리 값 필요)
+        GrowStem();
+
+        // GrowLeaves ->
+        // 1. 처음난 새싹은 같이 자라면서 올라가고
+        // 2. 특정시점(예: Growth 15%마다 1개씩, Stem의 특정 t position에 생겨나고 자람)
+        GrowLeaves();
+
+        //GrowBud ->
+        // 1. Animation with Normalized Value;
+        // 2. FlowerBudAnimationDurationValue = []
+        GrowBud();
+    }
+
+    /// <summary> 성장이 끝나면 시작 봉우리에서 피는 것 까지 에니메이션, 끝나면 활성화 (Grow를 Rj내고 끝내면 약5초 / else 약15초?) </summary>
+    public void Bloom()
+    {
+        // Flower Petal, Pistils Normalize Value에 따라 열리거나 성장함
+    }
+
+    /// <summary> 활성화 상태에서 비활성화 상태 사이에 천천히 꽃이 지는 에니메이션 </summary>
+    public void Fall()
+    {
+        // Flower Petal, Pistils Normalize Value에 따라 닫히거나 쪼그라듬
+        // Flower Petal 점진적으로 하나씩 이탈하여 Collision과 Gravity 값을 가지며 떨어짐
+    }
+
+    /// <summary> 꽃이 진 상태에서 봉우리까지의 상태로 에니메이션 (꽃이 고유하게 가진 Fall Time) </summary>
+    public void Rebloom()
+    {
+        // KillFlower();
+        // GrowBud();
+    }
+    #endregion
+
+    #region Private Functions
+    /// <summary>
+    /// Private Function for Stem Growth, Used in public function "Grow"
+    /// </summary>
+    private void GrowStem()
     {
 
     }
-    void Fall()
+    /// <summary>
+    /// Private Function for Leaf Growth, Used in public function "Grow"
+    /// </summary>
+    private void GrowLeaves()
     {
 
     }
-    void Rebloom()
+    /// <summary>
+    /// Private Function for Flower Growth, Used in public function <see cref="Grow()"/>
+    /// </summary>
+    private void GrowBud()
     {
 
     }
+    #endregion
 }

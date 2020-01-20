@@ -102,7 +102,7 @@ public class FlowerPrefab : MonoBehaviour
             }
         }
     }
-    private void GrowFlower()
+    public void GrowFlower()
     {
         if(growState == true)
         {

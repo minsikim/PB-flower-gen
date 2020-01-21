@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2691763bd03143448a71f4005bdd24f3, type: 3}
+  m_Name: Flower_Tulip
+  m_EditorClassIdentifier: 
+  flowerName: Tulip
+  description: Tulip
+  plantFormType: 0
+  flowerFormType: 0
+  PetalPrefab: {fileID: 2447095657092369944, guid: ea5e8200f40463648b8c6031497a4b5c,
+    type: 3}
+  PistilPrefab: {fileID: 1172504549165619814, guid: a8d3ea9c509b00c4bb5e2fff1cc1022e,
+    type: 3}
+  LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
+    type: 3}
+  SproutPath:
+    pathMeshProperties:
+      Thickness:
+        min: 0
+        max: 0
+      ThickerAtStart: 0
+      capType: 0
+    pathPoints:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0.2, z: 0}
+    - {x: 0.1, y: 0.8, z: 0}
+    - {x: 0.2, y: 1, z: 0}
+    randomPoints:
+    - randomPoint: 0
+      randomAxis: 0
+      randomRange:
+        min: 0
+        max: 0
+  StemPath:
+    pathMeshProperties:
+      Thickness:
+        min: 0
+        max: 0
+      ThickerAtStart: 0
+      capType: 0
+    pathPoints: []
+    randomPoints: []
+  BranchPath:
+    pathMeshProperties:
+      Thickness:
+        min: 0
+        max: 0
+      ThickerAtStart: 0
+      capType: 0
+    pathPoints: []
+    randomPoints: []
+  SproutAnimationDuration: 0
+  GrowAniamtionDuration: 0
+  BloomAnimationDuration: 0
+  FallAnimationDuration: 0
+  RebloomAnimationDuration: 0
+  AnimationRange: {x: 0.5, y: 1}

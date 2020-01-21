@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PathCreation;
 
 [Serializable]
 public class Flower : MonoBehaviour
@@ -13,15 +14,38 @@ public class Flower : MonoBehaviour
     #endregion
 
     #region Basic Serializable Info
-    public enum PlantType { TypeA, TypeB, TypeC, TypeD };
-    public PlantType plantType;
+    [LabelOverride("Flower Form Data")]
+    [SerializeField] FlowerFormData data;
     #endregion
 
     #region Private Fields
     //Initial Datas
-    private Time initialTime;
-    private Vector3 initialPosition;
-    
+    private DateTime initialTime;
+
+    //Flower Data
+    private string flowerName;
+    private string description;
+
+    private PlantFormType plantFormType;
+    private FlowerFormType flowerFormType;
+
+    private GameObject PetalPrefab;
+    private GameObject PistilPrefab;
+    private GameObject LeafPrefab;
+
+    //Randomize Data
+    private RandomPath SproutPath;
+    private RandomPath StemPath;
+    private RandomPath BranchPath;
+
+    //Stem Data
+    private BezierPath mainStemBPath;
+    private BezierPath[] branchBPaths;
+
+    //Children Data
+    //private Game
+    private GameObject Leaves;
+
     //Animation Process Trackers
     private float initAnimationPosition = 0f;
     private float growAnimationPosition = 0f;
@@ -33,22 +57,48 @@ public class Flower : MonoBehaviour
     #region Life Cycles
     void Start()
     {
+        // 1. Distribute Data to private variables
         InitializeFlowerData();
-        // 1. PlantType과 FlowerType에 따라서 전체 형태에 대한 데이터 저장(FlowerFormData)
 
+        // 2. PlantType과 FlowerType에 따라서 전체 형태에 대한 데이터 저장(FlowerFormData)
+        SaveInitialFlowerData();
     }
     #endregion
 
     #region Basic Functions
     void InitializeFlowerData()
     {
-        // Distribute Data to private variables
-        //    -> FlowerFormData 저장 필요 정보
-        //       MainStemSpline, BranchSpline의 갯수/위치/Y축각도(Semi-Random)
-        //       Spline들의 조정값(보통 한쪽+모든 핸들 고정, 마지막 포인트 상하 랜덤)
-        //       Leaves의 각 Leaf 갯수/위치/Y축각도(Semi-Random)
-        //       SproutSpline, SproutAnimationDurationValues 등 받아옴
+        initialTime = DateTime.Now;
+
+        flowerName = data.flowerName;
+        description = data.description;
+
+        plantFormType = data.plantFormType;
+        flowerFormType = data.flowerFormType;
+
+        PetalPrefab = data.PetalPrefab;
+        PistilPrefab = data.PistilPrefab;
+        LeafPrefab = data.LeafPrefab;
+
+        SproutPath = data.SproutPath;
+        StemPath = data.StemPath;
+        BranchPath = data.BranchPath;
+
+        
+
+    //    -> FlowerFormData 저장 필요 정보
+    //       MainStemSpline, BranchSpline의 갯수/위치/Y축각도(Semi-Random)
+    //       Spline들의 조정값(보통 한쪽+모든 핸들 고정, 마지막 포인트 상하 랜덤)
+    //       Leaves의 각 Leaf 갯수/위치/Y축각도(Semi-Random)
+    //       SproutSpline, SproutAnimationDurationValues 등 받아옴
+}
+    void UpdateFlowerData()
+    {
+        
     }
+    /// <summary>
+    /// Save Flower Data to Save Data
+    /// </summary>
     void SaveInitialFlowerData()
     {
 
@@ -57,10 +107,10 @@ public class Flower : MonoBehaviour
 
     #region Public Animation Functions
     /// <summary> 처음 심었을때 새싹까지 Animation Controller의 OnStateUpdate에서 실행됨(약5초) </summary>
-    public void Init()
+    public void Sprout()
     {
         // 1. SproutSpline 값을 받아서 현재 시각에 따라 Mesh 만듦(Animation)
-        // 2. FlowerFormData에서 정해진 위치와 각도를 받아와 그에 따라 새싹이 남
+        // 2. FlowerData에서 정해진 위치와 각도를 받아와 그에 따라 새싹이 남
         //    -> 예시: SproutAnimationDurationValues = [ [ 0f, 0.5f ], [ 0.5f, 0.8f ], [ 0.7f, 1.0f ] ]
         // 3. SproutParticleAnimation 실행
         // 4. Finish Init -> Trigger Grow State
@@ -107,21 +157,22 @@ public class Flower : MonoBehaviour
     /// <summary> 꽃이 진 상태에서 봉우리까지의 상태로 에니메이션 (꽃이 고유하게 가진 Fall Time) </summary>
     public void Rebloom()
     {
-        // KillFlower();
-        // GrowBud();
+        // 현재 상태에서 
+        KillFlower();
+        GrowBud();
     }
     #endregion
 
     #region Private Functions
     /// <summary>
-    /// Private Function for Stem Growth, Used in public function "Grow"
+    /// Private Function for Stem Growth, Used in public function <see cref="Grow()"/>
     /// </summary>
     private void GrowStem()
     {
 
     }
     /// <summary>
-    /// Private Function for Leaf Growth, Used in public function "Grow"
+    /// Private Function for Leaf Growth, Used in public function <see cref="Grow()"/>
     /// </summary>
     private void GrowLeaves()
     {
@@ -131,6 +182,13 @@ public class Flower : MonoBehaviour
     /// Private Function for Flower Growth, Used in public function <see cref="Grow()"/>
     /// </summary>
     private void GrowBud()
+    {
+
+    }
+    /// <summary>
+    /// Private Function for Dissolve Flower, Used in public function <see cref="Rebloom()"/>
+    /// </summary>
+    private void KillFlower()
     {
 
     }

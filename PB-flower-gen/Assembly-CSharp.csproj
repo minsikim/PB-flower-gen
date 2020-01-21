@@ -74,7 +74,9 @@
     <Compile Include="Assets\PathCreator\Examples\Scripts\PathSceneTool.cs" />
     <Compile Include="Assets\PathCreator\Examples\Scripts\PathSpawner.cs" />
     <Compile Include="Assets\PathCreator\Examples\Scripts\RoadMeshCreator.cs" />
+    <Compile Include="Assets\Scripts\Enumerations.cs" />
     <Compile Include="Assets\Scripts\Flower.cs" />
+    <Compile Include="Assets\Scripts\FlowerFormData.cs" />
     <Compile Include="Assets\Scripts\FlowerPrefab.cs" />
     <Compile Include="Assets\Scripts\LeafController.cs" />
     <Compile Include="Assets\Scripts\MeshGenerator.cs" />
@@ -82,6 +84,8 @@
     <Compile Include="Assets\Scripts\StateBehaviour_Growing.cs" />
     <Compile Include="Assets\Scripts\StemGenerator.cs" />
     <Compile Include="Assets\Scripts\UIController.cs" />
+    <Compile Include="Assets\Scripts\Utility\LabelOverride.cs" />
+    <Compile Include="Assets\Scripts\Utility\MinMaxAttribute.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

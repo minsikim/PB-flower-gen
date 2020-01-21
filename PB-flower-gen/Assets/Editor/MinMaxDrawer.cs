@@ -51,7 +51,7 @@ public class MinMaxDrawer : PropertyDrawer
                 position.y += EditorGUIUtility.singleLineHeight;
 
                 Vector4 val = new Vector4(minLimit, minValue, maxValue, maxLimit); // shove the values and limits into a vector4 and draw them all at once
-                val = EditorGUI.Vector4Field(position, "MinLimit/MinVal/MaxVal/MaxLimit", val);
+                val = EditorGUI.Vector4Field(position, "MinMax", val);
 
                 GUI.enabled = false; // the range part is always read only
                 position.y += EditorGUIUtility.singleLineHeight;

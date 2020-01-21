@@ -63,4 +63,6 @@ MonoBehaviour:
   BloomAnimationDuration: 0
   FallAnimationDuration: 0
   RebloomAnimationDuration: 0
-  AnimationRange: {x: 0.5, y: 1}
+  LeafCountRange: {x: 0, y: 20}
+  LeafPositionRange: {x: 0, y: 1}
+  LeafPositionRandomValue: {x: -0.4163363, y: 0.424927}

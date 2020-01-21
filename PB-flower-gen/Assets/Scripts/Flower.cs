@@ -38,11 +38,25 @@ public class Flower : MonoBehaviour
     private RandomPath StemPath;
     private RandomPath BranchPath;
 
+    //Distributed Path Data
+    private Vector3[] sproutBPath;
+    private Vector3[] stemBPath;
+    private Vector3[] branchBPath;
+
     //Stem Data
     private BezierPath mainStemBPath;
     private BezierPath[] branchBPaths;
 
+    //Leaf Position Data
+    private Vector2Int LeafCountRange;
+    private Vector2 LeafPositionRange;
+    private Vector2 LeafPositionRandomValue;
+
+    //Leaf Positions
+    private List<Vector3> LeafPositionList;
+
     //Children Data
+
     //private Game
     private GameObject Leaves;
 
@@ -68,6 +82,12 @@ public class Flower : MonoBehaviour
     #region Basic Functions
     void InitializeFlowerData()
     {
+        //    -> FlowerFormData 저장 필요 정보
+        //       MainStemSpline, BranchSpline의 갯수/위치/Y축각도(Semi-Random)
+        //       Spline들의 조정값(보통 한쪽+모든 핸들 고정, 마지막 포인트 상하 랜덤)
+        //       Leaves의 각 Leaf 갯수/위치/Y축각도(Semi-Random)
+        //       SproutSpline, SproutAnimationDurationValues 등 받아옴
+
         initialTime = DateTime.Now;
 
         flowerName = data.flowerName;
@@ -84,14 +104,18 @@ public class Flower : MonoBehaviour
         StemPath = data.StemPath;
         BranchPath = data.BranchPath;
 
-        
+        sproutBPath = DistributePath(SproutPath);
+        stemBPath = DistributePath(SproutPath);
+        branchBPath = DistributePath(SproutPath);
 
-    //    -> FlowerFormData 저장 필요 정보
-    //       MainStemSpline, BranchSpline의 갯수/위치/Y축각도(Semi-Random)
-    //       Spline들의 조정값(보통 한쪽+모든 핸들 고정, 마지막 포인트 상하 랜덤)
-    //       Leaves의 각 Leaf 갯수/위치/Y축각도(Semi-Random)
-    //       SproutSpline, SproutAnimationDurationValues 등 받아옴
-}
+        LeafCountRange = data.LeafCountRange;
+        LeafPositionRange = data.LeafPositionRange;
+        LeafPositionRandomValue = data.LeafPositionRandomValue;
+
+        LeafPositionList = DistributeLeafPositions(LeafCountRange, LeafPositionRange, LeafPositionRandomValue);
+
+
+    }
     void UpdateFlowerData()
     {
         
@@ -191,6 +215,28 @@ public class Flower : MonoBehaviour
     private void KillFlower()
     {
 
+    }
+    /// <summary>
+    /// Used for Fixing Random Values when a FlowerPrefab is Instantiated
+    /// </summary>
+    /// <param name="RandomizablePathData"></param>
+    /// <returns></returns>
+    private Vector3[] DistributePath(RandomPath RandomizablePathData)
+    {
+        Vector3[] tempPointList = RandomizablePathData.pathPoints;
+        foreach(RandomPoint rp in RandomizablePathData.randomPoints)
+        {
+            tempPointList[rp.randomPoint][(int)rp.randomAxis] = 
+                UnityEngine.Random.Range(rp.randomRange.min, rp.randomRange.max);
+        }
+        return tempPointList;
+    }
+    private List<Vector3> DistributeLeafPositions( Vector2Int countRange, Vector2 positionRange, Vector2 positionRandomValue)
+    {
+        List<Vector3> positions = new List<Vector3>();
+
+
+        return positions;
     }
     #endregion
 }

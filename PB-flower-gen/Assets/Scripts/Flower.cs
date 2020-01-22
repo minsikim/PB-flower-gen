@@ -81,6 +81,10 @@ public class Flower : MonoBehaviour
     private float bloomAnimationPosition = 0f;
     private float fallAnimationPosition = 0f;
     private float rebloomAnimationPosition = 0f;
+
+    //Animator
+    private Animator animator;
+
     #endregion
 
     #region Animation Delegates
@@ -104,7 +108,9 @@ public class Flower : MonoBehaviour
     #region Life Cycles
     private void Awake()
     {
-        //TODO
+        animator = GetComponent<Animator>();
+
+        //TODO 로딩이랑 처음 만드는 거랑 구분
         if (true)
         {
             InitializeFlowerData();
@@ -338,7 +344,10 @@ public class Flower : MonoBehaviour
     public void GrowC(float progress) { }
     public void GrowD(float progress) { }           
     public void GrowE(float progress) { }
-
+    public void FastGrow()
+    {
+        //TODO 로얄젤리 썼을때 빨리 자라는거 구현
+    }
     /// <summary> Grow 단계 이전에 처리할 것들 </summary>
     public void OnGrowStart()
     {

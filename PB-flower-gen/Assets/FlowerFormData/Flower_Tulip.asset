@@ -58,11 +58,11 @@ MonoBehaviour:
       capType: 0
     pathPoints: []
     randomPoints: []
-  SproutAnimationDuration: 0
-  GrowAniamtionDuration: 0
-  BloomAnimationDuration: 0
-  FallAnimationDuration: 0
-  RebloomAnimationDuration: 0
+  SproutAnimationDuration: 10
+  GrowAniamtionDuration: 60
+  BloomAnimationDuration: 30
+  FallAnimationDuration: 60
+  RebloomAnimationDuration: 30
   LeafCountRange: {x: 0, y: 20}
   LeafPositionRange: {x: 0, y: 1}
   LeafPositionRandomValue: {x: -0.4163363, y: 0.424927}

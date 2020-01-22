@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 4583098648222379116}
   - component: {fileID: 4583098648222379117}
   m_Layer: 0
-  m_Name: FlowerPrefab
+  m_Name: FlowerPrefab_old
   m_TagString: Flower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

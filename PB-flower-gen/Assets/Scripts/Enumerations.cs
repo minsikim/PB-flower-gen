@@ -15,3 +15,12 @@ public enum FlowerFormType
     OnePetalFlower,
     Special
 }
+
+public enum FlowerAnimationStates
+{
+    Sprout,
+    Grow,
+    Bloom,
+    Fall,
+    Rebloom
+}

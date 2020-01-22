@@ -15,11 +15,12 @@ public class StateBehaviour_Rebloom : StateMachineBehaviour
         {
             currentFlower.SwitchToNextState();
             FlowerAnimationStates currState = animator.GetComponent<Flower>().GetCurrentState();
-            animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState.Next()));
+            animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
         }
         else
         {
             currentFlower.Rebloom(progression);
+            animator.SetFloat("Progression", progression);
         }
 
     }

@@ -10,6 +10,7 @@ public class StateBehaviour_StateCheck : StateMachineBehaviour
     {
         FlowerAnimationStates currState = animator.GetComponent<Flower>().GetCurrentState();
         animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
+        Debug.Log(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
     }
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

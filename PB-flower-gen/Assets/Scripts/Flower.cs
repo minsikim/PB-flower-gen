@@ -67,6 +67,7 @@ public class Flower : MonoBehaviour
 
     //Animation Durations
     List<float> durationList;
+    private float durantionCycle;
 
     private float SproutAnimationDuration;
     private float GrowAniamtionDuration;
@@ -203,9 +204,20 @@ public class Flower : MonoBehaviour
         FallAnimationDuration       = data.FallAnimationDuration;
         RebloomAnimationDuration    = data.RebloomAnimationDuration;
 
+        durationList = new List<float>()
+        {
+            SproutAnimationDuration,
+            GrowAniamtionDuration,
+            BloomAnimationDuration,
+            FallAnimationDuration,
+            RebloomAnimationDuration
+        };
+
+        durantionCycle = BloomAnimationDuration + FallAnimationDuration + RebloomAnimationDuration;
+
         SaveFlowerData();
 
-        currentAnimationState = FlowerAnimationStates.Sprout;
+        SetAnimationState(FlowerAnimationStates.Sprout);
     }
 
     void UpdateFlowerData()
@@ -225,7 +237,7 @@ public class Flower : MonoBehaviour
     /// </summary>
     void loadFlowerData()
     {
-
+        //현재 시각과 대비해서 현재 스테잇을 정하는 것이 가장 중요
     }
     #endregion
 
@@ -234,15 +246,20 @@ public class Flower : MonoBehaviour
     #region Utility Functions for Animation
 
     /// <summary>
-    /// Calculates current the Progression of current State
+    /// Calculates current Progression of current State
     /// </summary>
     public FlowerAnimationStates GetCurrentState()
     {
         return currentAnimationState;
     }
+    public void SetAnimationState(FlowerAnimationStates state)
+    {
+        currentAnimationState = state;
+        LastStateChangedTime = DateTime.Now;
+    }
     public float GetProgression()
     {
-        float currentStateProgressionSeconds = (float)(LastStateChangedTime - DateTime.Now).TotalSeconds;
+        float currentStateProgressionSeconds = (float)(DateTime.Now - LastStateChangedTime).TotalSeconds;
         float currentStateAnimationDuration = durationList[(int)currentAnimationState];
         float progression = currentStateProgressionSeconds / currentStateAnimationDuration;
 
@@ -261,13 +278,7 @@ public class Flower : MonoBehaviour
         {
             currentAnimationState = FlowerAnimationStates.Bloom;
         }
-    }
-    /// <summary> Grow 단계 이전에 처리할 것들 </summary>
-    public void OnGrowStart()
-    {
-        currentAnimationState = FlowerAnimationStates.Grow;
-        // 1. stemSpline 정의
-        // 2. FlowerBud Initialize
+        LastStateChangedTime = DateTime.Now;
     }
 
     #endregion
@@ -328,6 +339,14 @@ public class Flower : MonoBehaviour
     public void GrowD(float progress) { }           
     public void GrowE(float progress) { }
 
+    /// <summary> Grow 단계 이전에 처리할 것들 </summary>
+    public void OnGrowStart()
+    {
+        currentAnimationState = FlowerAnimationStates.Grow;
+        // 1. stemSpline 정의
+        // 2. FlowerBud Initialize
+    }
+
     #endregion
 
     #region Bloom Animations by Type
@@ -362,8 +381,8 @@ public class Flower : MonoBehaviour
     public void RebloomA(float progress)
     {
         // 현재 상태에서 
-        KillFlower();
-        GrowBud();
+        KillFlower(progress);
+        GrowBud(progress);
     }
     public void RebloomB(float progress) { }
     public void RebloomC(float progress) { }

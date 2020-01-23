@@ -14,18 +14,39 @@ public class FlowerFormData : ScriptableObject
     public PlantFormType plantFormType;
     public FlowerFormType flowerFormType;
 
-    [Header("Mandatory Prefabs")]
-    [Space(20)]
+    [Header("Flower Data")]
     public GameObject PetalPrefab;
     public GameObject PistilPrefab;
-    public GameObject LeafPrefab;
+    [DrawIf("flowerFormType", FlowerFormType.BudsArePetals, ComparisonType.NotEqual)]
+    public GameObject BudPrefab;
+    [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
+    public int FlowerToPlantCount = 3;
 
     [Header("Path Data")]
     [Space(20)]
     public RandomPath SproutPath;
     public RandomPath StemPath;
-    [Tooltip("Mandatory for PlantTypes that have Branches")]
+    [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
+    public RandomPath StemBranchPath;
+    [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
     public RandomPath BranchPath;
+    [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
+    public RandomPath TreePath;
+
+    [Header("Materials")]
+    public Color TreeColor = Color.green;
+    public Color BranchColor = Color.green;
+    public Color StemColor = Color.green;
+    public Color StemBranchColor = Color.green;
+    public Color PistilColor = Color.yellow;
+    public bool PetalColorRandom = false;
+    [DrawIf("PetalColorRandom", true, ComparisonType.NotEqual)]
+    public Color PetalColor = Color.red;
+    [DrawIf("PetalColorRandom", true, ComparisonType.Equals)]
+    public Color PetalColorRange1;
+    [DrawIf("PetalColorRandom", true, ComparisonType.Equals)]
+    public Color PetalColorRange2;
+
 
     [Header("Animation Duration")]
     [Space(20)]
@@ -43,11 +64,14 @@ public class FlowerFormData : ScriptableObject
 
     [Header("Leaf Position Data")]
     [Space(20)]
+    public GameObject LeafPrefab;
     public Vector2Int LeafCountRange;
+    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
     [MinMax(0, 1, ShowEditRange = true)]
     public Vector2 LeafPositionRange = new Vector2(0.2f, 0.9f);
-    [Tooltip("Leaf Position Random Value: H")]
-    [MinMax(-1, 1, ShowEditRange = true)]
+    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual, order = 0)]
+    [Tooltip("Leaf Position Random Value: H", order = 1)]
+    [MinMax(-1, 1, ShowEditRange = true, order = 2)]
     public Vector2 LeafPositionRandomValue = new Vector2(-.25f, 0.25f);
 
 }

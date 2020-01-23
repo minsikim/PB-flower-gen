@@ -5,7 +5,7 @@ using UnityEngine;
 using PathCreation;
 
 [Serializable]
-public class Flower : MonoBehaviour
+public class Plant : MonoBehaviour
 {
     #region Information
     // ---- 컨트롤러 클래스에서 수행 ----
@@ -23,7 +23,7 @@ public class Flower : MonoBehaviour
     private DateTime initialTime;
 
     //Flower Data
-    private string flowerName;
+    private string plantName;
     private string description;
 
     private PlantFormType plantFormType;
@@ -57,9 +57,13 @@ public class Flower : MonoBehaviour
     private List<float> LeafRotationList;
 
     //Children Data
-
-    //private Game
+    private GameObject Tree;
+    private GameObject Branch;
+    private GameObject Stem;
+    private GameObject StemBranches;
     private GameObject Leaves;
+    private GameObject Flower;
+    private GameObject Flowers;
 
     //Animation State
     private FlowerAnimationStates currentAnimationState;
@@ -130,56 +134,13 @@ public class Flower : MonoBehaviour
     #endregion
 
     #region Basic Functions
-
-    private void AddAnimationMethodsToList()
-    {
-        SproutMethods.Add(SproutA);
-        SproutMethods.Add(SproutB);
-        SproutMethods.Add(SproutC);
-        SproutMethods.Add(SproutD);
-        SproutMethods.Add(SproutE);
-
-        GrowMethods.Add(GrowA);
-        GrowMethods.Add(GrowB);
-        GrowMethods.Add(GrowC);
-        GrowMethods.Add(GrowD);
-        GrowMethods.Add(GrowE);
-
-        BloomMethods.Add(BloomA);
-        BloomMethods.Add(BloomB);
-        BloomMethods.Add(BloomC);
-        BloomMethods.Add(BloomD);
-        BloomMethods.Add(BloomE);
-
-        FallMethods.Add(FallA);
-        FallMethods.Add(FallB);
-        FallMethods.Add(FallC);
-        FallMethods.Add(FallD);
-        FallMethods.Add(FallE);
-
-        RebloomMethods.Add(RebloomA);
-        RebloomMethods.Add(RebloomB);
-        RebloomMethods.Add(RebloomC);
-        RebloomMethods.Add(RebloomD);
-        RebloomMethods.Add(RebloomE);
-    }
-
-    private void DistributeAnimationMethodsByType()
-    {
-        Sprout  =   SproutMethods[(int)plantFormType];
-        Grow    =   GrowMethods[(int)plantFormType];
-        Bloom   =   BloomMethods[(int)plantFormType];
-        Fall    =   FallMethods[(int)plantFormType];
-        Rebloom =   RebloomMethods[(int)plantFormType];
-    }
-
     void InitializeFlowerData()
     {
         // FlowerFormData의 DATA를 모두 적절한 방식으로 배당
 
         initialTime = DateTime.Now;
 
-        flowerName  = data.flowerName;
+        plantName  = data.flowerName;
         description = data.description;
 
         plantFormType   = data.plantFormType;
@@ -221,9 +182,43 @@ public class Flower : MonoBehaviour
 
         durantionCycle = BloomAnimationDuration + FallAnimationDuration + RebloomAnimationDuration;
 
+        DistributeChildrenByType(plantFormType);
+
         SaveFlowerData();
 
         SetAnimationState(FlowerAnimationStates.Sprout);
+    }
+
+    void DistributeChildrenByType(PlantFormType type)
+    {
+        //TODO 차일드 배분
+        switch (type)
+        {
+            case PlantFormType.A:
+                Stem = InitWithParent("Stem", transform);
+                Leaves = InitWithParent("Leaves", Stem.transform);
+                Flower = InitWithParent("Flower", Stem.transform);
+                break;
+            case PlantFormType.B:
+                Stem = InitWithParent("Stem", transform);
+                Leaves = InitWithParent("Leaves", Stem.transform);
+                Flower = InitWithParent("Flower", Stem.transform);
+                break;
+            case PlantFormType.C:
+                Stem = InitWithParent("Stem", transform);
+                StemBranches = InitWithParent("StemBranches", Stem.transform);
+                Flower = InitWithParent("Flower", Stem.transform);
+                break;
+            case PlantFormType.D:
+
+                break;
+            case PlantFormType.E:
+
+                break;
+            default:
+                Console.WriteLine("PlantFormType is Broken");
+                break;
+        }
     }
 
     void UpdateFlowerData()
@@ -245,6 +240,48 @@ public class Flower : MonoBehaviour
     {
         //현재 시각과 대비해서 현재 스테잇을 정하는 것이 가장 중요
     }
+    private void AddAnimationMethodsToList()
+    {
+        SproutMethods.Add(SproutA);
+        SproutMethods.Add(SproutB);
+        SproutMethods.Add(SproutC);
+        SproutMethods.Add(SproutD);
+        SproutMethods.Add(SproutE);
+
+        GrowMethods.Add(GrowA);
+        GrowMethods.Add(GrowB);
+        GrowMethods.Add(GrowC);
+        GrowMethods.Add(GrowD);
+        GrowMethods.Add(GrowE);
+
+        BloomMethods.Add(BloomA);
+        BloomMethods.Add(BloomB);
+        BloomMethods.Add(BloomC);
+        BloomMethods.Add(BloomD);
+        BloomMethods.Add(BloomE);
+
+        FallMethods.Add(FallA);
+        FallMethods.Add(FallB);
+        FallMethods.Add(FallC);
+        FallMethods.Add(FallD);
+        FallMethods.Add(FallE);
+
+        RebloomMethods.Add(RebloomA);
+        RebloomMethods.Add(RebloomB);
+        RebloomMethods.Add(RebloomC);
+        RebloomMethods.Add(RebloomD);
+        RebloomMethods.Add(RebloomE);
+    }
+
+    private void DistributeAnimationMethodsByType()
+    {
+        Sprout = SproutMethods[(int)plantFormType];
+        Grow = GrowMethods[(int)plantFormType];
+        Bloom = BloomMethods[(int)plantFormType];
+        Fall = FallMethods[(int)plantFormType];
+        Rebloom = RebloomMethods[(int)plantFormType];
+    }
+
     #endregion
 
     #region Public Animation Functions
@@ -299,6 +336,9 @@ public class Flower : MonoBehaviour
         //    -> 예시: SproutAnimationDurationValues = [ [ 0f, 0.5f ], [ 0.5f, 0.8f ], [ 0.7f, 1.0f ] ]
         // 3. SproutParticleAnimation 실행
         // 4. Finish Init -> Trigger Grow State
+
+        //Stem.GetComponent<MeshGenerator>();
+        
     }
     public void SproutB(float progress)
     {
@@ -403,6 +443,14 @@ public class Flower : MonoBehaviour
     #endregion
 
     #region Private Functions
+
+    private GameObject InitWithParent(string name, Transform parent)
+    {
+        GameObject o = new GameObject(name);
+        o.transform.SetParent(parent);
+        return o;
+    }
+
     /// <summary>
     /// Private Function for Stem Growth, Used in public function <see cref="Grow()"/>
     /// </summary>

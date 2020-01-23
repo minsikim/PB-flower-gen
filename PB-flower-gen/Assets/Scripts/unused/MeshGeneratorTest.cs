@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 //[RequireComponent(typeof(MeshRenderer))]
-public class MeshGenerator : MonoBehaviour
+public class MeshGeneratorTest : MonoBehaviour
 {
     Mesh mesh;
 

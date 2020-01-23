@@ -5,16 +5,16 @@ public class StateBehaviour_Grow : StateMachineBehaviour
 {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<Flower>().OnGrowStart();
+        animator.GetComponent<Plant>().OnGrowStart();
     }
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Flower currentFlower = animator.GetComponent<Flower>();
+        Plant currentFlower = animator.GetComponent<Plant>();
         float progression = currentFlower.GetProgression();
         if (progression >= 1 || progression < 0)
         {
             currentFlower.SwitchToNextState();
-            FlowerAnimationStates currState = animator.GetComponent<Flower>().GetCurrentState();
+            FlowerAnimationStates currState = animator.GetComponent<Plant>().GetCurrentState();
             animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
             Debug.Log("Over : " + progression);
         }

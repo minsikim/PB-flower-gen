@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1172,7 +1172,7 @@ PrefabInstance:
     - target: {fileID: 5835418253295533290, guid: 149316172b42e2e4090d35c6643d79e0,
         type: 3}
       propertyPath: m_Name
-      value: Flower
+      value: Plant
       objectReference: {fileID: 0}
     - target: {fileID: 5835418253295533292, guid: 149316172b42e2e4090d35c6643d79e0,
         type: 3}

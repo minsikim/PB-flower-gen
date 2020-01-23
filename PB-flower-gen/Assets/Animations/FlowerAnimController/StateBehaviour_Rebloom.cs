@@ -9,12 +9,12 @@ public class StateBehaviour_Rebloom : StateMachineBehaviour
     }
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Flower currentFlower = animator.GetComponent<Flower>();
+        Plant currentFlower = animator.GetComponent<Plant>();
         float progression = currentFlower.GetProgression();
         if (progression >= 1 || progression < 0)
         {
             currentFlower.SwitchToNextState();
-            FlowerAnimationStates currState = animator.GetComponent<Flower>().GetCurrentState();
+            FlowerAnimationStates currState = animator.GetComponent<Plant>().GetCurrentState();
             animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
         }
         else

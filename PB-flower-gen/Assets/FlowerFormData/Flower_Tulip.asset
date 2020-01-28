@@ -80,13 +80,13 @@ MonoBehaviour:
     randomNode: []
   TreeColor: {r: 0.754717, g: 0.4764266, b: 0.15307939, a: 0}
   BranchColor: {r: 0.6981132, g: 0.5610104, b: 0.121840514, a: 0}
-  StemColor: {r: 0.56706786, g: 0.7735849, b: 0.3466536, a: 0}
+  StemColor: {r: 0.56706786, g: 0.7735849, b: 0.3466536, a: 1}
   StemBranchColor: {r: 0.7070273, g: 0.9056604, b: 0.3972944, a: 0}
-  PistilColor: {r: 0.8679245, g: 0.824567, b: 0.25792095, a: 0}
+  PistilColor: {r: 0.8679245, g: 0.824567, b: 0.25792095, a: 1}
   PetalColorRandom: 1
   PetalColor: {r: 0.8679245, g: 0.38923737, b: 0.06959773, a: 0}
-  PetalColorRange1: {r: 0.8773585, g: 0.31417674, b: 0.16967781, a: 0}
-  PetalColorRange2: {r: 0.8301887, g: 0.5577864, b: 0.38768244, a: 0}
+  PetalColorRange1: {r: 0.8773585, g: 0.31417674, b: 0.16967781, a: 1}
+  PetalColorRange2: {r: 0.8301887, g: 0.5577864, b: 0.38768244, a: 1}
   SproutAnimationDuration: 5
   GrowAniamtionDuration: 5
   BloomAnimationDuration: 5

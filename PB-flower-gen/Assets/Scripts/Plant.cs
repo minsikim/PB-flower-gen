@@ -1,17 +1,12 @@
-﻿using System;
+﻿using SplineMesh;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PathCreation;
 
 [Serializable]
 public class Plant : MonoBehaviour
 {
-    #region Information
-    // ---- 컨트롤러 클래스에서 수행 ----
-    // 1. 위치를 잡는다
-    // 2. 해당 위치에 Instantiate
-    #endregion
 
     #region Basic Serializable Info
     [LabelOverride("Flower Form Data")]
@@ -33,27 +28,35 @@ public class Plant : MonoBehaviour
     private GameObject PistilPrefab;
     private GameObject LeafPrefab;
 
-    //Randomize Data
-    private RandomPath SproutPath;
-    private RandomPath StemPath;
-    private RandomPath BranchPath;
+    private Vector2Int PetalCountRange;
+    private Vector2Int PetalLayerCount;
+
+    //Randomizable Path Data
+    private RandomPath SproutPathData;
+    private RandomPath StemPathData;
+    private RandomPath StemBranchPathData;
+    private RandomPath BranchPathData;
+    private RandomPath TreePathData;
 
     //Distributed Path Data
-    private Vector3[] sproutBPath;
-    private Vector3[] stemBPath;
-    private Vector3[] branchBPath;
+    private Node[] SproutPathNodes;
+    private Node[] StemPathNodes;
+    private Node[] StemBranchPathNodes;
+    private Node[] BranchPathNodes;
+    private Node[] TreePathNodes;
 
-    //Stem Data
-    private BezierPath mainStemBPath;
-    private BezierPath[] branchBPaths;
+    //Constant Mesh Generation Options
+    private const float maxVertexDistance = 0.5f;
 
     //Leaf Position Data
     private Vector2Int LeafCountRange;
     private Vector2 LeafPositionRange;
     private Vector2 LeafPositionRandomValue;
 
+    private int LeafCount;
+
     //Leaf Positions
-    private List<Vector3> LeafPositionList;
+    private List<float> LeafPositionList;
     private List<float> LeafRotationList;
 
     //Children Data
@@ -61,9 +64,13 @@ public class Plant : MonoBehaviour
     private GameObject Branch;
     private GameObject Stem;
     private GameObject StemBranches;
+    private GameObject Branches;
     private GameObject Leaves;
     private GameObject Flower;
     private GameObject Flowers;
+
+    private Spline TreeBPath;
+    private Spline StemBPath;
 
     //Animation State
     private FlowerAnimationStates currentAnimationState;
@@ -88,6 +95,17 @@ public class Plant : MonoBehaviour
 
     //Animator
     private Animator animator;
+
+    //Colors
+    private Color TreeColor;
+    private Color BranchColor;
+    private Color StemColor;
+    private Color StemBranchColor;
+    private Color PistilColor;
+    private bool PetalColorRandom;
+    private Color PetalColor;
+    private Color PetalColorRange1;
+    private Color PetalColorRange2;
 
     #endregion
 
@@ -150,19 +168,25 @@ public class Plant : MonoBehaviour
         PistilPrefab    = data.PistilPrefab;
         LeafPrefab      = data.LeafPrefab;
 
-        SproutPath  = data.SproutPath;
-        StemPath    = data.StemPath;
-        BranchPath  = data.BranchPath;
+        SproutPathData      = data.SproutPathData;
+        StemPathData        = data.StemPathData;
+        StemBranchPathData  = data.StemBranchPathData;
+        BranchPathData      = data.BranchPathData;
+        TreePathData        = data.TreePathData;
 
-        sproutBPath = DistributePath(SproutPath);
-        stemBPath   = DistributePath(SproutPath);
-        branchBPath = DistributePath(SproutPath);
+        SproutPathNodes        = DistributePath(SproutPathData);
+        StemPathNodes          = DistributePath(StemPathData);
+        StemBranchPathNodes    = DistributePath(StemBranchPathData);
+        BranchPathNodes        = DistributePath(BranchPathData);
+        TreePathNodes          = DistributePath(TreePathData);
 
         LeafCountRange          = data.LeafCountRange;
         LeafPositionRange       = data.LeafPositionRange;
         LeafPositionRandomValue = data.LeafPositionRandomValue;
 
-        LeafPositionList = DistributeLeafPositions(LeafCountRange, LeafPositionRange, LeafPositionRandomValue);
+        LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
+
+        LeafPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomValue);
         LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
 
         SproutAnimationDuration     = data.SproutAnimationDuration;
@@ -182,6 +206,14 @@ public class Plant : MonoBehaviour
 
         durantionCycle = BloomAnimationDuration + FallAnimationDuration + RebloomAnimationDuration;
 
+        TreeColor = data.TreeColor;
+        BranchColor = data.BranchColor;
+        StemColor = data.StemColor;
+        StemBranchColor = data.StemBranchColor;
+        PistilColor = data.PistilColor;
+        if (!data.PetalColorRandom) PetalColor = data.PetalColor;
+        else PetalColor = GetColorFromRange(data.PetalColorRange1, data.PetalColorRange2);
+
         DistributeChildrenByType(plantFormType);
 
         SaveFlowerData();
@@ -198,21 +230,49 @@ public class Plant : MonoBehaviour
                 Stem = InitWithParent("Stem", transform);
                 Leaves = InitWithParent("Leaves", Stem.transform);
                 Flower = InitWithParent("Flower", Stem.transform);
+
+                StemBPath = MakeSpline(Stem, SproutPathNodes);
+                InitMesh(Stem);
+                ApplyColorToMesh(Stem, StemColor);
+
                 break;
             case PlantFormType.B:
                 Stem = InitWithParent("Stem", transform);
                 Leaves = InitWithParent("Leaves", Stem.transform);
                 Flower = InitWithParent("Flower", Stem.transform);
+
+                StemBPath = MakeSpline(Stem, SproutPathNodes);
+                InitMesh(Stem);
+                ApplyColorToMesh(Stem, StemColor);
+
                 break;
             case PlantFormType.C:
                 Stem = InitWithParent("Stem", transform);
                 StemBranches = InitWithParent("StemBranches", Stem.transform);
                 Flower = InitWithParent("Flower", Stem.transform);
+
+                StemBPath = MakeSpline(Stem, SproutPathNodes);
+                InitMesh(Stem);
+                ApplyColorToMesh(Stem, StemColor);
+
                 break;
             case PlantFormType.D:
+                Stem = InitWithParent("Stem", transform);
+                Branches = InitWithParent("Branches", Stem.transform);
+                Leaves = InitWithParent("Leaves", Stem.transform);
+
+                StemBPath = MakeSpline(Stem, SproutPathNodes);
+                InitMesh(Stem);
+                ApplyColorToMesh(Stem, StemColor);
 
                 break;
             case PlantFormType.E:
+                Tree = InitWithParent("Tree", transform);
+                Branches = InitWithParent("Branches", Tree.transform);
+
+                TreeBPath = MakeSpline(Tree, SproutPathNodes);
+                InitMesh(Tree);
+                ApplyColorToMesh(Tree, TreeColor);
 
                 break;
             default:
@@ -275,10 +335,10 @@ public class Plant : MonoBehaviour
 
     private void DistributeAnimationMethodsByType()
     {
-        Sprout = SproutMethods[(int)plantFormType];
-        Grow = GrowMethods[(int)plantFormType];
-        Bloom = BloomMethods[(int)plantFormType];
-        Fall = FallMethods[(int)plantFormType];
+        Sprout  = SproutMethods [(int)plantFormType];
+        Grow    = GrowMethods   [(int)plantFormType];
+        Bloom   = BloomMethods  [(int)plantFormType];
+        Fall    = FallMethods   [(int)plantFormType];
         Rebloom = RebloomMethods[(int)plantFormType];
     }
 
@@ -337,8 +397,13 @@ public class Plant : MonoBehaviour
         // 3. SproutParticleAnimation 실행
         // 4. Finish Init -> Trigger Grow State
 
-        //Stem.GetComponent<MeshGenerator>();
-        
+        //DrawSproutMesh(progress);
+        //DrawSproutLeaf(progress);
+
+
+        //DrawStem(spline, thickness.max, thickness.min, t1, t2);
+
+
     }
     public void SproutB(float progress)
     {
@@ -450,6 +515,89 @@ public class Plant : MonoBehaviour
         o.transform.SetParent(parent);
         return o;
     }
+    private Color GetColorFromRange(Color c1, Color c2)
+    {
+        Color color = new Color(0,0,0,1);
+
+        color.r = UnityEngine.Random.Range(c1.r, c2.r);
+        color.g = UnityEngine.Random.Range(c1.g, c2.g);
+        color.b = UnityEngine.Random.Range(c1.b, c2.b);
+
+        return color;
+    }
+    private void InitMesh(GameObject o)
+    {
+        MeshFilter meshFilter = o.AddComponent<MeshFilter>();
+        MeshRenderer renderer = o.AddComponent<MeshRenderer>();
+        meshFilter.mesh = new Mesh();
+    }
+    private void ApplyColorToMesh(GameObject o, Color c)
+    {
+        MeshRenderer renderer;
+        try
+        {
+            renderer = o.GetComponent<MeshRenderer>();
+        }
+        catch (MissingComponentException e)
+        {
+            throw new MissingComponentException("MeshRenderer Component is Missing", e);
+        }
+        renderer.material.color = c;
+    }
+    private void DrawStem(Spline spline, float maxThickness, float minThickness)
+    {
+        DrawStem(spline, maxThickness, minThickness, 0f, 1f);
+    }
+
+    private void DrawStem(Spline spline, float maxThickness, float minThickness, float startTime, float endTime)
+    {
+        const int vertexCount = 8;
+        //Init mesh to ReDraw
+        Mesh mesh;
+        try
+        {
+            mesh = spline.gameObject.GetComponent<MeshFilter>().mesh;
+        }
+        catch(MissingComponentException e)
+        {
+            throw new MissingComponentException("Mesh Related Component is Missing", e);
+        }
+        mesh.Clear();
+
+        List<Vector3> meshVertices = new List<Vector3>();
+        List<int> meshTriangles = new List<int>();
+
+        int vertexRingCount = (int)Math.Round(spline.Length / maxVertexDistance);
+        float vertexInterval = (endTime - startTime) / vertexRingCount;
+
+        //for each Vertex Path Generate 8 vertices for a circle
+        for (int i = 0; i < vertexRingCount; i++)
+        {
+            Vector3 centerPoint = GetPointAt(spline, startTime + (vertexInterval * i));
+            Vector3[] tempList = GenerateCircleVertices(centerPoint, vertexCount, maxThickness);
+            meshVertices.AddRange(tempList);
+        }
+
+        //TODO
+
+        ////Generate triangles for Quads
+        //for (int i = 0; i < vPath.NumPoints - 1; i++)
+        //{
+        //    int initialPoint = i * vertexCount;
+        //    int[] tempList = GenerateCircleTriangles(initialPoint);
+        //    meshTriangles.AddRange(tempList);
+        //}
+
+        ////assign vertices to mesh
+        //StemMesh.SetVertices(meshVertices);
+        ////assign triangles to mesh
+        //StemMesh.SetTriangles(meshTriangles, 0);
+
+        ////Recalculate stuff
+        //StemMesh.RecalculateNormals();
+        //StemMesh.RecalculateBounds();
+
+    }
 
     /// <summary>
     /// Private Function for Stem Growth, Used in public function <see cref="Grow()"/>
@@ -485,15 +633,28 @@ public class Plant : MonoBehaviour
     /// </summary>
     /// <param name="RandomizablePathData"></param>
     /// <returns></returns>
-    private Vector3[] DistributePath(RandomPath RandomizablePathData)
+    private Node[] DistributePath(RandomPath RandomizablePathData)
     {
-        Vector3[] tempPointList = RandomizablePathData.pathPoints;
-        foreach(RandomPoint rp in RandomizablePathData.randomPoints)
+        Node[] tempNodeList = (Node[])RandomizablePathData.nodes.Clone();
+        
+        foreach(RandomNode rn in RandomizablePathData.randomNode)
         {
-            tempPointList[rp.randomPoint][(int)rp.randomAxis] = 
-                UnityEngine.Random.Range(rp.randomRange.min, rp.randomRange.max);
+            float random = UnityEngine.Random.Range(rn.randomRange.min, rn.randomRange.max);
+            tempNodeList[rn.randomNodeIndex].position[(int)rn.randomAxis] += random;
+            tempNodeList[rn.randomNodeIndex].handleOut[(int)rn.randomAxis] += random;
         }
-        return tempPointList;
+
+        return tempNodeList;
+    }
+
+    private Spline MakeSpline(GameObject o, Node[] nodes)
+    {
+        Spline spline = o.AddComponent<Spline>();
+        foreach(Node n in nodes)
+        {
+            spline.AddNode(new SplineNode(n.position, n.handleOut));
+        }
+        return spline;
     }
 
     /// <summary>
@@ -505,16 +666,116 @@ public class Plant : MonoBehaviour
     /// <returns>
     /// Returns ListArray of 0 < float < 1 values that represents relative position on stem or branch
     /// </returns>
-    private List<Vector3> DistributeLeafPositions( Vector2Int countRange, Vector2 positionRange, Vector2 positionRandomValue)
+    private List<float> DistributeLeafPositions( int leafCount, Vector2 positionRange, Vector2 positionRandomValue)
     {
-        List<Vector3> positions = new List<Vector3>();
+        List<float> positions = new List<float>();
 
+        float from = positionRange.x;
+        float to = positionRange.y;
+        float range = to - from;
+        float interval = range / leafCount;
+
+        for (int i = 0; i < leafCount; i++)
+        {
+            float random = UnityEngine.Random.Range(positionRandomValue.x, positionRandomValue.y);
+            positions.Add(from + interval + random);
+        }
 
         return positions;
     }
-    private List<float> DistributeLeafRotations(int flowerCount)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="leafCount"></param>
+    /// <returns>Float Value represents Euler angles 0 to 360</returns>
+    private List<float> DistributeLeafRotations(int leafCount)
     {
-        return new List<float>();
+        List<float> rotations = new List<float>();
+
+        for (int i = 0; i < leafCount; i++)
+        {
+            int section = i % 3;
+            rotations.Add(UnityEngine.Random.Range(section * 120, (section + 1) * 120));
+        }
+
+        return rotations;
+    }
+
+    private Vector3[] GenerateCircleVertices(Vector3 centerPoint, int vertexCount, float radius)
+    {
+        Vector3[] circleVertexList = new Vector3[vertexCount];
+        Vector3 firstPoint = new Vector3(radius, 0, 0);
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+            Vector3 p = Quaternion.AngleAxis(360 / vertexCount * -i, Vector3.up) * firstPoint + centerPoint - transform.position;
+            circleVertexList[i] = p;
+        }
+
+        return circleVertexList;
+    }
+    private int[] GenerateCircleTriangles(int initPoint, int vertexCount)
+    {
+
+        //Generate Cylinder Triangles according to 
+        int[] circleTriangleList = new int[vertexCount * 6];
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+            int[] tempQuad;
+            if (i == vertexCount - 1)
+            {
+                tempQuad = GenerateQuad(
+                    initPoint + i,
+                    initPoint + i - vertexCount + 1,
+                    initPoint + i + vertexCount,
+                    initPoint + i + 1
+                );
+            }
+            else
+            {
+                tempQuad = GenerateQuad(
+                    initPoint + i,
+                    initPoint + i + 1,
+                    initPoint + i + vertexCount,
+                    initPoint + i + vertexCount + 1
+                );
+            }
+
+            for (int j = 0; j < tempQuad.Length; j++)
+            {
+                circleTriangleList[i * 6 + j] = tempQuad[j];
+            }
+        }
+
+        return circleTriangleList;
+    }
+    private int[] GenerateQuad(int a, int b, int c, int d)
+    {
+        //Generate Quad Array consisting of 6 integers
+        //Clockwise = a > c > d > b
+        int[] quadRoutine = new int[6];
+
+        quadRoutine[0] = a;
+        quadRoutine[1] = c;
+        quadRoutine[2] = d;
+        quadRoutine[3] = a;
+        quadRoutine[4] = d;
+        quadRoutine[5] = b;
+
+        return quadRoutine;
+    }
+    private CurveSample GetSampleAt(Spline spline, float t)
+    {
+        return spline.GetSample(t * (spline.nodes.Count - 1));
+    }
+    private Vector3 GetPointAt(Spline spline, float t)
+    {
+        return spline.GetSample(t * (spline.nodes.Count - 1)).location;
+    }
+    private Vector3 GetDirectionAt(Spline spline, float t)
+    {
+        return spline.GetSample(t * (spline.nodes.Count - 1)).tangent;
     }
     #endregion
 }

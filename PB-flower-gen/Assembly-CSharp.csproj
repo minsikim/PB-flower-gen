@@ -74,12 +74,6 @@
     <Compile Include="Assets\L-systems\Scripts\SavedTransform.cs" />
     <Compile Include="Assets\L-systems\Scripts\TreeElement.cs" />
     <Compile Include="Assets\L-systems\Scripts\UI.cs" />
-    <Compile Include="Assets\PathCreator\Examples\Scripts\GeneratePathExample.cs" />
-    <Compile Include="Assets\PathCreator\Examples\Scripts\PathFollower.cs" />
-    <Compile Include="Assets\PathCreator\Examples\Scripts\PathPlacer.cs" />
-    <Compile Include="Assets\PathCreator\Examples\Scripts\PathSceneTool.cs" />
-    <Compile Include="Assets\PathCreator\Examples\Scripts\PathSpawner.cs" />
-    <Compile Include="Assets\PathCreator\Examples\Scripts\RoadMeshCreator.cs" />
     <Compile Include="Assets\Scripts\Enumerations.cs" />
     <Compile Include="Assets\Scripts\FlowerFormData.cs" />
     <Compile Include="Assets\Scripts\FlowerPrefab.cs" />
@@ -661,6 +655,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{51F37DB9-5166-9737-65DA-57A6B3D9C23B}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
     <ProjectReference Include="PathCreator.csproj">
       <Project>{C7ADF552-1A3E-F817-922A-1BD6353018B7}</Project>
       <Name>PathCreator</Name>

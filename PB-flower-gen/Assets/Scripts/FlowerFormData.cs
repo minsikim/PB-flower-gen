@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SplineMesh;
 
 [CreateAssetMenu (fileName = "Flower_NewFlowerName", menuName = "Project B/Flower")]
 public class FlowerFormData : ScriptableObject
@@ -21,22 +22,28 @@ public class FlowerFormData : ScriptableObject
     public GameObject BudPrefab;
     [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
     public int FlowerToPlantCount = 3;
+    public Vector2Int PetalCountRange;
+    public Vector2Int PetalLayerCount;
 
     [Header("Path Data")]
     [Space(20)]
-    public RandomPath SproutPath;
-    public RandomPath StemPath;
+    public RandomPath SproutPathData;
+    public RandomPath StemPathData;
     [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
-    public RandomPath StemBranchPath;
+    public RandomPath StemBranchPathData;
     [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
-    public RandomPath BranchPath;
+    public RandomPath BranchPathData;
     [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
-    public RandomPath TreePath;
+    public RandomPath TreePathData;
 
     [Header("Materials")]
+    [Space(20)]
+    [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
     public Color TreeColor = Color.green;
+    [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
     public Color BranchColor = Color.green;
     public Color StemColor = Color.green;
+    [DrawIf("plantFormType", PlantFormType.C, ComparisonType.GreaterOrEqual)]
     public Color StemBranchColor = Color.green;
     public Color PistilColor = Color.yellow;
     public bool PetalColorRandom = false;
@@ -88,13 +95,13 @@ public struct MinMaxRange
 public struct RandomPath
 {
     public PathMeshProperties pathMeshProperties;
-    public Vector3[] pathPoints;
-    public RandomPoint[] randomPoints;
+    public Node[] nodes;
+    public RandomNode[] randomNode;
 }
 [System.Serializable]
-public struct RandomPoint
+public struct RandomNode
 {
-    public int randomPoint;
+    public int randomNodeIndex;
     public VectorAxis randomAxis;
     public MinMaxRange randomRange;
 }
@@ -105,6 +112,12 @@ public struct PathMeshProperties
     public bool ThickerAtStart;
     [Space]
     public CapType capType;
+}
+[System.Serializable]
+public struct Node
+{
+    public Vector3 position;
+    public Vector3 handleOut;
 }
 public enum VectorAxis
 {

@@ -22,60 +22,62 @@ MonoBehaviour:
     type: 3}
   BudPrefab: {fileID: 0}
   FlowerToPlantCount: 10
-  SproutPath:
+  PetalCountRange: {x: 0, y: 0}
+  PetalLayerCount: {x: 0, y: 0}
+  SproutPathData:
     pathMeshProperties:
       Thickness:
         min: 0
         max: 0
       ThickerAtStart: 0
       capType: 0
-    pathPoints:
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0.2, z: 0}
-    - {x: 0.1, y: 0.8, z: 0}
-    - {x: 0.2, y: 1, z: 0}
-    randomPoints:
-    - randomPoint: 0
+    nodes:
+    - position: {x: 0, y: 0, z: 0}
+      handleOut: {x: 0, y: 0.5, z: 0}
+    - position: {x: 0, y: 2, z: 0}
+      handleOut: {x: -0.3, y: 2.3, z: 0}
+    randomNode:
+    - randomNodeIndex: 1
       randomAxis: 0
       randomRange:
-        min: 0
-        max: 0
-  StemPath:
+        min: -0.2
+        max: 0.2
+  StemPathData:
     pathMeshProperties:
       Thickness:
         min: 0
         max: 0
       ThickerAtStart: 0
       capType: 0
-    pathPoints: []
-    randomPoints: []
-  StemBranchPath:
+    nodes: []
+    randomNode: []
+  StemBranchPathData:
     pathMeshProperties:
       Thickness:
         min: 0
         max: 0
       ThickerAtStart: 0
       capType: 0
-    pathPoints: []
-    randomPoints: []
-  BranchPath:
+    nodes: []
+    randomNode: []
+  BranchPathData:
     pathMeshProperties:
       Thickness:
         min: 0
         max: 0
       ThickerAtStart: 0
       capType: 0
-    pathPoints: []
-    randomPoints: []
-  TreePath:
+    nodes: []
+    randomNode: []
+  TreePathData:
     pathMeshProperties:
       Thickness:
         min: 0
         max: 0
       ThickerAtStart: 0
       capType: 0
-    pathPoints: []
-    randomPoints: []
+    nodes: []
+    randomNode: []
   TreeColor: {r: 0.754717, g: 0.4764266, b: 0.15307939, a: 0}
   BranchColor: {r: 0.6981132, g: 0.5610104, b: 0.121840514, a: 0}
   StemColor: {r: 0.56706786, g: 0.7735849, b: 0.3466536, a: 0}
@@ -94,4 +96,4 @@ MonoBehaviour:
     type: 3}
   LeafCountRange: {x: 0, y: 20}
   LeafPositionRange: {x: 0, y: 1}
-  LeafPositionRandomValue: {x: -0.4006766, y: 0.4405867}
+  LeafPositionRandomValue: {x: -0.4006766, y: 0.81758034}

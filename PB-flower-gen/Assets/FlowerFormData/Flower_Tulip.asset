@@ -27,15 +27,15 @@ MonoBehaviour:
   SproutPathData:
     pathMeshProperties:
       Thickness:
-        min: 0
-        max: 0
+        min: 0.1
+        max: 0.3
       ThickerAtStart: 0
       capType: 0
     nodes:
     - position: {x: 0, y: 0, z: 0}
-      handleOut: {x: 0, y: 0.5, z: 0}
+      handleOut: {x: -0.3, y: 0.7, z: 0}
     - position: {x: 0, y: 2, z: 0}
-      handleOut: {x: -0.3, y: 2.3, z: 0}
+      handleOut: {x: -0.4, y: 2.5, z: 0}
     randomNode:
     - randomNodeIndex: 1
       randomAxis: 0
@@ -80,19 +80,19 @@ MonoBehaviour:
     randomNode: []
   TreeColor: {r: 0.754717, g: 0.4764266, b: 0.15307939, a: 0}
   BranchColor: {r: 0.6981132, g: 0.5610104, b: 0.121840514, a: 0}
-  StemColor: {r: 0.56706786, g: 0.7735849, b: 0.3466536, a: 1}
+  StemColor: {r: 0.58113956, g: 0.7264151, b: 0.41460484, a: 1}
   StemBranchColor: {r: 0.7070273, g: 0.9056604, b: 0.3972944, a: 0}
   PistilColor: {r: 0.8679245, g: 0.824567, b: 0.25792095, a: 1}
   PetalColorRandom: 1
   PetalColor: {r: 0.8679245, g: 0.38923737, b: 0.06959773, a: 0}
   PetalColorRange1: {r: 0.8773585, g: 0.31417674, b: 0.16967781, a: 1}
   PetalColorRange2: {r: 0.8301887, g: 0.5577864, b: 0.38768244, a: 1}
-  SproutAnimationDuration: 5
-  GrowAniamtionDuration: 5
-  BloomAnimationDuration: 5
-  FallAnimationDuration: 5
+  SproutAnimationDuration: 10
+  GrowAniamtionDuration: 3
+  BloomAnimationDuration: 3
+  FallAnimationDuration: 3
   RebloomAnimationDuration: 5
-  LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
+  LeafPrefab: {fileID: 4573938996701695792, guid: 986a76933a6af104197f582588c05fcb,
     type: 3}
   LeafCountRange: {x: 0, y: 20}
   LeafPositionRange: {x: 0, y: 1}

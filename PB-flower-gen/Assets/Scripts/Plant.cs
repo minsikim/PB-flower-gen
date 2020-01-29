@@ -46,7 +46,7 @@ public class Plant : MonoBehaviour
     private Node[] TreePathNodes;
 
     //Constant Mesh Generation Options
-    private const float maxVertexDistance = 0.5f;
+    private const float maxVertexDistance = 0.2f;
 
     //Leaf Position Data
     private Vector2Int LeafCountRange;
@@ -234,7 +234,7 @@ public class Plant : MonoBehaviour
                 StemBPath = MakeSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
-
+                //InitSproutLeaf(Stem.GetComponent<Spline>, 3);
                 break;
             case PlantFormType.B:
                 Stem = InitWithParent("Stem", transform);
@@ -400,10 +400,26 @@ public class Plant : MonoBehaviour
         //DrawSproutMesh(progress);
         //DrawSproutLeaf(progress);
 
+        float[] stemProgress = new float[2] { 0f , .7f };
+        float[] leafProgress = new float[2] { .7f , 1f };
 
-        //DrawStem(spline, thickness.max, thickness.min, t1, t2);
+        float currentStemProgress = (progress - stemProgress[0]) / (stemProgress[1] - stemProgress[0]);
+        float currentLeafProgress = (progress - leafProgress[0]) / (leafProgress[1] - leafProgress[0]);
 
+        if( 0f <= currentStemProgress && currentStemProgress <= 1f)
+        {
+            float currentThicknessMax = SproutPathData.pathMeshProperties.Thickness.max * currentStemProgress;
+            float currentThicknessMin = SproutPathData.pathMeshProperties.Thickness.min * currentStemProgress;
+            DrawStem(StemBPath, currentThicknessMax, currentThicknessMin, 0f, currentStemProgress);
+        }
 
+        if (0f <= currentLeafProgress && currentLeafProgress <= 1f)
+        {
+            float currentThicknessMax = SproutPathData.pathMeshProperties.Thickness.max * currentLeafProgress;
+            float currentThicknessMin = SproutPathData.pathMeshProperties.Thickness.min * currentLeafProgress;
+            DrawStem(StemBPath, currentThicknessMax, currentThicknessMin, 0f, currentLeafProgress);
+            //SproutLeaf(sproutLeafCount, currentLeafProgress);
+        }
     }
     public void SproutB(float progress)
     {
@@ -530,6 +546,10 @@ public class Plant : MonoBehaviour
         MeshFilter meshFilter = o.AddComponent<MeshFilter>();
         MeshRenderer renderer = o.AddComponent<MeshRenderer>();
         meshFilter.mesh = new Mesh();
+
+        //delete after test
+        GameObject test = new GameObject("Test");
+        test.transform.parent = Stem.transform;
     }
     private void ApplyColorToMesh(GameObject o, Color c)
     {
@@ -544,59 +564,149 @@ public class Plant : MonoBehaviour
         }
         renderer.material.color = c;
     }
+    //TODO Leaf Sprout
+    private void InitSproutLeaf(int leafCount)
+    {
+        for(int i = 0; i < leafCount; i++)
+        {
+            Instantiate(LeafPrefab, Leaves.transform);
+        }
+    }
+    private void SproutLeaf(float progress)
+    {
+        UpdateLeafPosition(progress);
+
+        foreach(Transform child in Leaves.transform)
+        {
+            if(child.tag == "Leaf")
+            {
+                
+            }
+        }
+    }
+    private void UpdateLeafPosition(float progress)
+    {
+        
+    }
     private void DrawStem(Spline spline, float maxThickness, float minThickness)
     {
         DrawStem(spline, maxThickness, minThickness, 0f, 1f);
     }
 
-    private void DrawStem(Spline spline, float maxThickness, float minThickness, float startTime, float endTime)
+    private void DrawStem(Spline spline, float maxThickness, float minThickness, float startTime, float endTime, CapType capType = CapType.round)
     {
         const int vertexCount = 8;
+
+        List<Vector3> meshVertices = new List<Vector3>();
+        List<int> meshTriangles = new List<int>();
+
         //Init mesh to ReDraw
         Mesh mesh;
         try
         {
             mesh = spline.gameObject.GetComponent<MeshFilter>().mesh;
+            mesh.Clear();
+            foreach (Transform child in Stem.transform.Find("Test").transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
         }
         catch(MissingComponentException e)
         {
             throw new MissingComponentException("Mesh Related Component is Missing", e);
         }
-        mesh.Clear();
 
-        List<Vector3> meshVertices = new List<Vector3>();
-        List<int> meshTriangles = new List<int>();
-
-        int vertexRingCount = (int)Math.Round(spline.Length / maxVertexDistance);
+        int vertexRingCount = (int)Math.Round(spline.Length * (endTime - startTime) / maxVertexDistance);
+        if (vertexRingCount < 2) vertexRingCount = 2;
         float vertexInterval = (endTime - startTime) / vertexRingCount;
-
+        float thicknessInterval = (maxThickness - minThickness) / vertexRingCount;
         //for each Vertex Path Generate 8 vertices for a circle
-        for (int i = 0; i < vertexRingCount; i++)
+        for (int i = 0; i <= vertexRingCount; i++)
         {
-            Vector3 centerPoint = GetPointAt(spline, startTime + (vertexInterval * i));
-            Vector3[] tempList = GenerateCircleVertices(centerPoint, vertexCount, maxThickness);
+            CurveSample centerSamplePoint = GetSampleAt(spline, startTime + (vertexInterval * i));
+
+            float currentThickness = maxThickness - thicknessInterval * i;
+            Vector3[] tempList = GenerateCircleVertices(centerSamplePoint, vertexCount, currentThickness);
             meshVertices.AddRange(tempList);
         }
 
-        //TODO
+        //Generate triangles for Quads
+        for (int i = 0; i < vertexRingCount; i++)
+        {
+            int initialPoint = i * vertexCount;
+            int[] tempList = GenerateCircleTriangles(initialPoint, vertexCount);
+            meshTriangles.AddRange(tempList);
+        }
 
-        ////Generate triangles for Quads
-        //for (int i = 0; i < vPath.NumPoints - 1; i++)
-        //{
-        //    int initialPoint = i * vertexCount;
-        //    int[] tempList = GenerateCircleTriangles(initialPoint);
-        //    meshTriangles.AddRange(tempList);
-        //}
+        //GenerateCap
+        switch (capType)
+        {
+            case CapType.flat:
 
-        ////assign vertices to mesh
-        //StemMesh.SetVertices(meshVertices);
-        ////assign triangles to mesh
-        //StemMesh.SetTriangles(meshTriangles, 0);
+                break;
 
-        ////Recalculate stuff
-        //StemMesh.RecalculateNormals();
-        //StemMesh.RecalculateBounds();
+            case CapType.sharp:
 
+                break;
+
+            case CapType.round:
+
+                //Add Cap Vertices
+                CurveSample endPoint = GetSampleAt(spline, endTime);
+                Vector3 radiusDistanceFromEndPoint = endPoint.tangent * minThickness / 2;
+                Vector3 centerPoint = endPoint.location + radiusDistanceFromEndPoint / 2;
+
+                float currentThickness = minThickness * (float)Math.Sqrt(3) / 2;
+                Vector3[] tempPointList = GenerateCircleVertices(centerPoint, endPoint.tangent, vertexCount, currentThickness);
+                meshVertices.AddRange(tempPointList);
+
+
+                Vector3 lastPoint = endPoint.location + radiusDistanceFromEndPoint;
+                meshVertices.Add(lastPoint);
+
+                //Add Triangles
+                int initialPoint = (vertexRingCount) * vertexCount;
+                int[] tempTriangleList = GenerateCircleTriangles(initialPoint, vertexCount);
+                meshTriangles.AddRange(tempTriangleList);
+
+                int[] capTrinangleList = GenerateCapTriangles(meshVertices.Count - 3 - vertexCount, meshVertices.Count-2, meshVertices.Count-1);
+
+                meshTriangles.AddRange(capTrinangleList);
+                break;
+
+            default:
+
+                break;
+        }
+
+        //assign vertices to mesh
+        mesh.SetVertices(meshVertices);
+        //assign triangles to mesh
+        mesh.SetTriangles(meshTriangles, 0);
+
+        //Recalculate stuff
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+    }
+
+    private int[] GenerateCapTriangles(int pIndex1, int pIndex2, int lastPIndex)
+    {
+        int count = Math.Abs(pIndex2 - pIndex1);
+        int[] capTriangles = new int[count * 3];
+        int firstPoint;
+        if (pIndex1 > pIndex2) firstPoint = pIndex2;
+        else firstPoint = pIndex1;
+
+        for(int i = 0; i < count; i++)
+        {
+            int lap = 0;
+            if (i == count - 1) lap = - count;
+            capTriangles[i * 3]     = lap + firstPoint + i;
+            capTriangles[i * 3 + 1] = lastPIndex;
+            capTriangles[i * 3 + 2] = lap + firstPoint + i + 1;
+        }
+
+        return capTriangles;
     }
 
     /// <summary>
@@ -701,14 +811,22 @@ public class Plant : MonoBehaviour
         return rotations;
     }
 
-    private Vector3[] GenerateCircleVertices(Vector3 centerPoint, int vertexCount, float radius)
+    private Vector3[] GenerateCircleVertices(CurveSample samplePoint, int vertexCount, float width)
+    {
+        return GenerateCircleVertices(samplePoint.location, samplePoint.tangent, vertexCount, width);
+    }
+    private Vector3[] GenerateCircleVertices(Vector3 centerPoint, Vector3 tangent, int vertexCount, float width)
     {
         Vector3[] circleVertexList = new Vector3[vertexCount];
-        Vector3 firstPoint = new Vector3(radius, 0, 0);
-
+        float radius = width;
+        Vector3 firstPoint = new Vector3(radius / 2, 0, 0);
         for (int i = 0; i < vertexCount; i++)
         {
-            Vector3 p = Quaternion.AngleAxis(360 / vertexCount * -i, Vector3.up) * firstPoint + centerPoint - transform.position;
+            Vector3 rotationAxis;
+            if (i == 0) rotationAxis = Vector3.up;
+            else rotationAxis = tangent;
+
+            Vector3 p = Quaternion.AngleAxis(360 / vertexCount * -i, rotationAxis) * firstPoint + centerPoint - transform.position;
             circleVertexList[i] = p;
         }
 

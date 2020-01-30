@@ -75,25 +75,18 @@ public class PlantFormData : ScriptableObject
 
     [Header("Leaf Position Data")]
     [Space(20)]
-
     public GameObject LeafPrefab;
-
     public Vector2Int LeafCountRange;
-
     [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
     [MinMax(0, 1, ShowEditRange = true)]
     public Vector2 LeafPositionRange = new Vector2(0.2f, 0.9f);
-
     [DrawIf("plantFormType", PlantFormType.A, ComparisonType.Equals)]
     public float LeafFixedPosition = 0.1f;
-
-    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
     [MinMax(-1, 1, ShowEditRange = true)]
     public float LeafPositionRandomPercentage = 0.25f;
 
     [Header("Sprout Leaf Position Data")]
     public LeafGrowRelation leafGrowRelation;
-    [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
     public Vector2Int SproutLeafCountRange;
     [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
     [MinMax(0, 1, ShowEditRange = true)]
@@ -101,6 +94,7 @@ public class PlantFormData : ScriptableObject
     [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
     [MinMax(-1, 1, ShowEditRange = true)]
     public float SproutLeafPositionRandomPercentage = 0.25f;
+    public float SproutLeafScale = 0.3f;
 }
 
 

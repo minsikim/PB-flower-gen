@@ -53,11 +53,18 @@ public class Plant : MonoBehaviour
     //Leaf Position Data
     private Vector2Int LeafCountRange;
     private Vector2 LeafPositionRange;
-    private float LeafPositionRandomValue;
+    private float LeafPositionRandomPercentage;
+    private float LeafFixedPosition;
 
     private int LeafCount;
 
-    LeafGrowRelation leafGrowRelation;
+    private LeafGrowRelation leafGrowRelation;
+    private Vector2Int SproutLeafCountRange;
+    private Vector2 SproutLeafPositionRange;
+    private float SproutLeafPositionRandomPercentage;
+    private float SproutLeafScale;
+
+    private int SproutLeafCount;
 
     //Leaf Positions
     private List<float> LeafPositionList;
@@ -65,9 +72,9 @@ public class Plant : MonoBehaviour
     private List<float> SproutPositionList;
 
     //List of Children by Type
-    private List<LeafLocalData> LeavesData;
-    private List<BranchLocalData> BranchesData;
-    private List<FlowerLocalData> FlowersData;
+    private List<GameObject> LeavesData;
+    private List<GameObject> BranchesData;
+    private List<GameObject> FlowersData;
 
     //Children GameObjects
     private GameObject Tree;
@@ -190,9 +197,16 @@ public class Plant : MonoBehaviour
         BranchPathNodes        = DistributePath(BranchPathData);
         TreePathNodes          = DistributePath(TreePathData);
 
-        LeafCountRange          = data.LeafCountRange;
-        LeafPositionRange       = data.LeafPositionRange;
-        LeafPositionRandomValue = data.LeafPositionRandomPercentage;
+        LeafCountRange                  = data.LeafCountRange;
+        LeafPositionRange               = data.LeafPositionRange;
+        LeafPositionRandomPercentage    = data.LeafPositionRandomPercentage;
+        LeafFixedPosition               = data.LeafFixedPosition;
+
+        leafGrowRelation                    = data.leafGrowRelation;
+        SproutLeafCountRange                = data.SproutLeafCountRange;
+        SproutLeafPositionRange             = data.SproutLeafPositionRange;
+        SproutLeafPositionRandomPercentage  = data.SproutLeafPositionRandomPercentage;
+        SproutLeafScale                     = data.SproutLeafScale;
 
         SproutAnimationDuration     = data.SproutAnimationDuration;
         GrowAniamtionDuration       = data.GrowAniamtionDuration;
@@ -200,11 +214,11 @@ public class Plant : MonoBehaviour
         FallAnimationDuration       = data.FallAnimationDuration;
         RebloomAnimationDuration    = data.RebloomAnimationDuration;
 
-        LeavesData = new List<LeafLocalData>();
-        BranchesData = new List<BranchLocalData>();
-        FlowersData = new List<FlowerLocalData>();
+        LeavesData = new List<GameObject>();
+        BranchesData = new List<GameObject>();
+        FlowersData = new List<GameObject>();
 
-    durationList = new List<float>()
+        durationList = new List<float>()
         {
             SproutAnimationDuration,
             GrowAniamtionDuration,
@@ -246,19 +260,39 @@ public class Plant : MonoBehaviour
 
                 //Distribute and Initialize Leaves GameObjects
                 LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
-                LeafPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomValue);
+                LeafPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomPercentage);
                 LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
-                if(leafGrowRelation == LeafGrowRelation.Differ) SproutPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomValue);
+
+
+                //TODO 
+
+                SproutLeafCount = UnityEngine.Random.Range(SproutLeafCountRange.x, SproutLeafCountRange.y + 1);
+                if (leafGrowRelation == LeafGrowRelation.Same)
+                {
+                    SproutPositionList = LeafPositionList;
+                }
+                else if (leafGrowRelation == LeafGrowRelation.Differ)
+                {
+                    SproutPositionList = DistributeLeafPositions(LeafCount, SproutLeafPositionRange, SproutLeafPositionRandomPercentage);
+                }
+
 
                 for (int i = 0; i < LeafCount; i++)
                 {
-                    LeafLocalData leaf = Instantiate(LeafPrefab, Leaves.transform).GetComponent<LeafLocalData>();
-                    leaf.parent = Leaves;
-                    leaf.leafIndex = i;
-                    leaf.totalLeafCount = LeafCount;
-                    if (leafGrowRelation == LeafGrowRelation.Same) leaf.sproutPosition = LeafPositionList[i];
-                    else leaf.sproutPosition = SproutPositionList[i];
-                    leaf.finalPosition = LeafPositionList[i];
+                    GameObject leaf = Instantiate(LeafPrefab, Leaves.transform);
+                    LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
+                    Transform leafTransform = leaf.transform;
+                    leafData.parent = Leaves;
+                    leafData.leafIndex = i;
+                    leafData.totalLeafCount = LeafCount;
+                    if (leafGrowRelation == LeafGrowRelation.Same) leafData.sproutPosition = LeafPositionList[i];
+                    else leafData.sproutPosition = SproutPositionList[i];
+                    leafData.finalPosition = LeafPositionList[i];
+                    leafData.rotation = LeafRotationList[i];
+
+                    //TODO
+                    //UpdateLeafTransform(localPosition, yRotation, localScale);
+
                     LeavesData.Add(leaf);
                 }
 
@@ -267,9 +301,10 @@ public class Plant : MonoBehaviour
                 PetalLayerCounts[0] = UnityEngine.Random.Range(data.PetalLayerCountRange.x, data.PetalLayerCountRange.y);
                 PetalCounts = DistributeRandomIntArray(PetalLayerCounts[0], data.PetalCountRange);
 
-                //InitFlower(Flower, PetalLayerCounts, PetalCounts);
+                InitFlower(Flower, PetalLayerCounts[0], PetalCounts);
 
                 //SaveDistributedData in Private Variables for Save Plant Form Data
+
 
                 break;
             case PlantFormType.B:
@@ -439,6 +474,24 @@ public class Plant : MonoBehaviour
 
         return positions;
     }
+    private List<float> DistributeLeafFixedPositions(int leafCount, Vector2 positionRange, float positionRandomValue)
+    {
+        List<float> positions = new List<float>();
+
+        float from = positionRange.x;
+        float to = positionRange.y;
+        float range = to - from;
+        float interval = range / leafCount;
+
+        for (int i = 0; i < leafCount; i++)
+        {
+            float random = UnityEngine.Random.Range(-positionRandomValue, positionRandomValue);
+            positions.Add(from + interval + (interval * random));
+        }
+
+        return positions;
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -467,7 +520,7 @@ public class Plant : MonoBehaviour
         GameObject parent = spline.gameObject;
 
     }
-    private void GeneratePetals(GameObject flowerObject, int PetalLayerCount, int PetalCount)
+    private void InitFlower(GameObject flowerObject, int PetalLayerCount, int[] PetalCounts)
     {
         const float CloseLayerDifference = 0.01f;
 
@@ -479,10 +532,10 @@ public class Plant : MonoBehaviour
             petalLayer.transform.SetParent(Petals.transform);
             petalLayer.transform.localPosition = new Vector3(0, 0, 0);
 
-            for (int j = 0; j < PetalCount; ++j)
+            for (int j = 0; j < PetalCounts[i]; ++j)
             {
                 GameObject petal = Instantiate(PetalPrefab, petalLayer.transform);
-                petal.transform.Rotate(new Vector3(0, (360 / PetalCount * j) + i * 30, 0));
+                petal.transform.Rotate(new Vector3(0, (360 / PetalCounts[i] * j) + i * 30, 0));
                 petal.GetComponent<Animator>().SetFloat("Time", 0.0f + ((PetalLayerCount - i) * CloseLayerDifference));
             }
         }
@@ -527,7 +580,11 @@ public class Plant : MonoBehaviour
 
     #region Animation Sub Methods
 
-
+    private void UpdateLeafTransform(GameObject leaf, Spline spline, float position, float yRotation, float localScale)
+    {
+        leaf.transform.position = GetPointAt(spline, position);
+        //TODO
+    }
 
     #endregion
 

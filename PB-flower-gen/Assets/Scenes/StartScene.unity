@@ -1012,6 +1012,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlowerPrefab_old
       objectReference: {fileID: 0}
+    - target: {fileID: 4583098648222379118, guid: 572e8438a0ba60741ac6d605fad11c50,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 572e8438a0ba60741ac6d605fad11c50, type: 3}
 --- !u!1 &1274653351

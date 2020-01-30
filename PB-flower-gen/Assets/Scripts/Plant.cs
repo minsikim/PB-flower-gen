@@ -168,6 +168,11 @@ public class Plant : MonoBehaviour
         AddAnimationMethodsToList();
         DistributeAnimationMethodsByType();
     }
+
+    private void Update()
+    {
+        
+    }
     #endregion
 
     #region Data Managing Functions
@@ -253,16 +258,15 @@ public class Plant : MonoBehaviour
         switch (type)
         {
             case PlantFormType.A:
-                GameObject StemParent    = InitWithParent("StemParent",   transform);
-                Stem    = InitWithParent("Stem", StemParent.transform);
-                Leaves  = InitWithParent("Leaves", StemParent.transform);
-                Flower  = InitWithParent("Flower", StemParent.transform);
+                Stem    = InitWithParent("Stem", transform);
+                Leaves  = InitWithParent("Leaves", Stem.transform);
+                Flower  = InitWithParent("Flower", Stem.transform);
 
                 //Initialize Stem + Mesh
                 StemSpline = MakeSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
-                //Stem.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+                //transform.RotateAround(transform.position, Vector3.up, rotation * Time.deltaTime);
 
                 //Distribute and Initialize Leaves GameObjects
                 LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
@@ -590,7 +594,7 @@ public class Plant : MonoBehaviour
 
     private void UpdateLeafTransform(GameObject leaf, Spline spline, float position, float yRotation, float localScale)
     {
-        leaf.transform.position = GetSampleAt(spline, position).location - transform.position;
+        leaf.transform.position = GetSampleAt(spline, position).location + transform.position;
         leaf.transform.Rotate(0, yRotation, 0);
         leaf.transform.localScale = Vector3.one * localScale;
     }
@@ -738,7 +742,7 @@ public class Plant : MonoBehaviour
     {
         GameObject o = new GameObject(name);
         o.transform.SetParent(parent);
-        //o.transform.localPosition = Vector3.zero;
+        o.transform.localPosition = Vector3.zero;
         return o;
     }
     private void InitMesh(GameObject obj)
@@ -856,7 +860,7 @@ public class Plant : MonoBehaviour
                 meshVertices.AddRange(tempPointList);
 
 
-                Vector3 lastPoint = endPoint.location + radiusDistanceFromEndPoint - transform.position;
+                Vector3 lastPoint = endPoint.location + radiusDistanceFromEndPoint;
                 Debug.Log(transform.name + lastPoint);
                 meshVertices.Add(lastPoint);
 
@@ -905,7 +909,7 @@ public class Plant : MonoBehaviour
     {
         return GenerateCircleVertices(samplePoint.location, samplePoint.tangent, vertexCount, width);
     }
-    private Vector3[] GenerateCircleVertices(Vector3 centerPoint, Vector3 tangent, int vertexCount, float width)
+    private Vector3[] GenerateCircleVertices(Vector3 localCenterPoint, Vector3 tangent, int vertexCount, float width)
     {
         Vector3[] circleVertexList = new Vector3[vertexCount];
         float radius = width;
@@ -916,7 +920,7 @@ public class Plant : MonoBehaviour
             if (i == 0) rotationAxis = Vector3.up;
             else rotationAxis = tangent;
 
-            Vector3 p = Quaternion.AngleAxis(360 / vertexCount * -i, rotationAxis) * firstPoint + centerPoint - transform.position;
+            Vector3 p = Quaternion.AngleAxis(360 / vertexCount * -i, rotationAxis) * firstPoint + localCenterPoint;
             circleVertexList[i] = p;
         }
 

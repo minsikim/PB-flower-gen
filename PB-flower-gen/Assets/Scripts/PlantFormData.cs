@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using SplineMesh;
 
-[CreateAssetMenu (fileName = "Flower_NewFlowerName", menuName = "Project B/Flower")]
-public class FlowerFormData : ScriptableObject
+[CreateAssetMenu (fileName = "Plant_NewPlantName", menuName = "Project B/Plant")]
+public class PlantFormData : ScriptableObject
 {
     [Header("Basic Information")]
     public string flowerName;
     public string description;
 
-    [Header("Form Type")]
+    [Header("Plant Type")]
     [Space(20)]
     public PlantFormType plantFormType;
+
+    [Header("Flower Type")]
     public FlowerFormType flowerFormType;
+
 
     [Header("Flower Data")]
     public GameObject PetalPrefab;
@@ -21,15 +24,16 @@ public class FlowerFormData : ScriptableObject
     [DrawIf("flowerFormType", FlowerFormType.BudsArePetals, ComparisonType.NotEqual)]
     public GameObject BudPrefab;
     [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
-    public int FlowerToPlantCount = 3;
+    public int FlowerToPlantCount = 0;
+
     public Vector2Int PetalCountRange;
-    public Vector2Int PetalLayerCount;
+    public Vector2Int PetalLayerCountRange;
 
     [Header("Path Data")]
     [Space(20)]
     public RandomPath SproutPathData;
     public RandomPath StemPathData;
-    [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
+    [DrawIf("plantFormType", PlantFormType.C, ComparisonType.GreaterOrEqual)]
     public RandomPath StemBranchPathData;
     [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
     public RandomPath BranchPathData;
@@ -71,16 +75,32 @@ public class FlowerFormData : ScriptableObject
 
     [Header("Leaf Position Data")]
     [Space(20)]
+
     public GameObject LeafPrefab;
+
     public Vector2Int LeafCountRange;
+
     [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
     [MinMax(0, 1, ShowEditRange = true)]
     public Vector2 LeafPositionRange = new Vector2(0.2f, 0.9f);
-    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual, order = 0)]
-    [Tooltip("Leaf Position Random Value: H", order = 1)]
-    [MinMax(-1, 1, ShowEditRange = true, order = 2)]
-    public Vector2 LeafPositionRandomValue = new Vector2(-.25f, 0.25f);
 
+    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.Equals)]
+    public float LeafFixedPosition = 0.1f;
+
+    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
+    [MinMax(-1, 1, ShowEditRange = true)]
+    public float LeafPositionRandomPercentage = 0.25f;
+
+    [Header("Sprout Leaf Position Data")]
+    public LeafGrowRelation leafGrowRelation;
+    [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
+    public Vector2Int SproutLeafCountRange;
+    [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
+    [MinMax(0, 1, ShowEditRange = true)]
+    public Vector2 SproutLeafPositionRange = new Vector2(0.2f, 0.9f);
+    [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
+    [MinMax(-1, 1, ShowEditRange = true)]
+    public float SproutLeafPositionRandomPercentage = 0.25f;
 }
 
 

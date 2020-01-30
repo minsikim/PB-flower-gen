@@ -163,6 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4583098648222379116}
   - component: {fileID: 4583098648222379117}
+  - component: {fileID: 2404122321579217640}
   m_Layer: 0
   m_Name: FlowerPrefab_old
   m_TagString: Flower
@@ -210,6 +211,25 @@ MonoBehaviour:
   LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
     type: 3}
   LeafAmount: 10
+--- !u!95 &2404122321579217640
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4583098648222379118}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e87cc312e152d5c44855d422f1702524, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4583098648689924933
 GameObject:
   m_ObjectHideFlags: 0

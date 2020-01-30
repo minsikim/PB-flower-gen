@@ -12,6 +12,7 @@ public class LeafLocalData : MonoBehaviour
     public float sproutPosition;
     public float finalPosition;
     public float rotation;
+    public float sproutScale;
     public GameObject parent;
 
     #endregion

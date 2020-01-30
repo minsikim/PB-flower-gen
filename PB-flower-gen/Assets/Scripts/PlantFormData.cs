@@ -7,7 +7,7 @@ using SplineMesh;
 public class PlantFormData : ScriptableObject
 {
     [Header("Basic Information")]
-    public string flowerName;
+    public string plantName;
     public string description;
 
     [Header("Plant Type")]

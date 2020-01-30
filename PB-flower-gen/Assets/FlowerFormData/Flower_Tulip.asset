@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2691763bd03143448a71f4005bdd24f3, type: 3}
   m_Name: Flower_Tulip
   m_EditorClassIdentifier: 
-  flowerName: Tulip
+  plantName: 
   description: Tulip
   plantFormType: 0
   flowerFormType: 0
@@ -92,7 +92,7 @@ MonoBehaviour:
   BloomAnimationDuration: 3
   FallAnimationDuration: 3
   RebloomAnimationDuration: 5
-  LeafPrefab: {fileID: 4573938996701695792, guid: 986a76933a6af104197f582588c05fcb,
+  LeafPrefab: {fileID: 7784309132061046610, guid: b03897776f350864c9a3770d94192165,
     type: 3}
   LeafCountRange: {x: 2, y: 4}
   LeafPositionRange: {x: 0, y: 1}

@@ -14,8 +14,6 @@ public class StateBehaviour_Fall : StateMachineBehaviour
         if (lastUpdateTime + 5f > Time.time) return;
         else
         {
-            Debug.Log(lastUpdateTime + "Fall Update" + Time.time);
-
             Plant currentFlower = animator.GetComponent<Plant>();
             float progression = currentFlower.GetProgression();
             if (progression >= 1 || progression < 0)

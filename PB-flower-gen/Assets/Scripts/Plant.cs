@@ -21,6 +21,8 @@ public class Plant : MonoBehaviour
     private string plantName;
     private string description;
 
+    private float rotation;
+
     private PlantFormType plantFormType;
     private FlowerFormType flowerFormType;
 
@@ -90,7 +92,7 @@ public class Plant : MonoBehaviour
     private Spline StemSpline;
 
     //Animation State
-    private FlowerAnimationStates currentAnimationState;
+    private FlowerAnimationStates currentAnimationState = FlowerAnimationStates.Sprout;
     private DateTime LastStateChangedTime;
 
     //Animation Durations
@@ -175,7 +177,7 @@ public class Plant : MonoBehaviour
 
         initialTime = DateTime.Now;
 
-        plantName  = data.flowerName;
+        plantName  = data.plantName;
         description = data.description;
 
         plantFormType   = data.plantFormType;
@@ -184,6 +186,8 @@ public class Plant : MonoBehaviour
         PetalPrefab     = data.PetalPrefab;
         PistilPrefab    = data.PistilPrefab;
         LeafPrefab      = data.LeafPrefab;
+
+        rotation = UnityEngine.Random.Range(0f, 360f);
 
         SproutPathData      = data.SproutPathData;
         StemPathData        = data.StemPathData;
@@ -249,14 +253,16 @@ public class Plant : MonoBehaviour
         switch (type)
         {
             case PlantFormType.A:
-                Stem    = InitWithParent("Stem",   transform);
-                Leaves  = InitWithParent("Leaves", Stem.transform);
-                Flower  = InitWithParent("Flower", Stem.transform);
+                GameObject StemParent    = InitWithParent("StemParent",   transform);
+                Stem    = InitWithParent("Stem", StemParent.transform);
+                Leaves  = InitWithParent("Leaves", StemParent.transform);
+                Flower  = InitWithParent("Flower", StemParent.transform);
 
                 //Initialize Stem + Mesh
                 StemSpline = MakeSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
+                //Stem.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
 
                 //Distribute and Initialize Leaves GameObjects
                 LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
@@ -289,9 +295,11 @@ public class Plant : MonoBehaviour
                     else leafData.sproutPosition = SproutPositionList[i];
                     leafData.finalPosition = LeafPositionList[i];
                     leafData.rotation = LeafRotationList[i];
+                    leafData.sproutScale = SproutLeafScale;
 
                     //TODO
-                    //UpdateLeafTransform(localPosition, yRotation, localScale);
+                    UpdateLeafTransform(leaf, StemSpline, leafData.sproutPosition, leafData.rotation, leafData.sproutScale);
+
 
                     LeavesData.Add(leaf);
                 }
@@ -582,8 +590,9 @@ public class Plant : MonoBehaviour
 
     private void UpdateLeafTransform(GameObject leaf, Spline spline, float position, float yRotation, float localScale)
     {
-        leaf.transform.position = GetPointAt(spline, position);
-        //TODO
+        leaf.transform.position = GetSampleAt(spline, position).location - transform.position;
+        leaf.transform.Rotate(0, yRotation, 0);
+        leaf.transform.localScale = Vector3.one * localScale;
     }
 
     #endregion
@@ -729,6 +738,7 @@ public class Plant : MonoBehaviour
     {
         GameObject o = new GameObject(name);
         o.transform.SetParent(parent);
+        //o.transform.localPosition = Vector3.zero;
         return o;
     }
     private void InitMesh(GameObject obj)
@@ -835,7 +845,7 @@ public class Plant : MonoBehaviour
                 break;
 
             case CapType.round:
-
+                
                 //Add Cap Vertices
                 CurveSample endPoint = GetSampleAt(spline, endTime);
                 Vector3 radiusDistanceFromEndPoint = endPoint.tangent * minThickness / 2;
@@ -846,7 +856,8 @@ public class Plant : MonoBehaviour
                 meshVertices.AddRange(tempPointList);
 
 
-                Vector3 lastPoint = endPoint.location + radiusDistanceFromEndPoint;
+                Vector3 lastPoint = endPoint.location + radiusDistanceFromEndPoint - transform.position;
+                Debug.Log(transform.name + lastPoint);
                 meshVertices.Add(lastPoint);
 
                 //Add Triangles

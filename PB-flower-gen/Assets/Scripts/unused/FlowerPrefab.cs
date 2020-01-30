@@ -181,7 +181,8 @@ public class FlowerPrefab : MonoBehaviour
             leaf.transform.position = tempPosition;
             float normalAngle = Vector3.Angle(tempRotation, Vector3.right);
             normalAngle = tempRotation.y > 0 ? normalAngle : -normalAngle;
-            leaf.transform.rotation.SetEulerAngles(0, 0, normalAngle - leaf.transform.localRotation.z);
+            //leaf.transform.rotation.SetEulerAngles(0, 0, normalAngle - leaf.transform.localRotation.z);
+            leaf.transform.rotation = Quaternion.Euler(0, 0, normalAngle - leaf.transform.localRotation.z);
         }
         lastLeafAmount = LeafAmount;
     }

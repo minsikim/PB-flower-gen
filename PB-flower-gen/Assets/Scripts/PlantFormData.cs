@@ -57,6 +57,13 @@ public class PlantFormData : ScriptableObject
     public Color PetalColorRange1;
     [DrawIf("PetalColorRandom", true, ComparisonType.Equals)]
     public Color PetalColorRange2;
+    public bool LeafColorRandom = false;
+    [DrawIf("LeafColorRandom", true, ComparisonType.NotEqual)]
+    public Color LeafColor = Color.red;
+    [DrawIf("LeafColorRandom", true, ComparisonType.Equals)]
+    public Color LeafColorRange1;
+    [DrawIf("LeafColorRandom", true, ComparisonType.Equals)]
+    public Color LeafColorRange2;
 
 
     [Header("Animation Duration")]
@@ -77,6 +84,7 @@ public class PlantFormData : ScriptableObject
     [Space(20)]
     public GameObject LeafPrefab;
     public Vector2Int LeafCountRange;
+    public float LeafScaleRandomValue = 0f;
     [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
     [MinMax(0, 1, ShowEditRange = true)]
     public Vector2 LeafPositionRange = new Vector2(0.2f, 0.9f);
@@ -95,6 +103,7 @@ public class PlantFormData : ScriptableObject
     [MinMax(-1, 1, ShowEditRange = true)]
     public float SproutLeafPositionRandomPercentage = 0.25f;
     public float SproutLeafScale = 0.3f;
+    public GameObject SproutParticles;
 }
 
 

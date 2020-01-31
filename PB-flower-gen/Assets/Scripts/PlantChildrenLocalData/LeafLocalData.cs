@@ -13,7 +13,13 @@ public class LeafLocalData : MonoBehaviour
     public float finalPosition;
     public float rotation;
     public float sproutScale;
+    public Color leafColor;
     public GameObject parent;
+
+    public void AssignMaterialColor(Color color)
+    {
+        transform.GetChild(0).GetComponent<MeshRenderer>().material.color = color;
+    }
 
     #endregion
 }

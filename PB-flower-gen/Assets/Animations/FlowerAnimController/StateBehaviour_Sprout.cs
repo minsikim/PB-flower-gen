@@ -4,7 +4,7 @@ using UnityEngine;
 public class StateBehaviour_Sprout : StateMachineBehaviour
 {
     private float lastUpdateTime;
-    private float updateTime = .2f;
+    private float updateTime = .1f;
 
     private void OnEnable()
     {
@@ -36,5 +36,10 @@ public class StateBehaviour_Sprout : StateMachineBehaviour
             }
             lastUpdateTime = Time.time;
         }
+    }
+    public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    {
+        animator.GetComponent<Plant>().InitParticles();
+        
     }
 }

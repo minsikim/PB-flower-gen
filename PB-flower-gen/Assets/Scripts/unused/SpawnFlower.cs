@@ -8,10 +8,30 @@ public class SpawnFlower : MonoBehaviour
 {
     [SerializeField] GameObject SpawnPrefab;
     [SerializeField] GameObject FlowerCount;
+
+    public bool autoSpawn = false;
+    private const float spawnInterval = 0.1f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(autoSpawn) InvokeRepeating("InitFlower", 0f, spawnInterval);
+    }
+
+    public void InitFlower()
+    {
+        Instantiate(SpawnPrefab);
+
+        float z1 = -13f;
+        float z2 = 37f;
+
+        float x1 = 8f;
+        float x2 = 22f;
+
+        float zRandom = UnityEngine.Random.Range(z1, z2);
+        float xCal = ((x2 - x1) * ((zRandom-z1) / x2-z1)) + x1;
+        float x = UnityEngine.Random.Range(-1f, 1f) * ( xCal / 5);
+
+        SpawnPrefab.transform.position = new Vector3(x, 0, zRandom);
     }
 
     // Update is called once per frame
@@ -27,27 +47,27 @@ public class SpawnFlower : MonoBehaviour
                 Instantiate(SpawnPrefab);
                 SpawnPrefab.transform.position = hit.point;
 
-                int currentFlowerCount = Convert.ToInt32(FlowerCount.GetComponent<Text>().text);
-                FlowerCount.GetComponent<Text>().text = (currentFlowerCount + 1).ToString();
+                //int currentFlowerCount = Convert.ToInt32(FlowerCount.GetComponent<Text>().text);
+                //FlowerCount.GetComponent<Text>().text = (currentFlowerCount + 1).ToString();
             }
 
         }
     }
 
-    public void SetGrowState()
-    {
-        GameObject[] Flowers = GameObject.FindGameObjectsWithTag("Flower");
-        foreach(GameObject f in Flowers)
-        {
-            f.GetComponent<FlowerPrefab>().ToggleGrowState();
-        }
-    }
-    public void SetBloomState()
-    {
-        GameObject[] Flowers = GameObject.FindGameObjectsWithTag("Flower");
-        foreach (GameObject f in Flowers)
-        {
-            f.GetComponent<FlowerPrefab>().ToggleBloomState();
-        }
-    }
+    //public void SetGrowState()
+    //{
+    //    GameObject[] Flowers = GameObject.FindGameObjectsWithTag("Flower");
+    //    foreach(GameObject f in Flowers)
+    //    {
+    //        f.GetComponent<FlowerPrefab>().ToggleGrowState();
+    //    }
+    //}
+    //public void SetBloomState()
+    //{
+    //    GameObject[] Flowers = GameObject.FindGameObjectsWithTag("Flower");
+    //    foreach (GameObject f in Flowers)
+    //    {
+    //        f.GetComponent<FlowerPrefab>().ToggleBloomState();
+    //    }
+    //}
 }

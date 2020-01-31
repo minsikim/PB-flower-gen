@@ -57,6 +57,7 @@ public class Plant : MonoBehaviour
     private Vector2 LeafPositionRange;
     private float LeafPositionRandomPercentage;
     private float LeafFixedPosition;
+    private float LeafScaleRandomValue;
 
     private int LeafCount;
 
@@ -74,9 +75,9 @@ public class Plant : MonoBehaviour
     private List<float> SproutPositionList;
 
     //List of Children by Type
-    private List<GameObject> LeavesData;
-    private List<GameObject> BranchesData;
-    private List<GameObject> FlowersData;
+    private List<GameObject> LeavesList;
+    private List<GameObject> BranchesList;
+    private List<GameObject> FlowersList;
 
     //Children GameObjects
     private GameObject Tree;
@@ -125,6 +126,12 @@ public class Plant : MonoBehaviour
     private Color PetalColor;
     private Color PetalColorRange1;
     private Color PetalColorRange2;
+    private Color LeafColorRandom;
+    private Color LeafColor;
+    private Color LeafColorRange1;
+    private Color LeafColorRange2;
+
+    private GameObject SproutParticles;
 
     #endregion
 
@@ -210,6 +217,7 @@ public class Plant : MonoBehaviour
         LeafPositionRange               = data.LeafPositionRange;
         LeafPositionRandomPercentage    = data.LeafPositionRandomPercentage;
         LeafFixedPosition               = data.LeafFixedPosition;
+        LeafScaleRandomValue            = data.LeafScaleRandomValue;
 
         leafGrowRelation                    = data.leafGrowRelation;
         SproutLeafCountRange                = data.SproutLeafCountRange;
@@ -217,15 +225,17 @@ public class Plant : MonoBehaviour
         SproutLeafPositionRandomPercentage  = data.SproutLeafPositionRandomPercentage;
         SproutLeafScale                     = data.SproutLeafScale;
 
+        SproutParticles = data.SproutParticles;
+
         SproutAnimationDuration     = data.SproutAnimationDuration;
         GrowAniamtionDuration       = data.GrowAniamtionDuration;
         BloomAnimationDuration      = data.BloomAnimationDuration;
         FallAnimationDuration       = data.FallAnimationDuration;
         RebloomAnimationDuration    = data.RebloomAnimationDuration;
 
-        LeavesData = new List<GameObject>();
-        BranchesData = new List<GameObject>();
-        FlowersData = new List<GameObject>();
+        LeavesList = new List<GameObject>();
+        BranchesList = new List<GameObject>();
+        FlowersList = new List<GameObject>();
 
         durationList = new List<float>()
         {
@@ -244,11 +254,13 @@ public class Plant : MonoBehaviour
         StemBranchColor = data.StemBranchColor;
         PistilColor = data.PistilColor;
         if (!data.PetalColorRandom) PetalColor = data.PetalColor;
-        else PetalColor = GetColorFromRange(data.PetalColorRange1, data.PetalColorRange2);
+        else LeafColor = GetColorFromRange(data.PetalColorRange1, data.LeafColorRange2);
+        if (!data.LeafColorRandom) LeafColor = data.LeafColor;
+        else LeafColor = GetColorFromRange(data.LeafColorRange1, data.LeafColorRange2);
 
         DistributeGameObjectsByType(plantFormType);
 
-        SaveFlowerData();
+        transform.RotateAround(transform.position, Vector3.up, rotation);
 
         SetAnimationState(FlowerAnimationStates.Sprout);
     }
@@ -266,26 +278,15 @@ public class Plant : MonoBehaviour
                 StemSpline = MakeSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
-                //transform.RotateAround(transform.position, Vector3.up, rotation * Time.deltaTime);
 
                 //Distribute and Initialize Leaves GameObjects
                 LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
-                LeafPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomPercentage);
+
+                LeafPositionList = DistributeLeafPositions(LeafCount, LeafFixedPosition);
                 LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
 
-
-                //TODO 
-
                 SproutLeafCount = UnityEngine.Random.Range(SproutLeafCountRange.x, SproutLeafCountRange.y + 1);
-                if (leafGrowRelation == LeafGrowRelation.Same)
-                {
-                    SproutPositionList = LeafPositionList;
-                }
-                else if (leafGrowRelation == LeafGrowRelation.Differ)
-                {
-                    SproutPositionList = DistributeLeafPositions(LeafCount, SproutLeafPositionRange, SproutLeafPositionRandomPercentage);
-                }
-
+                SproutPositionList = LeafPositionList;
 
                 for (int i = 0; i < LeafCount; i++)
                 {
@@ -299,13 +300,13 @@ public class Plant : MonoBehaviour
                     else leafData.sproutPosition = SproutPositionList[i];
                     leafData.finalPosition = LeafPositionList[i];
                     leafData.rotation = LeafRotationList[i];
-                    leafData.sproutScale = SproutLeafScale;
+                    leafData.sproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(- LeafScaleRandomValue, LeafScaleRandomValue);
+                    leafData.leafColor = LeafColor;
 
-                    //TODO
-                    UpdateLeafTransform(leaf, StemSpline, leafData.sproutPosition, leafData.rotation, leafData.sproutScale);
+                    leafData.AssignMaterialColor(LeafColor);
+                    UpdateLeafTransform(leaf, StemSpline, leafData.sproutPosition, leafData.rotation, 0f);
 
-
-                    LeavesData.Add(leaf);
+                    LeavesList.Add(leaf);
                 }
 
                 //Distribute and Initialize Flower GameObjects 
@@ -314,9 +315,6 @@ public class Plant : MonoBehaviour
                 PetalCounts = DistributeRandomIntArray(PetalLayerCounts[0], data.PetalCountRange);
 
                 InitFlower(Flower, PetalLayerCounts[0], PetalCounts);
-
-                //SaveDistributedData in Private Variables for Save Plant Form Data
-
 
                 break;
             case PlantFormType.B:
@@ -327,6 +325,20 @@ public class Plant : MonoBehaviour
                 StemSpline = MakeSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
+
+                //Saved position distribution function for random values
+                LeafPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomPercentage);
+                LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
+
+                SproutLeafCount = UnityEngine.Random.Range(SproutLeafCountRange.x, SproutLeafCountRange.y + 1);
+                if (leafGrowRelation == LeafGrowRelation.Same)
+                {
+                    SproutPositionList = LeafPositionList;
+                }
+                else if (leafGrowRelation == LeafGrowRelation.Differ)
+                {
+                    SproutPositionList = DistributeLeafPositions(LeafCount, SproutLeafPositionRange, SproutLeafPositionRandomPercentage);
+                }
 
                 break;
             case PlantFormType.C:
@@ -362,11 +374,6 @@ public class Plant : MonoBehaviour
                 Console.WriteLine("PlantFormType is Broken");
                 break;
         }
-    }
-
-    void UpdateFlowerData()
-    {
-        
     }
 
     /// <summary>
@@ -486,19 +493,25 @@ public class Plant : MonoBehaviour
 
         return positions;
     }
-    private List<float> DistributeLeafFixedPositions(int leafCount, Vector2 positionRange, float positionRandomValue)
+    private List<float> DistributeLeafPositions(int leafCount, float fixedPosition)
     {
         List<float> positions = new List<float>();
 
-        float from = positionRange.x;
-        float to = positionRange.y;
-        float range = to - from;
-        float interval = range / leafCount;
+        for (int i = 0; i < leafCount; i++)
+        {
+            positions.Add(fixedPosition);
+        }
+
+        return positions;
+    }
+    private List<float> DistributeLeafPositions(int leafCount, float fixedPosition, int positionRandomValue)
+    {
+        List<float> positions = new List<float>();
 
         for (int i = 0; i < leafCount; i++)
         {
             float random = UnityEngine.Random.Range(-positionRandomValue, positionRandomValue);
-            positions.Add(from + interval + (interval * random));
+            positions.Add(fixedPosition + random);
         }
 
         return positions;
@@ -522,16 +535,6 @@ public class Plant : MonoBehaviour
         return rotations;
     }
 
-    private void AssignLeavesToSpline(Spline spline)
-    {
-        GameObject parent = spline.gameObject;
-
-    }
-    private void AssignBranchToSpline(Spline spline)
-    {
-        GameObject parent = spline.gameObject;
-
-    }
     private void InitFlower(GameObject flowerObject, int PetalLayerCount, int[] PetalCounts)
     {
         const float CloseLayerDifference = 0.01f;
@@ -552,6 +555,7 @@ public class Plant : MonoBehaviour
             }
         }
     }
+
     #endregion
 
     #region Public Animation Functions
@@ -592,11 +596,9 @@ public class Plant : MonoBehaviour
 
     #region Animation Sub Methods
 
-    private void UpdateLeafTransform(GameObject leaf, Spline spline, float position, float yRotation, float localScale)
+    public void InitParticles()
     {
-        leaf.transform.position = GetSampleAt(spline, position).location + transform.position;
-        leaf.transform.Rotate(0, yRotation, 0);
-        leaf.transform.localScale = Vector3.one * localScale;
+        Instantiate(SproutParticles, transform);
     }
 
     #endregion
@@ -606,17 +608,9 @@ public class Plant : MonoBehaviour
     /// <summary> 처음 심었을때 새싹까지 Animation Controller의 OnStateUpdate에서 실행됨(약5초) </summary>
     public void SproutA(float progress)
     {
-        // 1. SproutSpline 값을 받아서 현재 시각에 따라 Mesh 만듦(Animation)
-        // 2. FlowerData에서 정해진 위치와 각도를 받아와 그에 따라 새싹이 남
-        //    -> 예시: SproutAnimationDurationValues = [ [ 0f, 0.5f ], [ 0.5f, 0.8f ], [ 0.7f, 1.0f ] ]
-        // 3. SproutParticleAnimation 실행
-        // 4. Finish Init -> Trigger Grow State
 
-        //DrawSproutMesh(progress);
-        //DrawSproutLeaf(progress);
-
-        float[] stemProgress = new float[2] { 0f , .7f };
-        float[] leafProgress = new float[2] { .7f , 1f };
+        float[] stemProgress = new float[2] { 0f , .8f };
+        float[] leafProgress = new float[2] { .5f , 1f };
 
         float currentStemProgress = (progress - stemProgress[0]) / (stemProgress[1] - stemProgress[0]);
         float currentLeafProgress = (progress - leafProgress[0]) / (leafProgress[1] - leafProgress[0]);
@@ -630,10 +624,12 @@ public class Plant : MonoBehaviour
 
         if (0f <= currentLeafProgress && currentLeafProgress <= 1f)
         {
-            float currentThicknessMax = SproutPathData.pathMeshProperties.Thickness.max * currentLeafProgress;
-            float currentThicknessMin = SproutPathData.pathMeshProperties.Thickness.min * currentLeafProgress;
-            DrawStem(StemSpline, currentThicknessMax, currentThicknessMin, 0f, currentLeafProgress);
-            //SproutLeaf(sproutLeafCount, currentLeafProgress);
+            foreach(GameObject leaf in LeavesList)
+            {
+                LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
+                float currentScale = SproutLeafScale * currentLeafProgress;
+                UpdateLeafTransform(leaf, StemSpline, leafData.sproutPosition * progress, leafData.rotation, currentScale);
+            }
         }
     }
     public void SproutB(float progress)
@@ -788,6 +784,29 @@ public class Plant : MonoBehaviour
 
     #endregion
 
+    #region Private Animation Functions
+
+    private void UpdateLeafTransform(GameObject leaf, Spline spline, float position, float yRotation, float localScale)
+    {
+        CurveSample p = GetSampleAt(spline, position);
+        leaf.transform.position = p.location + transform.position;
+        leaf.transform.rotation = Quaternion.Euler(0, yRotation, Vector3.Angle(Vector3.up, p.tangent));
+        leaf.transform.localScale = Vector3.one * localScale;
+    }
+    //TODO : UpdatePositionOnSpline을 쫌 일반화해보자
+    private void UpdateFlowerTransform(Spline spline, GameObject flowerObj)
+    {
+        CurveSample p = GetSampleAt(spline, 1f);
+        flowerObj.transform.position = p.location;
+        flowerObj.transform.rotation = Quaternion.Euler(0, 0, Vector3.Angle(Vector3.up, p.tangent));
+    }
+    public void SetAnimationNormalizedTime(GameObject obj, string floatName, float progress)
+    {
+        obj.GetComponent<Animator>().SetFloat(floatName, progress);
+    }
+
+    #endregion
+
     #region Generate Mesh Functions
 
     private void DrawStem(Spline spline, float maxThickness, float minThickness)
@@ -859,9 +878,7 @@ public class Plant : MonoBehaviour
                 Vector3[] tempPointList = GenerateCircleVertices(centerPoint, endPoint.tangent, vertexCount, currentThickness);
                 meshVertices.AddRange(tempPointList);
 
-
                 Vector3 lastPoint = endPoint.location + radiusDistanceFromEndPoint;
-                Debug.Log(transform.name + lastPoint);
                 meshVertices.Add(lastPoint);
 
                 //Add Triangles

@@ -16,14 +16,14 @@ MonoBehaviour:
   description: Tulip
   plantFormType: 0
   flowerFormType: 0
-  PetalPrefab: {fileID: 2447095657092369944, guid: ea5e8200f40463648b8c6031497a4b5c,
+  PetalPrefab: {fileID: 3193613396651603626, guid: 41f4cba8be4f445458e94f5275f7ce16,
     type: 3}
   PistilPrefab: {fileID: 1172504549165619814, guid: a8d3ea9c509b00c4bb5e2fff1cc1022e,
     type: 3}
   BudPrefab: {fileID: 0}
   FlowerToPlantCount: 10
   PetalCountRange: {x: 3, y: 5}
-  PetalLayerCountRange: {x: 0, y: 0}
+  PetalLayerCountRange: {x: 2, y: 3}
   SproutPathData:
     pathMeshProperties:
       Thickness:
@@ -42,6 +42,11 @@ MonoBehaviour:
       randomRange:
         min: -0.2
         max: 0.2
+    - randomNodeIndex: 1
+      randomAxis: 1
+      randomRange:
+        min: -0.5
+        max: 0.5
   StemPathData:
     pathMeshProperties:
       Thickness:
@@ -87,7 +92,11 @@ MonoBehaviour:
   PetalColor: {r: 0.8679245, g: 0.38923737, b: 0.06959773, a: 0}
   PetalColorRange1: {r: 0.8773585, g: 0.31417674, b: 0.16967781, a: 1}
   PetalColorRange2: {r: 0.8301887, g: 0.5577864, b: 0.38768244, a: 1}
-  SproutAnimationDuration: 10
+  LeafColorRandom: 1
+  LeafColor: {r: 0.5803922, g: 0.7254902, b: 0.41568628, a: 1}
+  LeafColorRange1: {r: 0.5803922, g: 0.7254902, b: 0.41568628, a: 1}
+  LeafColorRange2: {r: 0.4927836, g: 0.7254902, b: 0.41568628, a: 1}
+  SproutAnimationDuration: 5
   GrowAniamtionDuration: 3
   BloomAnimationDuration: 3
   FallAnimationDuration: 3
@@ -95,6 +104,7 @@ MonoBehaviour:
   LeafPrefab: {fileID: 7784309132061046610, guid: b03897776f350864c9a3770d94192165,
     type: 3}
   LeafCountRange: {x: 2, y: 4}
+  LeafScaleRandomValue: 0.2
   LeafPositionRange: {x: 0, y: 1}
   LeafFixedPosition: 0.1
   LeafPositionRandomPercentage: 0.25
@@ -103,3 +113,5 @@ MonoBehaviour:
   SproutLeafPositionRange: {x: 0.2, y: 0.9}
   SproutLeafPositionRandomPercentage: 0.25
   SproutLeafScale: 0.3
+  SproutParticles: {fileID: 3802949691150794262, guid: 3a6742c69416dd34b8bfeb2a2aa1be1f,
+    type: 3}

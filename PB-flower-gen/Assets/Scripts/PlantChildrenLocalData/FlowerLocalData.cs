@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class FlowerLocalData : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region Private Variables
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int flowerIndex = 0;
+    public int totalPetalCount;
+    public int petalLayerCount;
+    public int[] petalCounts;
+    public GameObject parent;
+
+    #endregion
 }

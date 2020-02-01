@@ -10,7 +10,7 @@ public class FlowerLocalData : MonoBehaviour
     public int totalPetalCount;
     public int petalLayerCount;
     public int[] petalCounts;
-    public GameObject parent;
+    public GameObject parent; // Parent Must be Stem.
 
     #endregion
 }

@@ -90,7 +90,7 @@ public class Plant : MonoBehaviour
     private GameObject Flowers;
 
     private Spline TreeSpline;
-    private Spline StemSpline;
+    private Spline CurrentMainSpline;
 
     //Animation State
     private FlowerAnimationStates currentAnimationState = FlowerAnimationStates.Sprout;
@@ -126,8 +126,9 @@ public class Plant : MonoBehaviour
     private Color PetalColor;
     private Color PetalColorRange1;
     private Color PetalColorRange2;
-    private Color LeafColorRandom;
+    private bool  LeafColorRandom;
     private Color LeafColor;
+    private Color[] LeafColors;
     private Color LeafColorRange1;
     private Color LeafColorRange2;
 
@@ -158,7 +159,7 @@ public class Plant : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        //TODO 로딩이랑 처음 만드는 거랑 구분
+        //희성: 로딩이랑 처음 만드는 거랑 구분
         if (true)
         {
             InitializeFlowerData();
@@ -219,6 +220,8 @@ public class Plant : MonoBehaviour
         LeafFixedPosition               = data.LeafFixedPosition;
         LeafScaleRandomValue            = data.LeafScaleRandomValue;
 
+        LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
+
         leafGrowRelation                    = data.leafGrowRelation;
         SproutLeafCountRange                = data.SproutLeafCountRange;
         SproutLeafPositionRange             = data.SproutLeafPositionRange;
@@ -253,10 +256,12 @@ public class Plant : MonoBehaviour
         StemColor = data.StemColor;
         StemBranchColor = data.StemBranchColor;
         PistilColor = data.PistilColor;
-        if (!data.PetalColorRandom) PetalColor = data.PetalColor;
-        else LeafColor = GetColorFromRange(data.PetalColorRange1, data.LeafColorRange2);
-        if (!data.LeafColorRandom) LeafColor = data.LeafColor;
-        else LeafColor = GetColorFromRange(data.LeafColorRange1, data.LeafColorRange2);
+        PetalColorRandom = data.PetalColorRandom;
+        LeafColorRandom = data.LeafColorRandom;
+        if (!PetalColorRandom) PetalColor = data.PetalColor;
+        else PetalColor = GetColorFromRange(data.PetalColorRange1, data.PetalColorRange2);
+        if (!LeafColorRandom) LeafColor = data.LeafColor;
+        else LeafColors = DistributeColorsFromRange(LeafCount, data.LeafColorRange1, data.LeafColorRange2);
 
         DistributeGameObjectsByType(plantFormType);
 
@@ -275,12 +280,13 @@ public class Plant : MonoBehaviour
                 Flower  = InitWithParent("Flower", Stem.transform);
 
                 //Initialize Stem + Mesh
-                StemSpline = MakeSpline(Stem, SproutPathNodes);
+                Spline tempSpline = CreateSplinefromNodes(SproutPathNodes);
+                SproutPathNodes = MatchNodeCount(SproutPathNodes, StemPathNodes, tempSpline);
+                CurrentMainSpline = InitSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
 
                 //Distribute and Initialize Leaves GameObjects
-                LeafCount = UnityEngine.Random.Range(LeafCountRange.x, LeafCountRange.y + 1);
 
                 LeafPositionList = DistributeLeafPositions(LeafCount, LeafFixedPosition);
                 LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
@@ -301,10 +307,18 @@ public class Plant : MonoBehaviour
                     leafData.finalPosition = LeafPositionList[i];
                     leafData.rotation = LeafRotationList[i];
                     leafData.sproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(- LeafScaleRandomValue, LeafScaleRandomValue);
-                    leafData.leafColor = LeafColor;
+                    if (LeafColorRandom)
+                    {
+                        leafData.leafColor = LeafColors[i];
+                        leafData.AssignMaterialColor(LeafColors[i]);
+                    }
+                    else
+                    {
+                        leafData.leafColor = LeafColor;
+                        leafData.AssignMaterialColor(LeafColor);
+                    }
 
-                    leafData.AssignMaterialColor(LeafColor);
-                    UpdateLeafTransform(leaf, StemSpline, leafData.sproutPosition, leafData.rotation, 0f);
+                    UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.sproutPosition, leafData.rotation, 0f);
 
                     LeavesList.Add(leaf);
                 }
@@ -314,7 +328,7 @@ public class Plant : MonoBehaviour
                 PetalLayerCounts[0] = UnityEngine.Random.Range(data.PetalLayerCountRange.x, data.PetalLayerCountRange.y);
                 PetalCounts = DistributeRandomIntArray(PetalLayerCounts[0], data.PetalCountRange);
 
-                InitFlower(Flower, PetalLayerCounts[0], PetalCounts);
+                InitFlower(Flower, PetalLayerCounts[0], PetalCounts, Stem);
 
                 break;
             case PlantFormType.B:
@@ -322,7 +336,7 @@ public class Plant : MonoBehaviour
                 Leaves = InitWithParent("Leaves", Stem.transform);
                 Flower = InitWithParent("Flower", Stem.transform);
 
-                StemSpline = MakeSpline(Stem, SproutPathNodes);
+                CurrentMainSpline = InitSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
 
@@ -346,7 +360,7 @@ public class Plant : MonoBehaviour
                 StemBranches = InitWithParent("StemBranches", Stem.transform);
                 Flower = InitWithParent("Flower", Stem.transform);
 
-                StemSpline = MakeSpline(Stem, SproutPathNodes);
+                CurrentMainSpline = InitSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
 
@@ -356,7 +370,7 @@ public class Plant : MonoBehaviour
                 Branches = InitWithParent("Branches", Stem.transform);
                 Leaves = InitWithParent("Leaves", Stem.transform);
 
-                StemSpline = MakeSpline(Stem, SproutPathNodes);
+                CurrentMainSpline = InitSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
 
@@ -365,7 +379,7 @@ public class Plant : MonoBehaviour
                 Tree = InitWithParent("Tree", transform);
                 Branches = InitWithParent("Branches", Tree.transform);
 
-                TreeSpline = MakeSpline(Tree, SproutPathNodes);
+                TreeSpline = InitSpline(Tree, SproutPathNodes);
                 InitMesh(Tree);
                 ApplyColorToMesh(Tree, TreeColor);
 
@@ -535,15 +549,33 @@ public class Plant : MonoBehaviour
         return rotations;
     }
 
-    private void InitFlower(GameObject flowerObject, int PetalLayerCount, int[] PetalCounts)
+    private Color[] DistributeColorsFromRange(int LeafCount, Color LeafColorRange1, Color LeafColorRange2)
+    {
+        Color[] colorArray = new Color[LeafCount];
+        for(int i = 0; i < LeafCount; i++)
+        {
+            colorArray[i] = GetColorFromRange(LeafColorRange1, LeafColorRange2);
+            Debug.Log(colorArray[i]);
+        }
+        return colorArray;
+    }
+
+    private void InitFlower(GameObject flowerObject, int PetalLayerCount, int[] PetalCounts, GameObject parent)
     {
         const float CloseLayerDifference = 0.01f;
 
+        GameObject Pistil = InitWithParent(PistilPrefab, flowerObject.transform);
         GameObject Petals = InitWithParent("Petals", flowerObject.transform);
+
+        FlowerLocalData flowerData  = flowerObject.AddComponent<FlowerLocalData>();
+
+        flowerData.petalLayerCount  = PetalLayerCount;
+        flowerData.petalCounts      = PetalCounts;
+        flowerData.parent           = parent;
+
         for (int i = 0; i < PetalLayerCount; ++i)
         {
-            InitWithParent("PetalLayer" + i, flowerObject.transform);
-            GameObject petalLayer = new GameObject();
+            GameObject petalLayer = InitWithParent("PetalLayer" + i, flowerObject.transform);
             petalLayer.transform.SetParent(Petals.transform);
             petalLayer.transform.localPosition = new Vector3(0, 0, 0);
 
@@ -552,8 +584,12 @@ public class Plant : MonoBehaviour
                 GameObject petal = Instantiate(PetalPrefab, petalLayer.transform);
                 petal.transform.Rotate(new Vector3(0, (360 / PetalCounts[i] * j) + i * 30, 0));
                 petal.GetComponent<Animator>().SetFloat("Time", 0.0f + ((PetalLayerCount - i) * CloseLayerDifference));
-            }
+                flowerData.totalPetalCount++;
+}
         }
+
+        UpdateTransformOnSpline(flowerObject, CurrentMainSpline, 1f, 0f, 1f);
+        flowerObject.SetActive(false);
     }
 
     #endregion
@@ -619,7 +655,7 @@ public class Plant : MonoBehaviour
         {
             float currentThicknessMax = SproutPathData.pathMeshProperties.Thickness.max * currentStemProgress;
             float currentThicknessMin = SproutPathData.pathMeshProperties.Thickness.min * currentStemProgress;
-            DrawStem(StemSpline, currentThicknessMax, currentThicknessMin, 0f, currentStemProgress);
+            DrawStem(CurrentMainSpline, currentThicknessMax, currentThicknessMin, 0f, currentStemProgress);
         }
 
         if (0f <= currentLeafProgress && currentLeafProgress <= 1f)
@@ -628,7 +664,7 @@ public class Plant : MonoBehaviour
             {
                 LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
                 float currentScale = SproutLeafScale * currentLeafProgress;
-                UpdateLeafTransform(leaf, StemSpline, leafData.sproutPosition * progress, leafData.rotation, currentScale);
+                UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.sproutPosition * progress, leafData.rotation, currentScale);
             }
         }
     }
@@ -662,6 +698,38 @@ public class Plant : MonoBehaviour
         // 2. StemSpline에서 Mesh 생성 (시작, 끝 두께 및 상단 끝처리 값 필요)
         //GrowStem(progress);
 
+        //Lerp Spline
+        //CurrentMainSpline
+
+        float[] stemProgress = new float[2] { 0f, 1f };
+        //float[] leafProgress = new float[2] { .5f, 1f };
+
+        float currentStemProgress = (progress - stemProgress[0]) / (stemProgress[1] - stemProgress[0]);
+        //float currentLeafProgress = (progress - leafProgress[0]) / (leafProgress[1] - leafProgress[0]);
+
+        if (0f <= currentStemProgress && currentStemProgress <= 1f)
+        {
+            Node[] lerpedNodeList = LerpNodeList(SproutPathNodes, StemPathNodes, CurrentMainSpline, progress);
+            CurrentMainSpline = UpdateNodeToSpline(CurrentMainSpline, lerpedNodeList);
+            float currentThicknessMax = (StemPathData.pathMeshProperties.Thickness.max - SproutPathData.pathMeshProperties.Thickness.max) * currentStemProgress + SproutPathData.pathMeshProperties.Thickness.max;
+            float currentThicknessMin = (StemPathData.pathMeshProperties.Thickness.min = SproutPathData.pathMeshProperties.Thickness.min) * currentStemProgress + SproutPathData.pathMeshProperties.Thickness.min;
+            DrawStem(CurrentMainSpline, currentThicknessMax, currentThicknessMin, 0f, 1f);
+            UpdateTransformOnSpline(Flower, CurrentMainSpline, 1f, 0f, progress);
+        }
+
+        foreach (GameObject leaf in LeavesList)
+        {
+            LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
+            UpdateTransformOnSpline(
+                leaf, CurrentMainSpline, 
+                progress * (leafData.finalPosition - leafData.sproutPosition) + leafData.sproutPosition,
+                leafData.rotation, 
+                progress * (1f - leafData.sproutScale) + leafData.sproutScale);
+        }
+
+        //UpdatePositionOnSpline(Flower, CurrentMainSpline, progress);
+
+
         // GrowLeaves ->
         // 1. 처음난 새싹은 같이 자라면서 올라가고
         // 2. 특정시점(예: Growth 15%마다 1개씩, Stem의 특정 t position에 생겨나고 자람)
@@ -683,9 +751,11 @@ public class Plant : MonoBehaviour
     /// <summary> Grow 단계 이전에 처리할 것들 </summary>
     public void OnGrowStart()
     {
-        currentAnimationState = FlowerAnimationStates.Grow;
-        // 1. stemSpline 정의
-        // 2. FlowerBud Initialize
+
+        //InitSpline()
+        /*CurrentMainSpline = */
+        MatchNodeCount(SproutPathNodes, StemPathNodes, CurrentMainSpline);
+        Flower.SetActive(true);
     }
 
     #endregion
@@ -733,13 +803,18 @@ public class Plant : MonoBehaviour
     #endregion
 
     #region Private Utility Functions
-
+    private GameObject InitWithParent(GameObject prefab, Transform parent)
+    {
+        GameObject instantiatedObject = Instantiate(prefab, parent);
+        instantiatedObject.transform.localPosition = Vector3.zero;
+        return instantiatedObject;
+    }
     private GameObject InitWithParent(string name, Transform parent)
     {
-        GameObject o = new GameObject(name);
-        o.transform.SetParent(parent);
-        o.transform.localPosition = Vector3.zero;
-        return o;
+        GameObject newObject = new GameObject(name);
+        newObject.transform.SetParent(parent);
+        newObject.transform.localPosition = Vector3.zero;
+        return newObject;
     }
     private void InitMesh(GameObject obj)
     {
@@ -785,6 +860,37 @@ public class Plant : MonoBehaviour
     #endregion
 
     #region Private Animation Functions
+    private void UpdateTransformOnSpline(GameObject objectToUpdate, Spline spline, float positionTime, float yEulerAngle, float localScale)
+    {
+        CurveSample p = GetSampleAt(spline, positionTime);
+        UpdatePositionOnSpline(objectToUpdate, p.location);
+        UpdateRotationOnSpline(objectToUpdate, yEulerAngle, p.tangent);
+        UpdateLocalScale(objectToUpdate, localScale);
+        objectToUpdate.transform.RotateAround(transform.position, Vector3.up, rotation);
+    }
+    private void UpdateTransformOnSpline(GameObject objectToUpdate, Spline spline, float positionTime)
+    {
+        CurveSample p = GetSampleAt(spline, positionTime);
+        UpdatePositionOnSpline(objectToUpdate, p.location);
+        UpdateRotationOnSpline(objectToUpdate, 0f, p.tangent);
+    }
+    private void UpdatePositionOnSpline(GameObject objectToUpdate, Vector3 p)
+    {
+        objectToUpdate.transform.position = p + transform.position;
+    }
+    private void UpdatePositionOnSpline(GameObject objectToUpdate, Spline spline, float positionTime)
+    {
+        CurveSample p = GetSampleAt(spline, positionTime);
+        objectToUpdate.transform.position = p.location + transform.position;
+    }
+    private void UpdateRotationOnSpline(GameObject objectToUpdate, float yEulerAngle, Vector3 tangent)
+    {
+        objectToUpdate.transform.rotation = Quaternion.Euler(0, yEulerAngle, Vector3.Angle(Vector3.up, tangent));
+    }
+    private void UpdateLocalScale(GameObject objectToUpdate, float localScale)
+    {
+        objectToUpdate.transform.localScale = Vector3.one * localScale;
+    }
 
     private void UpdateLeafTransform(GameObject leaf, Spline spline, float position, float yRotation, float localScale)
     {
@@ -792,13 +898,6 @@ public class Plant : MonoBehaviour
         leaf.transform.position = p.location + transform.position;
         leaf.transform.rotation = Quaternion.Euler(0, yRotation, Vector3.Angle(Vector3.up, p.tangent));
         leaf.transform.localScale = Vector3.one * localScale;
-    }
-    //TODO : UpdatePositionOnSpline을 쫌 일반화해보자
-    private void UpdateFlowerTransform(Spline spline, GameObject flowerObj)
-    {
-        CurveSample p = GetSampleAt(spline, 1f);
-        flowerObj.transform.position = p.location;
-        flowerObj.transform.rotation = Quaternion.Euler(0, 0, Vector3.Angle(Vector3.up, p.tangent));
     }
     public void SetAnimationNormalizedTime(GameObject obj, string floatName, float progress)
     {
@@ -998,16 +1097,148 @@ public class Plant : MonoBehaviour
     #endregion
 
     #region Spline Helper Methods
-
-    private Spline MakeSpline(GameObject o, Node[] nodes)
+    //Lerp Splines for Grow();
+    private Spline InitSpline(GameObject o, Node[] nodes)
     {
         Spline spline = o.AddComponent<Spline>();
+        spline = NodeToSpline(spline, nodes);
+        return spline;
+    }
+    private Spline CreateSplinefromNodes(Node[] nodes)
+    {
+        Spline spline = new Spline();
+        NodeToSpline(spline, nodes);
+        return spline;
+    }
+    private Spline NodeToSpline(Spline spline, Node[] nodes)
+    {
         foreach (Node n in nodes)
         {
             spline.AddNode(new SplineNode(n.position, n.handleOut));
         }
         return spline;
     }
+    private Spline UpdateNodeToSpline(Spline spline, Node[] nodes)
+    {
+        for (int i = 0; i < spline.nodes.Count; i++)
+        {
+            spline.nodes[i].Position = nodes[i].position;
+            spline.nodes[i].Direction = nodes[i].handleOut;
+        }
+        return spline;
+    }
+    /// <summary>
+    /// This is a Emergency Match Node Count, Only use this when beform Lerping 2 Splines that can possibly have different Length of Node Arrays
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    private Spline MatchNodeCount(Spline from, Node[] to)
+    {
+        int fromCount = from.nodes.Count;
+        int toCount = to.Length;
+        int difference = toCount - fromCount;
+        if (fromCount != toCount)
+        {
+           for(int i = 0; i < difference; i++)
+            {
+                //Adds Node between last and before last spline
+                
+                SplineNode lastNode = from.nodes[fromCount - 1];
+                SplineNode formerLastNode = from.nodes[fromCount - 2];
+                SplineNode firstNode = from.nodes[0];
+
+                float fullDist = Vector3.Distance(lastNode.Position, firstNode.Position);
+                float formerDist = Vector3.Distance(formerLastNode.Position, firstNode.Position);
+                float lastFormerDist = Vector3.Distance(formerLastNode.Position, lastNode.Position);
+
+                float insertTime = ((lastFormerDist / 2) + formerDist) / fullDist;
+
+                CurveSample insertNode = GetSampleAt(from, insertTime);
+                from.InsertNode(fromCount - 1, new SplineNode(insertNode.location,  insertNode.tangent * 0.1f + insertNode.location));
+            }
+        }
+        return from;
+    }
+    /// <summary>
+    /// Matches 2 Node Array Length with a temporary spline, fromSpline has to be a temporary spline, not a spline in Game Scene
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <param name="fromSpline"></param>
+    /// <returns></returns>
+    private Node[] MatchNodeCount(Node[] from, Node[] to, Spline fromSpline)
+    {
+        int fromCount = from.Length;
+        int toCount = to.Length;
+        int difference = toCount - fromCount;
+
+        if(fromCount != fromSpline.nodes.Count)
+        {
+            Debug.LogError("Node list and Spline Node List does not match");
+        }
+
+        List<Node> tempNodeList = new List<Node>(from);
+
+        if (fromCount != toCount)
+        {
+            for (int i = 0; i < difference; i++)
+            {
+                //Adds Node between last and before last spline
+
+                SplineNode lastNode = fromSpline.nodes[fromCount - 1];
+                SplineNode formerLastNode = fromSpline.nodes[fromCount - 2];
+                SplineNode firstNode = fromSpline.nodes[0];
+
+                float fullDist = Vector3.Distance(lastNode.Position, firstNode.Position);
+                float formerDist = Vector3.Distance(formerLastNode.Position, firstNode.Position);
+                float lastFormerDist = Vector3.Distance(formerLastNode.Position, lastNode.Position);
+
+                float insertTime = ((lastFormerDist / 2) + formerDist) / fullDist;
+
+                CurveSample insertNodeSample = GetSampleAt(fromSpline, insertTime);
+                Node insertNode = new Node(insertNodeSample.location, insertNodeSample.tangent * 0.1f + insertNodeSample.location);
+                tempNodeList.Insert(tempNodeList.Count-1, insertNode);
+
+                fromSpline.InsertNode(fromSpline.nodes.Count - 1, new SplineNode(insertNode.position, insertNode.handleOut));
+            }
+        }
+        Node[] insertedNodeArray = tempNodeList.ToArray();
+        
+        foreach(Node n in insertedNodeArray)
+        {
+            Debug.Log(n.position + "," + n.handleOut);
+        }
+
+        return insertedNodeArray;
+    }
+    private Node[] LerpNodeList(Node[] from, Node[] to, Spline spline, float progress)
+    {
+        //Check Node Count to Lerp
+        if (from.Length != to.Length)
+        {
+            spline = MatchNodeCount(spline, to);
+            from = MatchNodeCount(from, to, spline);
+        }
+
+        Node[] lerpedNodeList = new Node[to.Length];
+
+        for (int i = 0; i < lerpedNodeList.Length; i++)
+        {
+            lerpedNodeList[i] = LerpNode(from[i], to[i], progress);
+        }
+
+        return lerpedNodeList;
+    }
+    private Node LerpNode(Node from, Node to, float progress)
+    {
+        Vector3 lerpedPosition = (to.position - from.position) * progress + from.position;
+        Vector3 lerpedhandleOut = (to.handleOut - from.handleOut) * progress + from.handleOut;
+        Node changedNode = new Node(lerpedPosition, lerpedhandleOut);
+
+        return changedNode;
+    }
+
     private CurveSample GetSampleAt(Spline spline, float t)
     {
         return spline.GetSample(t * (spline.nodes.Count - 1));

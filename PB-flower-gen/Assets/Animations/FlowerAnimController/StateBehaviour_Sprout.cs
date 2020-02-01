@@ -19,8 +19,6 @@ public class StateBehaviour_Sprout : StateMachineBehaviour
         if (lastUpdateTime + updateTime > Time.time) return;
         else
         {
-            //Debug.Log(lastUpdateTime + "Sprout Update" + Time.time + ", " +updateTime);
-
             Plant currentFlower = animator.GetComponent<Plant>();
             float progression = currentFlower.GetProgression();
             if (progression >= 1 || progression < 0)

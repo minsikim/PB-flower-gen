@@ -141,6 +141,11 @@ public struct Node
 {
     public Vector3 position;
     public Vector3 handleOut;
+    public Node(Vector3 position, Vector3 handleOut)
+    {
+        this.position = position;
+        this.handleOut = handleOut;
+    }
 }
 public enum VectorAxis
 {

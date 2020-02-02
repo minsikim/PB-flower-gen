@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.Animations;
 
 [Serializable]
 public class Plant : MonoBehaviour
@@ -11,6 +12,7 @@ public class Plant : MonoBehaviour
     #region Basic Serializable Info
     [LabelOverride("Flower Form Data")]
     [SerializeField] PlantFormData data;
+    public AnimatorController NormalizedTimeAnimationController;
     #endregion
 
     #region Private Fields
@@ -34,6 +36,12 @@ public class Plant : MonoBehaviour
 
     private int[] PetalCounts;
     private int[] PetalLayerCounts;
+
+    private float PetalMinClosedTime;
+    private float PetalMaxClosedTime;
+    private float PetalMinOpenTime;
+    private float PetalMaxOpenTime;
+    private float PetalRandomTimeValue;
 
     //Randomizable Path Data
     private RandomPath SproutPathData;
@@ -78,6 +86,7 @@ public class Plant : MonoBehaviour
     private List<GameObject> LeavesList;
     private List<GameObject> BranchesList;
     private List<GameObject> FlowersList;
+    private List<GameObject> PetalsList;
 
     //Children GameObjects
     private GameObject Tree;
@@ -200,7 +209,13 @@ public class Plant : MonoBehaviour
         PistilPrefab    = data.PistilPrefab;
         LeafPrefab      = data.LeafPrefab;
 
-        rotation = UnityEngine.Random.Range(0f, 360f);
+        PetalMinClosedTime = data.PetalMinClosedTime;
+        PetalMaxClosedTime = data.PetalMaxClosedTime;
+        PetalMinOpenTime = data.PetalMinOpenTime;
+        PetalMaxOpenTime = data.PetalMaxOpenTime;
+        PetalRandomTimeValue = data.PetalRandomTimeValue;
+
+        rotation = UnityEngine.Random.Range(-180f, 0);
 
         SproutPathData      = data.SproutPathData;
         StemPathData        = data.StemPathData;
@@ -239,6 +254,7 @@ public class Plant : MonoBehaviour
         LeavesList = new List<GameObject>();
         BranchesList = new List<GameObject>();
         FlowersList = new List<GameObject>();
+        PetalsList = new List<GameObject>();
 
         durationList = new List<float>()
         {
@@ -555,19 +571,17 @@ public class Plant : MonoBehaviour
         for(int i = 0; i < LeafCount; i++)
         {
             colorArray[i] = GetColorFromRange(LeafColorRange1, LeafColorRange2);
-            Debug.Log(colorArray[i]);
         }
         return colorArray;
     }
 
     private void InitFlower(GameObject flowerObject, int PetalLayerCount, int[] PetalCounts, GameObject parent)
     {
-        const float CloseLayerDifference = 0.01f;
-
         GameObject Pistil = InitWithParent(PistilPrefab, flowerObject.transform);
         GameObject Petals = InitWithParent("Petals", flowerObject.transform);
 
         FlowerLocalData flowerData  = flowerObject.AddComponent<FlowerLocalData>();
+        flowerObject.AddComponent<Animator>().runtimeAnimatorController = NormalizedTimeAnimationController;
 
         flowerData.petalLayerCount  = PetalLayerCount;
         flowerData.petalCounts      = PetalCounts;
@@ -579,16 +593,35 @@ public class Plant : MonoBehaviour
             petalLayer.transform.SetParent(Petals.transform);
             petalLayer.transform.localPosition = new Vector3(0, 0, 0);
 
+            float petalLayerClosedTime = (PetalMaxClosedTime - PetalMinClosedTime) / (PetalLayerCount - 1) * i + PetalMinClosedTime;
+            float petalLayerOpenTime = (PetalMaxOpenTime - PetalMinOpenTime) / (PetalLayerCount - 1) * i + PetalMinOpenTime;
+
             for (int j = 0; j < PetalCounts[i]; ++j)
             {
+                float RandomValue = UnityEngine.Random.Range(-PetalRandomTimeValue, PetalRandomTimeValue);
+
                 GameObject petal = Instantiate(PetalPrefab, petalLayer.transform);
-                petal.transform.Rotate(new Vector3(0, (360 / PetalCounts[i] * j) + i * 30, 0));
-                petal.GetComponent<Animator>().SetFloat("Time", 0.0f + ((PetalLayerCount - i) * CloseLayerDifference));
+                //TODO - SetLocalData
+                PetalLocalData petalLocalData = petal.GetComponent<PetalLocalData>();
+                petalLocalData.Rotation = (360 / PetalCounts[i] * j) +i * 30;
+                petalLocalData.PetalLayer = i;
+                petalLocalData.PetalIndex = j;
+                petalLocalData.StartTime = petalLayerClosedTime + RandomValue;
+                petalLocalData.EndTime = petalLayerOpenTime + RandomValue;
+                petalLocalData.parent = petalLayer;
+
+                //SetTransform, Animation NormalizedTime
+                petal.transform.Rotate(new Vector3(0, petalLocalData.Rotation, 0));
+                petal.GetComponent<Animator>().SetFloat("Time", petalLocalData.StartTime);
+                //TODO 머테리얼 입힐 조금 더 똑똑한 방법을 생각해야할듯
+                petal.transform.Find("Plane").GetComponent<SkinnedMeshRenderer>().material.color = PetalColor;
+
                 flowerData.totalPetalCount++;
+                PetalsList.Add(petal);
 }
         }
 
-        UpdateTransformOnSpline(flowerObject, CurrentMainSpline, 1f, 0f, 1f);
+        UpdateTransformOnSpline(flowerObject, CurrentMainSpline, 1f, 0f, 0f);
         flowerObject.SetActive(false);
     }
 
@@ -644,7 +677,7 @@ public class Plant : MonoBehaviour
     /// <summary> 처음 심었을때 새싹까지 Animation Controller의 OnStateUpdate에서 실행됨(약5초) </summary>
     public void SproutA(float progress)
     {
-
+        //TODO Progress Scriptable Object 에서 설정하게끔 바꿔라
         float[] stemProgress = new float[2] { 0f , .8f };
         float[] leafProgress = new float[2] { .5f , 1f };
 
@@ -692,15 +725,8 @@ public class Plant : MonoBehaviour
     /// <summary> 새싹에서 봉우리까지의 성장 (약1시간) </summary>
     public void GrowA(float progress)
     {
-        // Stem/Leaf/Flower의 성장을 각각 실행해야할듯
-        // GrowStem ->
-        // 1. SproutSpline에서 StemSpline으로의 점진적인 BezierCurve Lurp
-        // 2. StemSpline에서 Mesh 생성 (시작, 끝 두께 및 상단 끝처리 값 필요)
-        //GrowStem(progress);
-
-        //Lerp Spline
-        //CurrentMainSpline
-
+        //TODO Progress Scriptable Object 에서 설정하게끔 바꿔라
+        //Stem Grow Progress , Stem Mesh Progress, Bug Growth Progress, Leaf Growth Progress 
         float[] stemProgress = new float[2] { 0f, 1f };
         //float[] leafProgress = new float[2] { .5f, 1f };
 
@@ -726,19 +752,6 @@ public class Plant : MonoBehaviour
                 leafData.rotation, 
                 progress * (1f - leafData.sproutScale) + leafData.sproutScale);
         }
-
-        //UpdatePositionOnSpline(Flower, CurrentMainSpline, progress);
-
-
-        // GrowLeaves ->
-        // 1. 처음난 새싹은 같이 자라면서 올라가고
-        // 2. 특정시점(예: Growth 15%마다 1개씩, Stem의 특정 t position에 생겨나고 자람)
-        //GrowLeaves(progress);
-
-        //GrowBud ->
-        // 1. Animation with Normalized Value;
-        // 2. FlowerBudAnimationDurationValue = []
-        //GrowBud(progress);
     }
     public void GrowB(float progress) { }
     public void GrowC(float progress) { }
@@ -752,8 +765,6 @@ public class Plant : MonoBehaviour
     public void OnGrowStart()
     {
 
-        //InitSpline()
-        /*CurrentMainSpline = */
         MatchNodeCount(SproutPathNodes, StemPathNodes, CurrentMainSpline);
         Flower.SetActive(true);
     }
@@ -764,7 +775,12 @@ public class Plant : MonoBehaviour
     /// <summary> 성장이 끝나면 시작 봉우리에서 피는 것 까지 에니메이션, 끝나면 활성화 (Grow를 Rj내고 끝내면 약5초 / else 약15초?) </summary>
     public void BloomA(float progress)
     {
-        // Flower Petal, Pistils Normalize Value에 따라 열리거나 성장함
+        foreach(GameObject p in PetalsList)
+        {
+            PetalLocalData petalData = p.GetComponent<PetalLocalData>();
+            float localProgress = CalculateTimeByMinToMax(petalData.StartTime, petalData.EndTime, progress);
+            SetAnimationNormalizedTime(p, "Time", localProgress);
+        }
     }
     public void BloomB(float progress) { }
     public void BloomC(float progress) { }
@@ -791,7 +807,12 @@ public class Plant : MonoBehaviour
     /// <summary> 꽃이 진 상태에서 봉우리까지의 상태로 에니메이션 (꽃이 고유하게 가진 Fall Time) </summary>
     public void RebloomA(float progress)
     {
-        // 현재 상태에서 
+        foreach (GameObject p in PetalsList)
+        {
+            PetalLocalData petalData = p.GetComponent<PetalLocalData>();
+            float localProgress = CalculateTimeByMaxToMin(petalData.EndTime, petalData.StartTime, progress);
+            SetAnimationNormalizedTime(p, "Time", localProgress);
+        }
     }
     public void RebloomB(float progress) { }
     public void RebloomC(float progress) { }
@@ -899,9 +920,43 @@ public class Plant : MonoBehaviour
         leaf.transform.rotation = Quaternion.Euler(0, yRotation, Vector3.Angle(Vector3.up, p.tangent));
         leaf.transform.localScale = Vector3.one * localScale;
     }
+    //TODO set this to be calculate each petal's own start~end Time and then sign it.
     public void SetAnimationNormalizedTime(GameObject obj, string floatName, float progress)
     {
+
         obj.GetComponent<Animator>().SetFloat(floatName, progress);
+    }
+    private float CalculateTimeByMinToMax(float min, float max, float progress)
+    {
+        float calculatedTime = ( ( max - min ) * progress ) + min;
+        return calculatedTime;
+    }
+    private float CalculateTimeByMaxToMin(float max, float min, float progress)
+    {
+        float calculatedTime = max - (max - min) * progress;
+        return calculatedTime;
+    }
+
+    void SetAnimationNormalizedTime(GameObject obj, string floatName, float progress, int retryNumber = 0)
+    {
+        const int maxRetryNumber = 5;
+        try
+        {
+            obj.GetComponent<Animator>().SetFloat(floatName, progress);
+        }
+        catch (MissingComponentException e)
+        {
+            if (retryNumber < maxRetryNumber)
+            {
+                obj.AddComponent<Animator>().runtimeAnimatorController = NormalizedTimeAnimationController;
+                SetAnimationNormalizedTime(obj, floatName, progress, retryNumber + 1);
+            }
+            else
+            {
+                throw;
+            }
+                
+        }
     }
 
     #endregion
@@ -1204,11 +1259,6 @@ public class Plant : MonoBehaviour
             }
         }
         Node[] insertedNodeArray = tempNodeList.ToArray();
-        
-        foreach(Node n in insertedNodeArray)
-        {
-            Debug.Log(n.position + "," + n.handleOut);
-        }
 
         return insertedNodeArray;
     }

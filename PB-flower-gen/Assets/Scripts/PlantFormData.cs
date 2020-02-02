@@ -28,6 +28,11 @@ public class PlantFormData : ScriptableObject
 
     public Vector2Int PetalCountRange;
     public Vector2Int PetalLayerCountRange;
+    public float PetalMinClosedTime;
+    public float PetalMaxClosedTime;
+    public float PetalMinOpenTime;
+    public float PetalMaxOpenTime;
+    public float PetalRandomTimeValue;
 
     [Header("Path Data")]
     [Space(20)]

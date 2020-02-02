@@ -23,12 +23,10 @@ public class StateBehaviour_Grow : StateMachineBehaviour
                 currentFlower.SwitchToNextState();
                 FlowerAnimationStates currState = animator.GetComponent<Plant>().GetCurrentState();
                 animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
-                Debug.Log("Over : " + progression);
             }
             else
             {
                 currentFlower.Grow(progression);
-                Debug.Log("Grow : " + progression);
             }
         }
     }

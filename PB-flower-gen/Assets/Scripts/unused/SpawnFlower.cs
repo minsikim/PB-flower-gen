@@ -8,9 +8,11 @@ public class SpawnFlower : MonoBehaviour
 {
     [SerializeField] GameObject SpawnPrefab;
     [SerializeField] GameObject FlowerCount;
+    [SerializeField] int MaxFlowerCount;
+    private int CurrFlowerCount = 0;
 
     public bool autoSpawn = false;
-    private const float spawnInterval = 0.1f;
+    public float spawnInterval = 0.1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,8 @@ public class SpawnFlower : MonoBehaviour
 
     public void InitFlower()
     {
+        if (MaxFlowerCount <= CurrFlowerCount) return;
+
         Instantiate(SpawnPrefab);
 
         float z1 = -13f;
@@ -32,26 +36,29 @@ public class SpawnFlower : MonoBehaviour
         float x = UnityEngine.Random.Range(-1f, 1f) * ( xCal / 5);
 
         SpawnPrefab.transform.position = new Vector3(x, 0, zRandom);
+
+        CurrFlowerCount++;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    RaycastHit hit;
+        //    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                Instantiate(SpawnPrefab);
-                SpawnPrefab.transform.position = hit.point;
+        //    if (Physics.Raycast(ray, out hit))
+        //    {
+        //        Instantiate(SpawnPrefab);
+        //        SpawnPrefab.transform.position = hit.point;
 
-                //int currentFlowerCount = Convert.ToInt32(FlowerCount.GetComponent<Text>().text);
-                //FlowerCount.GetComponent<Text>().text = (currentFlowerCount + 1).ToString();
-            }
+        //        //int currentFlowerCount = Convert.ToInt32(FlowerCount.GetComponent<Text>().text);
+        //        //FlowerCount.GetComponent<Text>().text = (currentFlowerCount + 1).ToString();
+        //    }
 
-        }
+        //}
+        //FlowerCount.GetComponent<Text>().text = (1 / Time.deltaTime).ToString();
     }
 
     //public void SetGrowState()

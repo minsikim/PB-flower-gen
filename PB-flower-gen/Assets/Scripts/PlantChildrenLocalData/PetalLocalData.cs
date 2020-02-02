@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class PetalLocalData : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region Public Variables
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public float Rotation;
+    public int PetalLayer;
+    public int PetalIndex;
+    public float StartTime;
+    public float EndTime;
+    public GameObject parent;
+
+    #endregion
 }

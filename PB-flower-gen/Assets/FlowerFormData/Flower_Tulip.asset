@@ -22,8 +22,13 @@ MonoBehaviour:
     type: 3}
   BudPrefab: {fileID: 0}
   FlowerToPlantCount: 10
-  PetalCountRange: {x: 3, y: 5}
+  PetalCountRange: {x: 6, y: 8}
   PetalLayerCountRange: {x: 2, y: 3}
+  PetalMinClosedTime: 0
+  PetalMaxClosedTime: 0.05
+  PetalMinOpenTime: 0.3
+  PetalMaxOpenTime: 0.35
+  PetalRandomTimeValue: 0.05
   SproutPathData:
     pathMeshProperties:
       Thickness:
@@ -57,11 +62,19 @@ MonoBehaviour:
     nodes:
     - position: {x: 0, y: 0, z: 0}
       handleOut: {x: -0.3, y: 1, z: 0}
-    - position: {x: 0, y: 4, z: 0}
-      handleOut: {x: 0.2, y: 5, z: 0}
-    - position: {x: 1, y: 8, z: 0}
-      handleOut: {x: -0.5, y: 9, z: 0}
-    randomNode: []
+    - position: {x: 0, y: 8, z: 0}
+      handleOut: {x: -0.5, y: 8.3, z: 0}
+    randomNode:
+    - randomNodeIndex: 1
+      randomAxis: 0
+      randomRange:
+        min: -0.2
+        max: 0.2
+    - randomNodeIndex: 1
+      randomAxis: 1
+      randomRange:
+        min: -1
+        max: 1
   StemBranchPathData:
     pathMeshProperties:
       Thickness:
@@ -97,14 +110,14 @@ MonoBehaviour:
   PetalColorRandom: 1
   PetalColor: {r: 0.8679245, g: 0.38923737, b: 0.06959773, a: 0}
   PetalColorRange1: {r: 0.8773585, g: 0.31417674, b: 0.16967781, a: 1}
-  PetalColorRange2: {r: 0.8301887, g: 0.5577864, b: 0.38768244, a: 1}
+  PetalColorRange2: {r: 0.83137256, g: 0.38823527, b: 0.74214274, a: 1}
   LeafColorRandom: 1
   LeafColor: {r: 0.5803922, g: 0.7254902, b: 0.41568628, a: 1}
-  LeafColorRange1: {r: 0.41568628, g: 0.45830724, b: 0.7254902, a: 1}
+  LeafColorRange1: {r: 0.41568628, g: 0.7254902, b: 0.63081074, a: 1}
   LeafColorRange2: {r: 0.4927836, g: 0.7254902, b: 0.41568628, a: 1}
-  SproutAnimationDuration: 5
-  GrowAniamtionDuration: 10
-  BloomAnimationDuration: 3
+  SproutAnimationDuration: 3
+  GrowAniamtionDuration: 3
+  BloomAnimationDuration: 5
   FallAnimationDuration: 3
   RebloomAnimationDuration: 5
   LeafPrefab: {fileID: 7784309132061046610, guid: b03897776f350864c9a3770d94192165,

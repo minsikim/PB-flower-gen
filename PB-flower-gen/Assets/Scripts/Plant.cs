@@ -614,6 +614,7 @@ public class Plant : MonoBehaviour
                 petalLocalData.StartTime = petalLayerClosedTime + RandomValue;
                 petalLocalData.EndTime = petalLayerOpenTime + RandomValue;
                 petalLocalData.parent = petalLayer;
+                petalLocalData.FallTime = UnityEngine.Random.Range(0f, 5f);
 
                 //SetTransform, Animation NormalizedTime
                 petal.transform.Rotate(new Vector3(0, petalLocalData.Rotation, 0));
@@ -799,7 +800,15 @@ public class Plant : MonoBehaviour
     public void FallA(float progress)
     {
         // Flower Petal, Pistils Normalize Value에 따라 닫히거나 쪼그라듬
-        // Flower Petal 점진적으로 하나씩 이탈하여 Collision과 Gravity 값을 가지며 떨어짐
+        foreach (GameObject p in PetalsList)
+        {
+            float tempFallTime = p.GetComponent<PetalLocalData>().FallTime;
+            if (tempFallTime < progress)
+            {
+                p.GetComponent<Rigidbody>().isKinematic = false;
+                p.GetComponent<Rigidbody>().useGravity = true;
+            }
+        }
     }
     public void FallB(float progress) { }
     public void FallC(float progress) { }
@@ -807,18 +816,11 @@ public class Plant : MonoBehaviour
     public void FallE(float progress) { }
     public void OnFallStart()
     {
-        //TODO : Make Fall
         foreach (GameObject p in PetalsList)
         {
-            Destroy(p.GetComponent<Animator>());
-            //petalMesh = p.transform.FindChild("Plane")
-            Mesh mesh = p.transform.FindChild("Plane").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
-            MeshCollider meshCol = p.transform.FindChild("Plane").gameObject.AddComponent<MeshCollider>();
-            meshCol.convex = true;
-            meshCol.sharedMesh = mesh;
-            p.transform.FindChild("Plane").gameObject.AddComponent<Rigidbody>().useGravity = true;
-            //rb.mass = 0.05f;
+            p.GetComponent<PetalLocalData>().FallTime--;
         }
+        
     }
     #endregion
 

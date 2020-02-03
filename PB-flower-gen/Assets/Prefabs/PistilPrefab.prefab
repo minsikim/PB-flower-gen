@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 971097626001763963}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PistilPrefab
-  m_TagString: Untagged
+  m_TagString: Flower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2903942916305785590}
   - component: {fileID: 8462924646455105666}
   - component: {fileID: 2918793004351212025}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PistilMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

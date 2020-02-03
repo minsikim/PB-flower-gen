@@ -4,7 +4,7 @@ using UnityEngine;
 public class StateBehaviour_Fall : StateMachineBehaviour
 {
     private float lastUpdateTime;
-    private float updateTime;
+    private float updateTime = 0.1f;
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         lastUpdateTime = Time.time;
@@ -12,7 +12,7 @@ public class StateBehaviour_Fall : StateMachineBehaviour
     }
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (lastUpdateTime + 5f > Time.time) return;
+        if (lastUpdateTime + updateTime > Time.time) return;
         else
         {
             Plant currentFlower = animator.GetComponent<Plant>();

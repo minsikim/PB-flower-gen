@@ -18,6 +18,8 @@ public class FallTest : MonoBehaviour
     void Example()
     {
         //Physics.gravity = new Vector3(0, -1.0F, 0);
-        Debug.Log(Physics.gravity);
+        //GetComponent<Rigidbody>().AddForceAtPosition(Vector3.up, transform.position);
+        //GetComponent<Rigidbody>().AddForce(Vector3.up);
+        //GetComponent<Rigidbody>().velocity = Vector3.down;
     }
 }

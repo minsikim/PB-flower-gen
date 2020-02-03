@@ -11,6 +11,7 @@ public class PetalLocalData : MonoBehaviour
     public int PetalIndex;
     public float StartTime;
     public float EndTime;
+    public float FallTime;
     public GameObject parent;
 
     #endregion

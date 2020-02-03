@@ -108,7 +108,7 @@ MonoBehaviour:
   SproutAnimationDuration: 3
   GrowAniamtionDuration: 3
   BloomAnimationDuration: 3
-  FallAnimationDuration: 3
+  FallAnimationDuration: 15
   RebloomAnimationDuration: 3
   LeafPrefab: {fileID: 7784309132061046610, guid: b03897776f350864c9a3770d94192165,
     type: 3}

@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5835418253295533290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.75755, y: 0, z: 22.12199}
+  m_LocalPosition: {x: 36.98279, y: 0, z: -9.387869}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: a20c0ec29a7ae6d4fb0e95f8ff13d186, type: 2}
-  NormalizedTimeAnimationController: {fileID: 0}
+  NormalizedTimeAnimationController: {fileID: 9100000, guid: e87cc312e152d5c44855d422f1702524,
+    type: 2}
 --- !u!95 &9174957539111885704
 Animator:
   serializedVersion: 3

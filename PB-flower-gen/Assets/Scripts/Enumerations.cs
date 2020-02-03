@@ -16,7 +16,7 @@ public enum FlowerFormType
     Special
 }
 
-public enum FlowerAnimationStates
+public enum FlowerAnimationState
 {
     Sprout,
     Grow,

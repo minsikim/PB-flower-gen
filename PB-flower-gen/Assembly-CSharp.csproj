@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Animations\FlowerAnimController\StateBehaviour_Animations.cs" />
     <Compile Include="Assets\Animations\FlowerAnimController\StateBehaviour_Bloom.cs" />
     <Compile Include="Assets\Animations\FlowerAnimController\StateBehaviour_Fall.cs" />
     <Compile Include="Assets\Animations\FlowerAnimController\StateBehaviour_Grow.cs" />
@@ -75,13 +76,19 @@
     <Compile Include="Assets\L-systems\Scripts\TreeElement.cs" />
     <Compile Include="Assets\L-systems\Scripts\UI.cs" />
     <Compile Include="Assets\Scripts\Enumerations.cs" />
+    <Compile Include="Assets\Scripts\Inputs\CameraZoom_Orthograph.cs" />
+    <Compile Include="Assets\Scripts\Inputs\CameraZoom_Perspective.cs" />
+    <Compile Include="Assets\Scripts\Inputs\InputManager.cs" />
+    <Compile Include="Assets\Scripts\Inputs\ScreenDrag.cs" />
     <Compile Include="Assets\Scripts\Plant.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\BranchLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\FlowerLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\LeafLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\PetallayerLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\PetalLocalData.cs" />
+    <Compile Include="Assets\Scripts\PlantChildrenLocalData\PlantLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantFormData.cs" />
+    <Compile Include="Assets\Scripts\unused\FallTest.cs" />
     <Compile Include="Assets\Scripts\unused\FlowerPrefab.cs" />
     <Compile Include="Assets\Scripts\unused\LeafController.cs" />
     <Compile Include="Assets\Scripts\unused\MeshGeneratorTest.cs" />
@@ -102,31 +109,31 @@
     <Compile Include="Assets\Scripts\Utility\SerializedPropertyExtentions.cs" />
     <Compile Include="Assets\Scripts\Utility\TypeUtilities.cs" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Users/Minsi/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/PB-flower-gen/PB-flower-gen/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.17f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -298,6 +305,12 @@
     </Reference>
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.17f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.17f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.17f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.17f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

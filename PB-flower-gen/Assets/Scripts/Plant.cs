@@ -1,18 +1,17 @@
 ﻿using SplineMesh;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Animations;
 
 [Serializable]
 public class Plant : MonoBehaviour
 {
 
     #region Basic Serializable Info
-    [LabelOverride("Flower Form Data")]
+
     [SerializeField] PlantFormData data;
-    public AnimatorController NormalizedTimeAnimationController;
+    public RuntimeAnimatorController NormalizedTimeAnimationController;
+
     #endregion
 
     #region Private Fields
@@ -20,6 +19,8 @@ public class Plant : MonoBehaviour
     private DateTime initialTime;
 
     //Flower Data
+    //TODO plantFormData를 다 distribute 한다음에 plantLocalData에 다 모아서 저장하자
+    private PlantLocalData plantLocalData;
     private string plantName;
     private string description;
 
@@ -102,7 +103,7 @@ public class Plant : MonoBehaviour
     private Spline CurrentMainSpline;
 
     //Animation State
-    private FlowerAnimationStates currentAnimationState = FlowerAnimationStates.Sprout;
+    private FlowerAnimationState currentAnimationState = FlowerAnimationState.Sprout;
     private DateTime LastStateChangedTime;
 
     //Animation Durations
@@ -193,9 +194,13 @@ public class Plant : MonoBehaviour
     #endregion
 
     #region Data Managing Functions
+
+    //InitializeFlowerData 랑 DistributeDataByType 을 통합하고 작은 단위로 쪼개야할듯
     void InitializeFlowerData()
     {
         // FlowerFormData의 DATA를 모두 적절한 방식으로 배당
+
+        
 
         initialTime = DateTime.Now;
 
@@ -283,7 +288,7 @@ public class Plant : MonoBehaviour
 
         transform.RotateAround(transform.position, Vector3.up, rotation);
 
-        SetAnimationState(FlowerAnimationStates.Sprout);
+        SetAnimationState(FlowerAnimationState.Sprout);
     }
 
     void DistributeGameObjectsByType(PlantFormType type)
@@ -303,7 +308,7 @@ public class Plant : MonoBehaviour
                 ApplyColorToMesh(Stem, StemColor);
 
                 //Distribute and Initialize Leaves GameObjects
-
+                Debug.Log(LeafFixedPosition);
                 LeafPositionList = DistributeLeafPositions(LeafCount, LeafFixedPosition);
                 LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
 
@@ -631,11 +636,11 @@ public class Plant : MonoBehaviour
 
     #region Animation Progress and Animation State
 
-    public FlowerAnimationStates GetCurrentState()
+    public FlowerAnimationState GetCurrentState()
     {
         return currentAnimationState;
     }
-    public void SetAnimationState(FlowerAnimationStates state)
+    public void SetAnimationState(FlowerAnimationState state)
     {
         currentAnimationState = state;
         LastStateChangedTime = DateTime.Now;
@@ -650,13 +655,13 @@ public class Plant : MonoBehaviour
     }
     public void SwitchToNextState()
     {
-        if (currentAnimationState != FlowerAnimationStates.Rebloom)
+        if (currentAnimationState != FlowerAnimationState.Rebloom)
         {
             currentAnimationState = currentAnimationState.Next();
         }
         else
         {
-            currentAnimationState = FlowerAnimationStates.Bloom;
+            currentAnimationState = FlowerAnimationState.Bloom;
         }
         LastStateChangedTime = DateTime.Now;
     }
@@ -800,7 +805,21 @@ public class Plant : MonoBehaviour
     public void FallC(float progress) { }
     public void FallD(float progress) { }
     public void FallE(float progress) { }
-
+    public void OnFallStart()
+    {
+        //TODO : Make Fall
+        foreach (GameObject p in PetalsList)
+        {
+            Destroy(p.GetComponent<Animator>());
+            //petalMesh = p.transform.FindChild("Plane")
+            Mesh mesh = p.transform.FindChild("Plane").gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh;
+            MeshCollider meshCol = p.transform.FindChild("Plane").gameObject.AddComponent<MeshCollider>();
+            meshCol.convex = true;
+            meshCol.sharedMesh = mesh;
+            p.transform.FindChild("Plane").gameObject.AddComponent<Rigidbody>().useGravity = true;
+            //rb.mass = 0.05f;
+        }
+    }
     #endregion
 
     #region Bloom Animations by Type

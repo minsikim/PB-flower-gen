@@ -19,8 +19,8 @@ public class StateBehaviour_Bloom : StateMachineBehaviour
             if (progression >= 1 || progression < 0)
             {
                 currentFlower.SwitchToNextState();
-                FlowerAnimationStates currState = animator.GetComponent<Plant>().GetCurrentState();
-                animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationStates), (int)currState));
+                FlowerAnimationState currState = animator.GetComponent<Plant>().GetCurrentState();
+                animator.SetTrigger(Enum.GetName(typeof(FlowerAnimationState), (int)currState));
             }
             else
             {

@@ -96,6 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ab8860bf16842b4f8305fa9282ba01a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Rotation: 0
+  PetalLayer: 0
+  PetalIndex: 0
+  StartTime: 0
+  EndTime: 0
+  parent: {fileID: 0}
 --- !u!1 &3516269955403157231
 GameObject:
   m_ObjectHideFlags: 0

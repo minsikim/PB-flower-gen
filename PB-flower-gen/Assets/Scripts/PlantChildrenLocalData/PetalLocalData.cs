@@ -12,7 +12,18 @@ public class PetalLocalData : MonoBehaviour
     public float StartTime;
     public float EndTime;
     public float FallTime;
+    public bool isOnFlower = true;
     public GameObject parent;
 
     #endregion
+
+
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
+    void OnBecameVisible()
+    {
+        enabled = true;
+    }
 }

@@ -803,11 +803,21 @@ public class Plant : MonoBehaviour
         foreach (GameObject p in PetalsList)
         {
             float tempFallTime = p.GetComponent<PetalLocalData>().FallTime;
-            if (tempFallTime < progress)
+            bool isOnFlower = p.GetComponent<PetalLocalData>().isOnFlower;
+            if (tempFallTime > 0 && tempFallTime < progress && isOnFlower)
             {
                 p.GetComponent<Rigidbody>().isKinematic = false;
                 p.GetComponent<Rigidbody>().useGravity = true;
+                p.GetComponent<Rigidbody>().AddForce(Vector3.up * 4);
             }
+            //if(tempFallTime < -3f)
+            //{
+            //    p.GetComponent<PetalLocalData>().isOnFlower = false;
+            //}
+            //else
+            //{
+            //    p.GetComponent<PetalLocalData>().FallTime -= 1f * Time.deltaTime;
+            //}
         }
     }
     public void FallB(float progress) { }

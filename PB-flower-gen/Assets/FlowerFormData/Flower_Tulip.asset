@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Flower_Tulip
   m_EditorClassIdentifier: 
   plantName: 
-  description: 
+  description: Tulip Description
   plantFormType: 0
   flowerFormType: 0
   PetalPrefab: {fileID: 3193613396651603626, guid: 41f4cba8be4f445458e94f5275f7ce16,
@@ -38,33 +38,33 @@ MonoBehaviour:
       capType: 0
     nodes:
     - position: {x: 0, y: 0, z: 0}
-      handleOut: {x: -0.2, y: 0.7, z: 0}
+      handleOut: {x: 0.3, y: 0.7, z: 0}
     - position: {x: 0, y: 2, z: 0}
-      handleOut: {x: -0.4, y: 2.4, z: 0}
-    randomNode:
-    - randomNodeIndex: 1
-      randomAxis: 1
-      randomRange:
-        min: -0.5
-        max: -0.5
-  StemPathData:
-    pathMeshProperties:
-      Thickness:
-        min: 0.1
-        max: 0.2
-      ThickerAtStart: 0
-      capType: 0
-    nodes:
-    - position: {x: 0, y: 0, z: 0}
-      handleOut: {x: -1, y: 4, z: 0}
-    - position: {x: -1, y: 8, z: 0}
-      handleOut: {x: -3.5, y: 12, z: 0}
+      handleOut: {x: -0.3, y: 2.3, z: 0}
     randomNode:
     - randomNodeIndex: 1
       randomAxis: 1
       randomRange:
         min: -0.5
         max: 0.5
+  StemPathData:
+    pathMeshProperties:
+      Thickness:
+        min: 0.2
+        max: 0.3
+      ThickerAtStart: 0
+      capType: 0
+    nodes:
+    - position: {x: 0, y: 0, z: 0}
+      handleOut: {x: 1, y: 4, z: 0}
+    - position: {x: 0, y: 8, z: 0}
+      handleOut: {x: -1, y: 8.7, z: 0}
+    randomNode:
+    - randomNodeIndex: 1
+      randomAxis: 1
+      randomRange:
+        min: -2
+        max: 2
   StemBranchPathData:
     pathMeshProperties:
       Thickness:

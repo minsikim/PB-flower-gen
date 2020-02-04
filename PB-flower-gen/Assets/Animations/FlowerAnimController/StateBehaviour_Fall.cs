@@ -8,7 +8,6 @@ public class StateBehaviour_Fall : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         lastUpdateTime = Time.time;
-        animator.GetComponent<Plant>().OnFallStart();
     }
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -31,6 +30,9 @@ public class StateBehaviour_Fall : StateMachineBehaviour
 
             lastUpdateTime = Time.time;
         }
-
+    }
+    public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    {
+        animator.GetComponent<Plant>().OnFallExit();
     }
 }

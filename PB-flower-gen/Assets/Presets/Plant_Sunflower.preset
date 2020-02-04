@@ -1,0 +1,584 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Plant_Sunflower
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 2691763bd03143448a71f4005bdd24f3,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: plantName
+    value: SunFlower
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: description
+    value: SunFlower Description
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: plantFormType
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: flowerFormType
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalPrefab
+    value: 
+    objectReference: {fileID: 5276578311803539455, guid: 2a4d8100e10d16144aa040a325e8aba1,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: PistilPrefab
+    value: 
+    objectReference: {fileID: 4923504732176623683, guid: 1e17c27a19b1a8745b27bd8993ee1574,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: BudPrefab
+    value: 
+    objectReference: {fileID: 4573938996701695792, guid: 986a76933a6af104197f582588c05fcb,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: FlowerToPlantCount
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalCountRange.x
+    value: 28
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalCountRange.y
+    value: 35
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalLayerCountRange.x
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalLayerCountRange.y
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalMinClosedTime
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalMaxClosedTime
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalMinOpenTime
+    value: 0.8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalMaxOpenTime
+    value: 0.9
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalRandomTimeValue
+    value: 0.05
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.pathMeshProperties.Thickness.min
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.pathMeshProperties.Thickness.max
+    value: 0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.pathMeshProperties.ThickerAtStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.pathMeshProperties.capType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[0].position.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[0].position.y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[0].position.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[0].handleOut.x
+    value: -0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[0].handleOut.y
+    value: 0.8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[0].handleOut.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[1].position.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[1].position.y
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[1].position.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[1].handleOut.x
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[1].handleOut.y
+    value: 3.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.nodes.Array.data[1].handleOut.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutPathData.randomNode.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.pathMeshProperties.Thickness.min
+    value: 0.25
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.pathMeshProperties.Thickness.max
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.pathMeshProperties.ThickerAtStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.pathMeshProperties.capType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[0].position.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[0].position.y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[0].position.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[0].handleOut.x
+    value: -0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[0].handleOut.y
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[0].handleOut.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[1].position.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[1].position.y
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[1].position.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[1].handleOut.x
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[1].handleOut.y
+    value: 13
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.nodes.Array.data[1].handleOut.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemPathData.randomNode.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchPathData.pathMeshProperties.Thickness.min
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchPathData.pathMeshProperties.Thickness.max
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchPathData.pathMeshProperties.ThickerAtStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchPathData.pathMeshProperties.capType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchPathData.nodes.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchPathData.randomNode.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchPathData.pathMeshProperties.Thickness.min
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchPathData.pathMeshProperties.Thickness.max
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchPathData.pathMeshProperties.ThickerAtStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchPathData.pathMeshProperties.capType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchPathData.nodes.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchPathData.randomNode.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreePathData.pathMeshProperties.Thickness.min
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreePathData.pathMeshProperties.Thickness.max
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreePathData.pathMeshProperties.ThickerAtStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreePathData.pathMeshProperties.capType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreePathData.nodes.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreePathData.randomNode.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreeColor.r
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreeColor.g
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreeColor.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: TreeColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchColor.r
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchColor.g
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchColor.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BranchColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemColor.r
+    value: 0.5023585
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemColor.g
+    value: 0.6698113
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemColor.b
+    value: 0.52485216
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchColor.r
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchColor.g
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchColor.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StemBranchColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PistilColor.r
+    value: 0.3490566
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PistilColor.g
+    value: 0.32902005
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PistilColor.b
+    value: 0.29142934
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PistilColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRandom
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColor.r
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColor.g
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColor.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange1.r
+    value: 0.81960785
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange1.g
+    value: 0.6093033
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange1.b
+    value: 0.2588235
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange1.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange2.r
+    value: 0.9150943
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange2.g
+    value: 0.7227622
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange2.b
+    value: 0.17697577
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PetalColorRange2.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRandom
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColor.r
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColor.g
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColor.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange1.r
+    value: 0.44687065
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange1.g
+    value: 0.6037736
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange1.b
+    value: 0.35599858
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange1.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange2.r
+    value: 0.5023585
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange2.g
+    value: 0.6698113
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange2.b
+    value: 0.52485216
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafColorRange2.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutAnimationDuration
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: GrowAniamtionDuration
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: BloomAnimationDuration
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FallAnimationDuration
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: RebloomAnimationDuration
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafPrefab
+    value: 
+    objectReference: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: LeafCountRange.x
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafCountRange.y
+    value: 6
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafScaleRandomValue
+    value: 0.4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafPositionRange.x
+    value: 0.4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafPositionRange.y
+    value: 0.95
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafFixedPosition
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: LeafPositionRandomPercentage
+    value: 0.25
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: leafGrowRelation
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutLeafCountRange.x
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutLeafCountRange.y
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutLeafPositionRange.x
+    value: 0.8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutLeafPositionRange.y
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutLeafPositionRandomPercentage
+    value: 0.25
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutLeafScale
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SproutParticles
+    value: 
+    objectReference: {fileID: 3802949691150794262, guid: 3a6742c69416dd34b8bfeb2a2aa1be1f,
+      type: 3}

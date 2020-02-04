@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7334317722295930896}
-  - component: {fileID: -6140713229100131182}
+  - component: {fileID: 5332335038080032161}
   m_Layer: 0
   m_Name: leaf-prototype
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6140713229100131182
+--- !u!114 &5332335038080032161
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8473983580224665529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c094483cda5594e4d9cc051ca6e27f8d, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c8c21287c66d6b41bc5bd2ecb60eb38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leafIndex: 0
+  totalLeafCount: 0
+  sproutPosition: 0
+  finalPosition: 0
+  rotation: 0
+  sproutScale: 0
+  leafColor: {r: 0, g: 0, b: 0, a: 0}
+  parent: {fileID: 0}
 --- !u!1001 &2499941957414716665
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class PetalLocalData : MonoBehaviour
     public float EndTime;
     public float FallTime;
     public bool isOnFlower = true;
+    public bool waitForDisable = false;
     public GameObject parent;
 
     #endregion
@@ -20,10 +21,11 @@ public class PetalLocalData : MonoBehaviour
 
     void OnBecameInvisible()
     {
-        Destroy(gameObject);
+        waitForDisable = true;
+        Debug.Log(name + " is disabled." + isActiveAndEnabled);
     }
     void OnBecameVisible()
     {
-        enabled = true;
+        
     }
 }

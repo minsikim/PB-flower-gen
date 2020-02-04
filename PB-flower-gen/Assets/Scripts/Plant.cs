@@ -59,7 +59,7 @@ public class Plant : MonoBehaviour
     private Node[] TreePathNodes;
 
     //Constant Mesh Generation Options
-    private const float maxVertexDistance = 0.2f;
+    private const float maxVertexDistance = 1f;
 
     //Leaf Position Data
     private Vector2Int LeafCountRange;
@@ -108,7 +108,7 @@ public class Plant : MonoBehaviour
 
     //Animation Durations
     List<float> durationList;
-    private float durantionCycle;
+    private float durationCycle;
 
     private float SproutAnimationDuration;
     private float GrowAniamtionDuration;
@@ -270,7 +270,7 @@ public class Plant : MonoBehaviour
             RebloomAnimationDuration
         };
 
-        durantionCycle = BloomAnimationDuration + FallAnimationDuration + RebloomAnimationDuration;
+        durationCycle = BloomAnimationDuration + FallAnimationDuration + RebloomAnimationDuration;
 
         TreeColor = data.TreeColor;
         BranchColor = data.BranchColor;
@@ -357,23 +357,56 @@ public class Plant : MonoBehaviour
                 Leaves = InitWithParent("Leaves", Stem.transform);
                 Flower = InitWithParent("Flower", Stem.transform);
 
+                //Initialize Stem + Mesh
+                Spline tempSpline2 = CreateSplinefromNodes(SproutPathNodes);
+                SproutPathNodes = MatchNodeCount(SproutPathNodes, StemPathNodes, tempSpline2);
                 CurrentMainSpline = InitSpline(Stem, SproutPathNodes);
                 InitMesh(Stem);
                 ApplyColorToMesh(Stem, StemColor);
 
-                //Saved position distribution function for random values
+                //Distribute and Initialize Leaves GameObjects
+                Debug.Log(LeafFixedPosition);
                 LeafPositionList = DistributeLeafPositions(LeafCount, LeafPositionRange, LeafPositionRandomPercentage);
                 LeafRotationList = DistributeLeafRotations(LeafPositionList.Count);
 
                 SproutLeafCount = UnityEngine.Random.Range(SproutLeafCountRange.x, SproutLeafCountRange.y + 1);
-                if (leafGrowRelation == LeafGrowRelation.Same)
+                SproutPositionList = LeafPositionList;
+
+                for (int i = 0; i < LeafCount; i++)
                 {
-                    SproutPositionList = LeafPositionList;
+                    GameObject leaf = Instantiate(LeafPrefab, Leaves.transform);
+                    LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
+                    Transform leafTransform = leaf.transform;
+                    leafData.parent = Leaves;
+                    leafData.leafIndex = i;
+                    leafData.totalLeafCount = LeafCount;
+                    if (leafGrowRelation == LeafGrowRelation.Same) leafData.sproutPosition = LeafPositionList[i];
+                    else leafData.sproutPosition = SproutPositionList[i];
+                    leafData.finalPosition = LeafPositionList[i];
+                    leafData.rotation = LeafRotationList[i];
+                    leafData.sproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(-LeafScaleRandomValue, LeafScaleRandomValue);
+                    if (LeafColorRandom)
+                    {
+                        leafData.leafColor = LeafColors[i];
+                        leafData.AssignMaterialColor(LeafColors[i]);
+                    }
+                    else
+                    {
+                        leafData.leafColor = LeafColor;
+                        leafData.AssignMaterialColor(LeafColor);
+                    }
+
+                    UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.sproutPosition, leafData.rotation, 0f);
+
+                    LeavesList.Add(leaf);
                 }
-                else if (leafGrowRelation == LeafGrowRelation.Differ)
-                {
-                    SproutPositionList = DistributeLeafPositions(LeafCount, SproutLeafPositionRange, SproutLeafPositionRandomPercentage);
-                }
+
+                //Distribute and Initialize Flower GameObjects 
+                PetalLayerCounts = new int[1];
+                PetalLayerCounts[0] = UnityEngine.Random.Range(data.PetalLayerCountRange.x, data.PetalLayerCountRange.y);
+                PetalCounts = DistributeRandomIntArray(PetalLayerCounts[0], data.PetalCountRange);
+
+                InitFlower(Flower, PetalLayerCounts[0], PetalCounts, Stem);
 
                 break;
             case PlantFormType.C:
@@ -523,7 +556,7 @@ public class Plant : MonoBehaviour
         for (int i = 0; i < leafCount; i++)
         {
             float random = UnityEngine.Random.Range(-positionRandomValue, positionRandomValue);
-            positions.Add(from + interval + (interval * random) );
+            positions.Add(from + (interval * i) + (interval * random) );
         }
 
         return positions;
@@ -598,8 +631,8 @@ public class Plant : MonoBehaviour
             petalLayer.transform.SetParent(Petals.transform);
             petalLayer.transform.localPosition = new Vector3(0, 0, 0);
 
-            float petalLayerClosedTime = (PetalMaxClosedTime - PetalMinClosedTime) / (PetalLayerCount - 1) * i + PetalMinClosedTime;
-            float petalLayerOpenTime = (PetalMaxOpenTime - PetalMinOpenTime) / (PetalLayerCount - 1) * i + PetalMinOpenTime;
+            float petalLayerClosedTime = (PetalMaxClosedTime - PetalMinClosedTime) / PetalLayerCount * i + PetalMinClosedTime;
+            float petalLayerOpenTime = (PetalMaxOpenTime - PetalMinOpenTime) / PetalLayerCount * i + PetalMinOpenTime;
 
             for (int j = 0; j < PetalCounts[i]; ++j)
             {
@@ -709,7 +742,7 @@ public class Plant : MonoBehaviour
     }
     public void SproutB(float progress)
     {
-
+        SproutA(progress);
     }
     public void SproutC(float progress)
     {
@@ -752,14 +785,26 @@ public class Plant : MonoBehaviour
         foreach (GameObject leaf in LeavesList)
         {
             LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
+            float positionTime = 0f;
+            if (leafGrowRelation == LeafGrowRelation.Same)
+            {
+                positionTime = leafData.finalPosition;
+            }
+            else
+            {
+                positionTime = progress * (leafData.finalPosition - leafData.sproutPosition) + leafData.sproutPosition;
+            }
             UpdateTransformOnSpline(
-                leaf, CurrentMainSpline, 
-                progress * (leafData.finalPosition - leafData.sproutPosition) + leafData.sproutPosition,
+                leaf, CurrentMainSpline,
+                positionTime,
                 leafData.rotation, 
                 progress * (1f - leafData.sproutScale) + leafData.sproutScale);
         }
     }
-    public void GrowB(float progress) { }
+    public void GrowB(float progress)
+    {
+        GrowA(progress);
+    }
     public void GrowC(float progress) { }
     public void GrowD(float progress) { }           
     public void GrowE(float progress) { }
@@ -788,7 +833,10 @@ public class Plant : MonoBehaviour
             SetAnimationNormalizedTime(p, "Time", localProgress);
         }
     }
-    public void BloomB(float progress) { }
+    public void BloomB(float progress)
+    {
+        BloomA(progress);
+    }
     public void BloomC(float progress) { }
     public void BloomD(float progress) { }
     public void BloomE(float progress) { }
@@ -799,42 +847,57 @@ public class Plant : MonoBehaviour
     /// <summary> 활성화 상태에서 비활성화 상태 사이에 천천히 꽃이 지는 에니메이션 </summary>
     public void FallA(float progress)
     {
+        List<int> tempDestroyIndex = new List<int>();
         // Flower Petal, Pistils Normalize Value에 따라 닫히거나 쪼그라듬
-        foreach (GameObject p in PetalsList)
+        for (int i = 0; i < PetalsList.Count; i++)
         {
-            float tempFallTime = p.GetComponent<PetalLocalData>().FallTime;
-            bool isOnFlower = p.GetComponent<PetalLocalData>().isOnFlower;
-            if (tempFallTime > 0 && tempFallTime < progress && isOnFlower)
-            {
-                p.GetComponent<Rigidbody>().isKinematic = false;
-                p.GetComponent<Rigidbody>().useGravity = true;
-                p.GetComponent<Rigidbody>().AddForce(Vector3.up * 4);
-            }
-            //if(tempFallTime < -3f)
+            GameObject p = PetalsList[i];
+            PetalLocalData pData = p.GetComponent<PetalLocalData>();
+            float tempFallTime = pData.FallTime;
+            bool isOnFlower = pData.isOnFlower;
+            //if (pData.waitForDisable)
             //{
-            //    p.GetComponent<PetalLocalData>().isOnFlower = false;
+            //    tempDestroyIndex.Add(i);
             //}
             //else
             //{
-            //    p.GetComponent<PetalLocalData>().FallTime -= 1f * Time.deltaTime;
-            //}
-        }
+                if (tempFallTime > 0 && tempFallTime < progress && isOnFlower)
+                {
+                    p.GetComponent<Rigidbody>().isKinematic = false;
+                    p.GetComponent<Rigidbody>().useGravity = true;
+                    p.GetComponent<Rigidbody>().AddForce(Vector3.up * 4);
+                }
+                else if (tempFallTime < 0f)
+                {
+                    p.GetComponent<PetalLocalData>().isOnFlower = false;
+                    
+                }
+            }
+        //}
+        //for (var j = 0; j < tempDestroyIndex.Count; j++)
+        //{
+        //    PetalsList.RemoveAt(tempDestroyIndex[tempDestroyIndex.Count - 1 - j]);
+        //    Destroy(PetalsList[tempDestroyIndex[tempDestroyIndex.Count - 1 - j]]);
+        //}
     }
-    public void FallB(float progress) { }
+    public void FallB(float progress)
+    {
+        FallA(progress);
+    }
     public void FallC(float progress) { }
     public void FallD(float progress) { }
     public void FallE(float progress) { }
-    public void OnFallStart()
+    public void OnFallExit()
     {
         foreach (GameObject p in PetalsList)
         {
             p.GetComponent<PetalLocalData>().FallTime--;
+            p.GetComponent<Rigidbody>().AddForce((Vector3.right + Vector3.forward) * 20);
         }
-        
     }
     #endregion
 
-    #region Bloom Animations by Type
+    #region ReBloom Animations by Type
     /// <summary> 꽃이 진 상태에서 봉우리까지의 상태로 에니메이션 (꽃이 고유하게 가진 Fall Time) </summary>
     public void RebloomA(float progress)
     {
@@ -845,7 +908,10 @@ public class Plant : MonoBehaviour
             SetAnimationNormalizedTime(p, "Time", localProgress);
         }
     }
-    public void RebloomB(float progress) { }
+    public void RebloomB(float progress)
+    {
+        RebloomA(progress);
+    }
     public void RebloomC(float progress) { }
     public void RebloomD(float progress) { }
     public void RebloomE(float progress) { }
@@ -984,7 +1050,7 @@ public class Plant : MonoBehaviour
             }
             else
             {
-                throw;
+                throw e;
             }
                 
         }

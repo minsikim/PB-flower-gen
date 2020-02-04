@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2691763bd03143448a71f4005bdd24f3, type: 3}
+  m_Name: Flower_Gerbera
+  m_EditorClassIdentifier: 
+  plantName: SunFlower
+  description: SunFlower Description
+  plantFormType: 1
+  flowerFormType: 1
+  PetalPrefab: {fileID: 5276578311803539455, guid: 2a4d8100e10d16144aa040a325e8aba1,
+    type: 3}
+  PistilPrefab: {fileID: 2380631764398131936, guid: 3c42ada6d05dbe2458ffbc57d7240cb5,
+    type: 3}
+  BudPrefab: {fileID: 4573938996701695792, guid: 986a76933a6af104197f582588c05fcb,
+    type: 3}
+  FlowerToPlantCount: 0
+  PetalCountRange: {x: 28, y: 35}
+  PetalLayerCountRange: {x: 2, y: 3}
+  PetalMinClosedTime: 0
+  PetalMaxClosedTime: 0.1
+  PetalMinOpenTime: 0.8
+  PetalMaxOpenTime: 0.9
+  PetalRandomTimeValue: 0.05
+  SproutPathData:
+    pathMeshProperties:
+      Thickness:
+        min: 0.1
+        max: 0.2
+      ThickerAtStart: 0
+      capType: 0
+    nodes:
+    - position: {x: 0, y: 0, z: 0}
+      handleOut: {x: -0.2, y: 0.8, z: 0}
+    - position: {x: 0, y: 2.8, z: 0}
+      handleOut: {x: 0.3, y: 3, z: 0}
+    randomNode: []
+  StemPathData:
+    pathMeshProperties:
+      Thickness:
+        min: 0.25
+        max: 0.3
+      ThickerAtStart: 0
+      capType: 0
+    nodes:
+    - position: {x: 0, y: 0, z: 0}
+      handleOut: {x: -0.2, y: 3, z: 0}
+    - position: {x: 0, y: 6, z: 0}
+      handleOut: {x: 0.5, y: 7.5, z: 0}
+    randomNode: []
+  StemBranchPathData:
+    pathMeshProperties:
+      Thickness:
+        min: 0
+        max: 0
+      ThickerAtStart: 0
+      capType: 0
+    nodes: []
+    randomNode: []
+  BranchPathData:
+    pathMeshProperties:
+      Thickness:
+        min: 0
+        max: 0
+      ThickerAtStart: 0
+      capType: 0
+    nodes: []
+    randomNode: []
+  TreePathData:
+    pathMeshProperties:
+      Thickness:
+        min: 0
+        max: 0
+      ThickerAtStart: 0
+      capType: 0
+    nodes: []
+    randomNode: []
+  TreeColor: {r: 0, g: 1, b: 0, a: 1}
+  BranchColor: {r: 0, g: 1, b: 0, a: 1}
+  StemColor: {r: 0.42635277, g: 0.6320754, b: 0.45505828, a: 1}
+  StemBranchColor: {r: 0, g: 1, b: 0, a: 1}
+  PistilColor: {r: 0.3490566, g: 0.32902005, b: 0.29142934, a: 1}
+  PetalColorRandom: 1
+  PetalColor: {r: 1, g: 0, b: 0, a: 1}
+  PetalColorRange1: {r: 0.8, g: 0.3882353, b: 0.4389623, a: 1}
+  PetalColorRange2: {r: 0.7058824, g: 0.1372549, b: 0.6881304, a: 1}
+  LeafColorRandom: 1
+  LeafColor: {r: 1, g: 0, b: 0, a: 1}
+  LeafColorRange1: {r: 0.33184153, g: 0.4716981, b: 0.25142398, a: 1}
+  LeafColorRange2: {r: 0.40236738, g: 0.6226415, b: 0.43310332, a: 1}
+  SproutAnimationDuration: 5
+  GrowAniamtionDuration: 5
+  BloomAnimationDuration: 5
+  FallAnimationDuration: 5
+  RebloomAnimationDuration: 5
+  LeafPrefab: {fileID: 8473983580224665529, guid: 3d3d27015b1a91f46ae4544a7e76cfd1,
+    type: 3}
+  LeafCountRange: {x: 3, y: 6}
+  LeafScaleRandomValue: 0.4
+  LeafPositionRange: {x: 0.2, y: 0.5}
+  LeafFixedPosition: 0.1
+  LeafPositionRandomPercentage: 0.25
+  leafGrowRelation: 0
+  SproutLeafCountRange: {x: 2, y: 3}
+  SproutLeafPositionRange: {x: 0.8, y: 1}
+  SproutLeafPositionRandomPercentage: 0.25
+  SproutLeafScale: 0.3
+  SproutParticles: {fileID: 3802949691150794262, guid: 3a6742c69416dd34b8bfeb2a2aa1be1f,
+    type: 3}

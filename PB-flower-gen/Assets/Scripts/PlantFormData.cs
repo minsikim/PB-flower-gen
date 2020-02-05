@@ -75,6 +75,7 @@ public class PlantFormData : ScriptableObject
     [Space(20)]
     [LabelOverride("Sprouting")]
     public float SproutAnimationDuration;
+    public AnimationCurve SproutAnimationCurve;
     [LabelOverride("Growing")]
     public float GrowAniamtionDuration;
     [LabelOverride("Blooming")]
@@ -151,16 +152,4 @@ public struct Node
         this.position = position;
         this.handleOut = handleOut;
     }
-}
-public enum VectorAxis
-{
-    x,
-    y,
-    z
-}
-public enum CapType
-{
-    round,
-    sharp,
-    flat
 }

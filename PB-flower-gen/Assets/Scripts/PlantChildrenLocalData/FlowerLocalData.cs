@@ -4,13 +4,31 @@ using UnityEngine;
 
 public class FlowerLocalData : MonoBehaviour
 {
-    #region Private Variables
+    #region Properties
 
-    public int flowerIndex = 0;
-    public int totalPetalCount;
-    public int petalLayerCount;
-    public int[] petalCounts;
+    public int FlowerIndex = 0;
+    public int TotalPetalCount;
+    public int PetalLayerCount;
+    public int[] PetalCounts
+    {
+        get
+        {
+            return PetalCounts;
+        }
+        set
+        {
+            TotalPetalCount = 0;
+            foreach(int c in value)
+            {
+                TotalPetalCount += c;
+            }
+            PetalCounts = value;
+        }
+    }
+
     public GameObject parent; // Parent Must be Stem.
 
     #endregion
+
+
 }

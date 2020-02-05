@@ -7,13 +7,19 @@ public class LeafLocalData : MonoBehaviour
 
     #region Private Variables
 
-    public int leafIndex;
-    public int totalLeafCount;
-    public float sproutPosition;
-    public float finalPosition;
-    public float rotation;
-    public float sproutScale;
+    public int StemIndex;
+    public int LeafIndex;
+    public int TotalLeafCount;
+
+    public float SproutPosition;
+    public float FinalPosition;
+    public float Rotation;
+
+    public float SproutScale;
+    public float FinalScale;
+
     public Color leafColor;
+
     public GameObject parent;
 
     public void AssignMaterialColor(Color color)

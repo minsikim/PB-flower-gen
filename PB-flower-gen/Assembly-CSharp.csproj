@@ -81,12 +81,11 @@
     <Compile Include="Assets\Scripts\Inputs\InputManager.cs" />
     <Compile Include="Assets\Scripts\Inputs\ScreenDrag.cs" />
     <Compile Include="Assets\Scripts\Plant.cs" />
-    <Compile Include="Assets\Scripts\PlantChildrenLocalData\BranchLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\FlowerLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\LeafLocalData.cs" />
-    <Compile Include="Assets\Scripts\PlantChildrenLocalData\PetallayerLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\PetalLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\PlantLocalData.cs" />
+    <Compile Include="Assets\Scripts\PlantChildrenLocalData\StemLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantFormData.cs" />
     <Compile Include="Assets\Scripts\unused\FallTest.cs" />
     <Compile Include="Assets\Scripts\unused\FlowerPrefab.cs" />

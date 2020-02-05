@@ -20,7 +20,7 @@ public class Plant : MonoBehaviour
 
     //Flower Data
     //TODO plantFormData를 다 distribute 한다음에 plantLocalData에 다 모아서 저장하자
-    private PlantLocalData plantLocalData;
+    private PlantLocalData _d;
     private string plantName;
     private string description;
 
@@ -321,13 +321,13 @@ public class Plant : MonoBehaviour
                     LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
                     Transform leafTransform = leaf.transform;
                     leafData.parent = Leaves;
-                    leafData.leafIndex = i;
-                    leafData.totalLeafCount = LeafCount;
-                    if (leafGrowRelation == LeafGrowRelation.Same) leafData.sproutPosition = LeafPositionList[i];
-                    else leafData.sproutPosition = SproutPositionList[i];
-                    leafData.finalPosition = LeafPositionList[i];
-                    leafData.rotation = LeafRotationList[i];
-                    leafData.sproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(- LeafScaleRandomValue, LeafScaleRandomValue);
+                    leafData.LeafIndex = i;
+                    leafData.TotalLeafCount = LeafCount;
+                    if (leafGrowRelation == LeafGrowRelation.Same) leafData.SproutPosition = LeafPositionList[i];
+                    else leafData.SproutPosition = SproutPositionList[i];
+                    leafData.FinalPosition = LeafPositionList[i];
+                    leafData.Rotation = LeafRotationList[i];
+                    leafData.SproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(- LeafScaleRandomValue, LeafScaleRandomValue);
                     if (LeafColorRandom)
                     {
                         leafData.leafColor = LeafColors[i];
@@ -339,7 +339,7 @@ public class Plant : MonoBehaviour
                         leafData.AssignMaterialColor(LeafColor);
                     }
 
-                    UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.sproutPosition, leafData.rotation, 0f);
+                    UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.SproutPosition, leafData.Rotation, 0f);
 
                     LeavesList.Add(leaf);
                 }
@@ -378,13 +378,13 @@ public class Plant : MonoBehaviour
                     LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
                     Transform leafTransform = leaf.transform;
                     leafData.parent = Leaves;
-                    leafData.leafIndex = i;
-                    leafData.totalLeafCount = LeafCount;
-                    if (leafGrowRelation == LeafGrowRelation.Same) leafData.sproutPosition = LeafPositionList[i];
-                    else leafData.sproutPosition = SproutPositionList[i];
-                    leafData.finalPosition = LeafPositionList[i];
-                    leafData.rotation = LeafRotationList[i];
-                    leafData.sproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(-LeafScaleRandomValue, LeafScaleRandomValue);
+                    leafData.LeafIndex = i;
+                    leafData.TotalLeafCount = LeafCount;
+                    if (leafGrowRelation == LeafGrowRelation.Same) leafData.SproutPosition = LeafPositionList[i];
+                    else leafData.SproutPosition = SproutPositionList[i];
+                    leafData.FinalPosition = LeafPositionList[i];
+                    leafData.Rotation = LeafRotationList[i];
+                    leafData.SproutScale = SproutLeafScale + SproutLeafScale * UnityEngine.Random.Range(-LeafScaleRandomValue, LeafScaleRandomValue);
                     if (LeafColorRandom)
                     {
                         leafData.leafColor = LeafColors[i];
@@ -396,7 +396,7 @@ public class Plant : MonoBehaviour
                         leafData.AssignMaterialColor(LeafColor);
                     }
 
-                    UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.sproutPosition, leafData.rotation, 0f);
+                    UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.SproutPosition, leafData.Rotation, 0f);
 
                     LeavesList.Add(leaf);
                 }
@@ -512,7 +512,6 @@ public class Plant : MonoBehaviour
         {
             counts[i] = UnityEngine.Random.Range(range.x, range.y);
         }
-
         return counts;
     }
 
@@ -621,8 +620,8 @@ public class Plant : MonoBehaviour
         FlowerLocalData flowerData  = flowerObject.AddComponent<FlowerLocalData>();
         flowerObject.AddComponent<Animator>().runtimeAnimatorController = NormalizedTimeAnimationController;
 
-        flowerData.petalLayerCount  = PetalLayerCount;
-        flowerData.petalCounts      = PetalCounts;
+        flowerData.PetalLayerCount  = PetalLayerCount;
+        flowerData.PetalCounts      = PetalCounts;
         flowerData.parent           = parent;
 
         for (int i = 0; i < PetalLayerCount; ++i)
@@ -655,7 +654,7 @@ public class Plant : MonoBehaviour
                 //TODO 머테리얼 입힐 조금 더 똑똑한 방법을 생각해야할듯
                 petal.transform.Find("Plane").GetComponent<SkinnedMeshRenderer>().material.color = PetalColor;
 
-                flowerData.totalPetalCount++;
+                flowerData.TotalPetalCount++;
                 PetalsList.Add(petal);
 }
         }
@@ -736,7 +735,7 @@ public class Plant : MonoBehaviour
             {
                 LeafLocalData leafData = leaf.GetComponent<LeafLocalData>();
                 float currentScale = SproutLeafScale * currentLeafProgress;
-                UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.sproutPosition * progress, leafData.rotation, currentScale);
+                UpdateTransformOnSpline(leaf, CurrentMainSpline, leafData.SproutPosition * progress, leafData.Rotation, currentScale);
             }
         }
     }
@@ -788,17 +787,17 @@ public class Plant : MonoBehaviour
             float positionTime = 0f;
             if (leafGrowRelation == LeafGrowRelation.Same)
             {
-                positionTime = leafData.finalPosition;
+                positionTime = leafData.FinalPosition;
             }
             else
             {
-                positionTime = progress * (leafData.finalPosition - leafData.sproutPosition) + leafData.sproutPosition;
+                positionTime = progress * (leafData.FinalPosition - leafData.SproutPosition) + leafData.SproutPosition;
             }
             UpdateTransformOnSpline(
                 leaf, CurrentMainSpline,
                 positionTime,
-                leafData.rotation, 
-                progress * (1f - leafData.sproutScale) + leafData.sproutScale);
+                leafData.Rotation, 
+                progress * (1f - leafData.SproutScale) + leafData.SproutScale);
         }
     }
     public void GrowB(float progress)

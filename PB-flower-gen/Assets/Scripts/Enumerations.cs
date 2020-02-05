@@ -46,3 +46,15 @@ public enum LeafGrowRelation
     Same,
     Differ
 }
+public enum VectorAxis
+{
+    x,
+    y,
+    z
+}
+public enum CapType
+{
+    round,
+    sharp,
+    flat
+}

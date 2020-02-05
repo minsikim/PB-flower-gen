@@ -22,12 +22,38 @@ public class LeafLocalData : MonoBehaviour
 
     public Color leafColor;
 
-    public GameObject parent;
+    #endregion
+    public LeafLocalData() { }
+    public LeafLocalData(LeafLocalData data)
+    {
+        StemIndex       = data.StemIndex;
+        LeafIndex       = data.LeafIndex;
+        TotalLeafCount  = data.TotalLeafCount;
+        isSprout        = data.isSprout;
+        SproutPosition  = data.SproutPosition;
+        FinalPosition   = data.FinalPosition;
+        Rotation        = data.Rotation;
+        SproutScale     = data.SproutScale;
+        FinalScale      = data.FinalScale;
+        leafColor       = data.leafColor;
+    }
+    public LeafLocalData AssignValues(LeafLocalData data)
+    {
+        StemIndex = data.StemIndex;
+        LeafIndex = data.LeafIndex;
+        TotalLeafCount = data.TotalLeafCount;
+        isSprout = data.isSprout;
+        SproutPosition = data.SproutPosition;
+        FinalPosition = data.FinalPosition;
+        Rotation = data.Rotation;
+        SproutScale = data.SproutScale;
+        FinalScale = data.FinalScale;
+        leafColor = data.leafColor;
 
+        return this;
+    }
     public void AssignMaterialColor(Color color)
     {
         transform.GetChild(0).GetComponent<MeshRenderer>().material.color = color;
     }
-
-    #endregion
 }

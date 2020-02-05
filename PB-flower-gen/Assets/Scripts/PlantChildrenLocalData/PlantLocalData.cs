@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using SplineMesh;
 
-public class PlantLocalData : MonoBehaviour
+public class PlantLocalData
 {
     #region Properties
 
@@ -31,17 +32,18 @@ public class PlantLocalData : MonoBehaviour
     #endregion
 
     #region Children Information
-    StemLocalData MainStem;
-    FlowerLocalData Flower;
-    List<PetalLocalData> Petals;
-    List<LeafLocalData> Leaves;
+    public StemLocalData MainStem;
+    public FlowerLocalData Flower;
+    public List<PetalLocalData> Petals;
+    public List<LeafLocalData> Leaves;
     #endregion
 
     #endregion
 
     #region Constructor
 
-    PlantLocalData(PlantFormData data)
+    public PlantLocalData() { }
+    public PlantLocalData(PlantFormData data)
     {
         InitialTime     = DateTime.Now;
 
@@ -76,6 +78,7 @@ public class PlantLocalData : MonoBehaviour
         Petals      = DistributePetalLocalData(Flower, data.PetalData);
         Leaves      = DistributeLeafLocalData(data.leafGrowRelation, data.SproutLeafData, data.GrownLeafData, data.LeafColorData);
 
+        Debug.Log("PlantLocalData Constructed");
     }
 
     #endregion
@@ -87,11 +90,12 @@ public class PlantLocalData : MonoBehaviour
     {
         StemLocalData data = new StemLocalData();
 
-        data.isBranch       = isBranch;
-        
-        data.SproutNodes    = DistributePath(sproutRandomPath);
-        data.Nodes          = DistributePath(stemRandomPath);
-        data.Color          = !colorData.isRandom ? colorData.Color : Util.GetColorFromRange(colorData.ColorRange1, colorData.ColorRange2);
+        data.isBranch        = isBranch;
+        data.Nodes           = DistributePath(stemRandomPath);
+        data.SproutNodes     = Util.MatchNodeCount(DistributePath(sproutRandomPath), data.Nodes);
+        data.SproutThickness = new Vector2(sproutRandomPath.pathMeshProperties.Thickness.min, sproutRandomPath.pathMeshProperties.Thickness.max);
+        data.StemThickness   = new Vector2(stemRandomPath.pathMeshProperties.Thickness.min, stemRandomPath.pathMeshProperties.Thickness.max);
+        data.Color           = !colorData.isRandom ? colorData.Color : Util.GetColorFromRange(colorData.ColorRange1, colorData.ColorRange2);
 
         return data;
     }
@@ -121,10 +125,12 @@ public class PlantLocalData : MonoBehaviour
         Vector2Int petalCountRange = petalData.PetalCountRange;
 
         int tempPetalLayerCount = UnityEngine.Random.Range(petalLayerCountRange.x, petalLayerCountRange.y + 1);
-        data.TotalPetalCount = tempPetalLayerCount;
+        data.PetalLayerCount = tempPetalLayerCount;
         data.PetalCounts = Util.DistributeRandomIntArray(tempPetalLayerCount, petalCountRange);
+        data.TotalPetalCount = Util.SumArray(data.PetalCounts);
         data.PetalFallPercentage = petalData.FallPercentage;
         data.PetalColor = !colorData.isRandom ? colorData.Color : Util.GetColorFromRange(colorData.ColorRange1, colorData.ColorRange2);
+        
 
         return data;
     }
@@ -156,6 +162,7 @@ public class PlantLocalData : MonoBehaviour
                 petalLocalData.PetalIndex = j;
                 petalLocalData.StartTime = petalLayerClosedTime + RandomValue;
                 petalLocalData.EndTime = petalLayerOpenTime + RandomValue;
+                petalLocalData.Color = flower.PetalColor;
 
                 dataList.Add(petalLocalData);
             }
@@ -181,6 +188,7 @@ public class PlantLocalData : MonoBehaviour
             data.LeafIndex = i;
             data.TotalLeafCount = TotalLeafCount;
 
+            //TODO use DistributeLeafRotations
             data.Rotation = Util.RandomRange(180f);
 
             data.FinalPosition = DistributeLeafPosition(TotalLeafCount, i, GrownLeafData);
@@ -221,6 +229,19 @@ public class PlantLocalData : MonoBehaviour
             return positionRange.x + (interval * i) + (interval * random);
         }
 
+    }
+    //TODO Make This to distribute 1 and put it in DistributeLeafLocalData
+    private List<float> DistributeLeafRotations(int leafCount)
+    {
+        List<float> rotations = new List<float>();
+
+        for (int i = 0; i < leafCount; i++)
+        {
+            int section = i % 3;
+            rotations.Add(UnityEngine.Random.Range(section * 120, (section + 1) * 120));
+        }
+
+        return rotations;
     }
 
     #endregion

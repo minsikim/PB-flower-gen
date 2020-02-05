@@ -11,27 +11,42 @@ public class PetalLocalData : MonoBehaviour
 
     public float Rotation;
 
-    public Color PetalColor;
+    public Color Color;
 
     public float StartTime;
     public float EndTime;
-
-    //delete after LocalData refactoring
-    public float FallTime;
+    //Delete after Local Data Refactoring
+    public float FallTime = 5f;
 
     public bool isOnFlower = true;
     public bool waitForDisable = false;
 
     #endregion
-
-    //DELETE
-    void OnBecameInvisible()
+    public PetalLocalData() { }
+    public PetalLocalData(PetalLocalData data)
     {
-        waitForDisable = true;
-        Debug.Log(name + " is disabled." + isActiveAndEnabled);
+        PetalLayer      = data.PetalLayer;
+        PetalIndex      = data.PetalIndex;
+        Rotation        = data.Rotation;
+        Color           = data.Color;
+        StartTime       = data.StartTime;
+        EndTime         = data.EndTime;
+        FallTime        = data.FallTime;
+        isOnFlower      = data.isOnFlower;
+        waitForDisable  = data.waitForDisable;
     }
-    void OnBecameVisible()
+    public PetalLocalData AssignValues(PetalLocalData data)
     {
-        
+        PetalLayer = data.PetalLayer;
+        PetalIndex = data.PetalIndex;
+        Rotation = data.Rotation;
+        Color = data.Color;
+        StartTime = data.StartTime;
+        EndTime = data.EndTime;
+        FallTime = data.FallTime;
+        isOnFlower = data.isOnFlower;
+        waitForDisable = data.waitForDisable;
+
+        return this;
     }
 }

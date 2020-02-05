@@ -4,13 +4,35 @@ using UnityEngine;
 
 public class FlowerLocalData : MonoBehaviour
 {
-    #region Private Variables
+    #region Properties
 
-    public int flowerIndex = 0;
-    public int totalPetalCount;
-    public int petalLayerCount;
-    public int[] petalCounts;
-    public GameObject parent; // Parent Must be Stem.
+    public int FlowerIndex = 0;
+    public int TotalPetalCount;
+    public int PetalLayerCount;
+    public float PetalFallPercentage = 0.2f;
+    public Color PetalColor = Color.yellow;
+    public int[] PetalCounts;
 
     #endregion
+    public FlowerLocalData() { }
+    public FlowerLocalData(FlowerLocalData data)
+    {
+        FlowerIndex         = data.FlowerIndex;
+        TotalPetalCount     = data.TotalPetalCount;
+        PetalLayerCount     = data.PetalLayerCount;
+        PetalFallPercentage = data.PetalFallPercentage;
+        PetalColor          = data.PetalColor;
+        PetalCounts         = data.PetalCounts;
+    }
+    public FlowerLocalData AssignValues(FlowerLocalData data)
+    {
+        FlowerIndex = data.FlowerIndex;
+        TotalPetalCount = data.TotalPetalCount;
+        PetalLayerCount = data.PetalLayerCount;
+        PetalFallPercentage = data.PetalFallPercentage;
+        PetalColor = data.PetalColor;
+        PetalCounts = data.PetalCounts;
+
+        return this;
+    }
 }

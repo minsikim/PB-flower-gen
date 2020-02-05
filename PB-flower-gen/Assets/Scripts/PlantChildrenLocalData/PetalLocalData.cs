@@ -4,28 +4,49 @@ using UnityEngine;
 
 public class PetalLocalData : MonoBehaviour
 {
-    #region Public Variables
+    #region Properties
 
-    public float Rotation;
     public int PetalLayer;
     public int PetalIndex;
+
+    public float Rotation;
+
+    public Color Color;
+
     public float StartTime;
     public float EndTime;
-    public float FallTime;
+    //Delete after Local Data Refactoring
+    public float FallTime = 5f;
+
     public bool isOnFlower = true;
     public bool waitForDisable = false;
-    public GameObject parent;
 
     #endregion
-
-
-    void OnBecameInvisible()
+    public PetalLocalData() { }
+    public PetalLocalData(PetalLocalData data)
     {
-        waitForDisable = true;
-        Debug.Log(name + " is disabled." + isActiveAndEnabled);
+        PetalLayer      = data.PetalLayer;
+        PetalIndex      = data.PetalIndex;
+        Rotation        = data.Rotation;
+        Color           = data.Color;
+        StartTime       = data.StartTime;
+        EndTime         = data.EndTime;
+        FallTime        = data.FallTime;
+        isOnFlower      = data.isOnFlower;
+        waitForDisable  = data.waitForDisable;
     }
-    void OnBecameVisible()
+    public PetalLocalData AssignValues(PetalLocalData data)
     {
-        
+        PetalLayer = data.PetalLayer;
+        PetalIndex = data.PetalIndex;
+        Rotation = data.Rotation;
+        Color = data.Color;
+        StartTime = data.StartTime;
+        EndTime = data.EndTime;
+        FallTime = data.FallTime;
+        isOnFlower = data.isOnFlower;
+        waitForDisable = data.waitForDisable;
+
+        return this;
     }
 }

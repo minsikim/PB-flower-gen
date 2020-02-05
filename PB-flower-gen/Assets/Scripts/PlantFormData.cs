@@ -23,16 +23,11 @@ public class PlantFormData : ScriptableObject
     public GameObject PistilPrefab;
     [DrawIf("flowerFormType", FlowerFormType.BudsArePetals, ComparisonType.NotEqual)]
     public GameObject BudPrefab;
+    public GameObject LeafPrefab;
     [DrawIf("plantFormType", PlantFormType.C, ComparisonType.Equals)]
     public int FlowerToPlantCount = 0;
 
-    public Vector2Int PetalCountRange;
-    public Vector2Int PetalLayerCountRange;
-    public float PetalMinClosedTime;
-    public float PetalMaxClosedTime;
-    public float PetalMinOpenTime;
-    public float PetalMaxOpenTime;
-    public float PetalRandomTimeValue;
+    public PetalData PetalData;
 
     [Header("Path Data")]
     [Space(20)]
@@ -48,33 +43,22 @@ public class PlantFormData : ScriptableObject
     [Header("Materials")]
     [Space(20)]
     [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
-    public Color TreeColor = Color.green;
+    public ColorData TreeColorData;
     [DrawIf("plantFormType", PlantFormType.E, ComparisonType.Equals)]
-    public Color BranchColor = Color.green;
-    public Color StemColor = Color.green;
+    public ColorData BranchColorData;
+    public ColorData StemColorData;
     [DrawIf("plantFormType", PlantFormType.C, ComparisonType.GreaterOrEqual)]
-    public Color StemBranchColor = Color.green;
-    public Color PistilColor = Color.yellow;
-    public bool PetalColorRandom = false;
-    [DrawIf("PetalColorRandom", true, ComparisonType.NotEqual)]
-    public Color PetalColor = Color.red;
-    [DrawIf("PetalColorRandom", true, ComparisonType.Equals)]
-    public Color PetalColorRange1;
-    [DrawIf("PetalColorRandom", true, ComparisonType.Equals)]
-    public Color PetalColorRange2;
-    public bool LeafColorRandom = false;
-    [DrawIf("LeafColorRandom", true, ComparisonType.NotEqual)]
-    public Color LeafColor = Color.red;
-    [DrawIf("LeafColorRandom", true, ComparisonType.Equals)]
-    public Color LeafColorRange1;
-    [DrawIf("LeafColorRandom", true, ComparisonType.Equals)]
-    public Color LeafColorRange2;
+    public ColorData StemBranchColorData;
+    public ColorData PistilColorData;
+    public ColorData PetalColorData;
+    public ColorData LeafColorData;
 
 
     [Header("Animation Duration")]
     [Space(20)]
     [LabelOverride("Sprouting")]
     public float SproutAnimationDuration;
+    public AnimationCurve SproutAnimationCurve;
     [LabelOverride("Growing")]
     public float GrowAniamtionDuration;
     [LabelOverride("Blooming")]
@@ -87,32 +71,37 @@ public class PlantFormData : ScriptableObject
 
     [Header("Leaf Position Data")]
     [Space(20)]
-    public GameObject LeafPrefab;
-    public Vector2Int LeafCountRange;
-    public float LeafScaleRandomValue = 0f;
-    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.NotEqual)]
-    [MinMax(0, 1, ShowEditRange = true)]
-    public Vector2 LeafPositionRange = new Vector2(0.2f, 0.9f);
-    [DrawIf("plantFormType", PlantFormType.A, ComparisonType.Equals)]
-    public float LeafFixedPosition = 0.1f;
-    [MinMax(-1, 1, ShowEditRange = true)]
-    public float LeafPositionRandomPercentage = 0.25f;
 
-    [Header("Sprout Leaf Position Data")]
     public LeafGrowRelation leafGrowRelation;
-    public Vector2Int SproutLeafCountRange;
-    [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
-    [MinMax(0, 1, ShowEditRange = true)]
-    public Vector2 SproutLeafPositionRange = new Vector2(0.2f, 0.9f);
-    [DrawIf("leafGrowRelation", LeafGrowRelation.Same, ComparisonType.NotEqual)]
-    [MinMax(-1, 1, ShowEditRange = true)]
-    public float SproutLeafPositionRandomPercentage = 0.25f;
-    public float SproutLeafScale = 0.3f;
     public GameObject SproutParticles;
+
+    public LeafData SproutLeafData;
+    public LeafData GrownLeafData;
+
+}
+[System.Serializable]
+public struct ColorData
+{
+    public bool isRandom;
+    public Color Color;
+    public Color ColorRange1;
+    public Color ColorRange2;
 }
 
+[System.Serializable]
+public struct LeafData
+{
+    public Vector2Int CountRange;
+    public bool isFixed;
 
+    public float FixedPosition;
 
+    public Vector2 PositionRange;
+    public float PositionRandomPercentage;
+
+    public float BaseScale;
+    public float ScaleRandomValue;
+}
 [System.Serializable]
 public struct MinMaxRange
 {
@@ -152,15 +141,15 @@ public struct Node
         this.handleOut = handleOut;
     }
 }
-public enum VectorAxis
+[System.Serializable]
+public struct PetalData
 {
-    x,
-    y,
-    z
-}
-public enum CapType
-{
-    round,
-    sharp,
-    flat
+    public Vector2Int PetalCountRange;
+    public Vector2Int PetalLayerCountRange;
+    public float MinClosedTime;
+    public float MaxClosedTime;
+    public float MinOpenTime;
+    public float MaxOpenTime;
+    public float RandomTimeValue;
+    public float FallPercentage;
 }

@@ -10,7 +10,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{1ECFF656-03ED-C640-F8E0-225DA800A7EE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -81,11 +82,11 @@
     <Compile Include="Assets\Scripts\Inputs\InputManager.cs" />
     <Compile Include="Assets\Scripts\Inputs\ScreenDrag.cs" />
     <Compile Include="Assets\Scripts\Plant.cs" />
+    <Compile Include="Assets\Scripts\PlantChildrenLocalData\SteamLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\FlowerLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\LeafLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\PetalLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantChildrenLocalData\PlantLocalData.cs" />
-    <Compile Include="Assets\Scripts\PlantChildrenLocalData\StemLocalData.cs" />
     <Compile Include="Assets\Scripts\PlantFormData.cs" />
     <Compile Include="Assets\Scripts\unused\FallTest.cs" />
     <Compile Include="Assets\Scripts\unused\FlowerPrefab.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Assets\Scripts\unused\SpawnFlower.cs" />
     <Compile Include="Assets\Scripts\unused\StemGenerator.cs" />
     <Compile Include="Assets\Scripts\unused\UIController.cs" />
+    <Compile Include="Assets\Scripts\Utility\Util.cs" />
     <Compile Include="Assets\Scripts\Utility\DrawIfAttribute.cs" />
     <Compile Include="Assets\Scripts\Utility\Extensions.cs" />
     <Compile Include="Assets\Scripts\Utility\FieldNotFoundException.cs" />

@@ -20,13 +20,14 @@ public class PlantLocalData : MonoBehaviour
     public GameObject PistilPrefab;
     public GameObject BudPrefab;
     public GameObject LeafPrefab;
+    public GameObject SproutParticles;
     #endregion
 
     #region Animation Information
     public FlowerAnimationState CurrentAnimationState;
     public DateTime LastStateChangedTime;
-    public TimeSpan AnimationCycleTime;
     public List<float> AnimationDurationList;
+    public float AnimationCycleTime;
     #endregion
 
     #region Children Information
@@ -42,24 +43,39 @@ public class PlantLocalData : MonoBehaviour
 
     PlantLocalData(PlantFormData data)
     {
-        InitialTime = DateTime.Now;
+        InitialTime     = DateTime.Now;
 
-        PlantName = data.plantName;
-        Description = data.description;
+        PlantName       = data.plantName;
+        Description     = data.description;
 
-        Rotation = UnityEngine.Random.Range(-150f, -30f);
+        Rotation        = Util.RandomRange(-150f, -30f);
 
-        PlantFormType = data.plantFormType;
-        FlowerFormType = data.flowerFormType;
+        PlantFormType   = data.plantFormType;
+        FlowerFormType  = data.flowerFormType;
 
-        MainStem = DistributeMainStemLocalData(data.SproutPathData, data.StemPathData, data.StemColor);
-        Flower = DistributeFlowerLocalData(data.PetalLayerCountRange, data.PetalCountRange);
-        Petals = new List<PetalLocalData>();
-        Leaves = new List<LeafLocalData>();
-        for (int i = 0; i < Flower.TotalPetalCount; i++)
+        PetalPrefab     = data.PetalPrefab;
+        PistilPrefab    = data.PistilPrefab;
+        BudPrefab       = data.BudPrefab;
+        LeafPrefab      = data.LeafPrefab;
+        SproutParticles = data.SproutParticles;
+
+        CurrentAnimationState   = FlowerAnimationState.Sprout;
+        LastStateChangedTime    = InitialTime;
+        AnimationDurationList   = new List<float>()
         {
+            data.SproutAnimationDuration,
+            data.GrowAniamtionDuration,
+            data.BloomAnimationDuration,
+            data.FallAnimationDuration,
+            data.RebloomAnimationDuration
+        };
+        AnimationCycleTime = data.BloomAnimationDuration + data.FallAnimationDuration + data.RebloomAnimationDuration;
 
-        }
+        MainStem    = DistributeMainStemLocalData(data.SproutPathData, data.StemPathData, data.StemColorData);
+        Flower      = DistributeFlowerLocalData(data.PetalData, data.PetalColorData);
+        Petals      = DistributePetalLocalData(Flower, data.PetalData);
+        Leaves      = DistributeLeafLocalData(data.leafGrowRelation, data.SproutLeafData, data.GrownLeafData, data.LeafColorData);
+
     }
 
     #endregion
@@ -67,7 +83,7 @@ public class PlantLocalData : MonoBehaviour
     #region Distribution Functions
 
     #region Stems
-    private StemLocalData DistributeMainStemLocalData(RandomPath sproutRandomPath, RandomPath stemRandomPath, Color color, bool isBranch = false)
+    private StemLocalData DistributeMainStemLocalData(RandomPath sproutRandomPath, RandomPath stemRandomPath, ColorData colorData, bool isBranch = false)
     {
         StemLocalData data = new StemLocalData();
 
@@ -75,7 +91,7 @@ public class PlantLocalData : MonoBehaviour
         
         data.SproutNodes    = DistributePath(sproutRandomPath);
         data.Nodes          = DistributePath(stemRandomPath);
-        data.Color          = color;
+        data.Color          = !colorData.isRandom ? colorData.Color : Util.GetColorFromRange(colorData.ColorRange1, colorData.ColorRange2);
 
         return data;
     }
@@ -86,7 +102,7 @@ public class PlantLocalData : MonoBehaviour
 
         foreach (RandomNode rn in RandomizablePathData.randomNode)
         {
-            float random = UnityEngine.Random.Range(rn.randomRange.min, rn.randomRange.max);
+            float random = Util.RandomRange(rn.randomRange.min, rn.randomRange.max);
             distributedNodeArray[rn.randomNodeIndex].position[(int)rn.randomAxis] += random;
             distributedNodeArray[rn.randomNodeIndex].handleOut[(int)rn.randomAxis] += random;
         }
@@ -97,36 +113,114 @@ public class PlantLocalData : MonoBehaviour
 
     #region Flowers
 
-    private FlowerLocalData DistributeFlowerLocalData(Vector2Int petalLayerCountRange, Vector2Int petalCountRange)
+    private FlowerLocalData DistributeFlowerLocalData(PetalData petalData, ColorData colorData)
     {
         FlowerLocalData data = new FlowerLocalData();
 
+        Vector2Int petalLayerCountRange = petalData.PetalLayerCountRange;
+        Vector2Int petalCountRange = petalData.PetalCountRange;
+
         int tempPetalLayerCount = UnityEngine.Random.Range(petalLayerCountRange.x, petalLayerCountRange.y + 1);
         data.TotalPetalCount = tempPetalLayerCount;
-        data.PetalCounts = DistributeRandomIntArray(tempPetalLayerCount, petalCountRange);
+        data.PetalCounts = Util.DistributeRandomIntArray(tempPetalLayerCount, petalCountRange);
+        data.PetalFallPercentage = petalData.FallPercentage;
+        data.PetalColor = !colorData.isRandom ? colorData.Color : Util.GetColorFromRange(colorData.ColorRange1, colorData.ColorRange2);
 
         return data;
     }
 
-    private List<PetalLocalData> DistributePetalLocalData(FlowerLocalData flower)
+    private List<PetalLocalData> DistributePetalLocalData(FlowerLocalData flower, PetalData petalData)
     {
+        List<PetalLocalData> dataList = new List<PetalLocalData>();
 
-        return new List<PetalLocalData>();
+        int PetalLayerCount = flower.PetalLayerCount;
+        int[] PetalCounts = flower.PetalCounts;
+        float PetalMinClosedTime = petalData.MinClosedTime;
+        float PetalMaxClosedTime = petalData.MaxClosedTime;
+        float PetalMinOpenTime = petalData.MinOpenTime;
+        float PetalMaxOpenTime = petalData.MaxOpenTime;
+        float PetalRandomTimeValue = petalData.RandomTimeValue;
+
+        for (int i = 0; i < flower.PetalLayerCount; i++)
+        {
+            float petalLayerClosedTime = (PetalMaxClosedTime - PetalMinClosedTime) / PetalLayerCount * i + PetalMinClosedTime;
+            float petalLayerOpenTime = (PetalMaxOpenTime - PetalMinOpenTime) / PetalLayerCount * i + PetalMinOpenTime;
+            for (int j = 0; j < flower.PetalCounts[i]; j++)
+            {
+                PetalLocalData petalLocalData = new PetalLocalData();
+
+                float RandomValue = Util.RandomRange(PetalRandomTimeValue);
+
+                petalLocalData.Rotation = (360 / PetalCounts[i] * j) + i * 30;
+                petalLocalData.PetalLayer = i;
+                petalLocalData.PetalIndex = j;
+                petalLocalData.StartTime = petalLayerClosedTime + RandomValue;
+                petalLocalData.EndTime = petalLayerOpenTime + RandomValue;
+
+                dataList.Add(petalLocalData);
+            }
+        }
+        return dataList;
     }
 
     #endregion
 
-    #region Util
+    #region Leaves
 
-    private int[] DistributeRandomIntArray(int howMany, Vector2Int range)
+    private List<LeafLocalData> DistributeLeafLocalData(LeafGrowRelation leafGrowRelation, LeafData SproutLeafData, LeafData GrownLeafData, ColorData colorData)
     {
-        int[] counts = new int[2];
+        List<LeafLocalData> dataList = new List<LeafLocalData>();
 
-        for (int i = 0; i < howMany; i++)
+        int TotalLeafCount = Util.RandomRange(GrownLeafData.CountRange);
+        int TotalSproutLeafCount = Util.RandomRange(SproutLeafData.CountRange);
+
+        for (int i = 0; i < TotalLeafCount; i++)
         {
-            counts[i] = UnityEngine.Random.Range(range.x, range.y + 1);
+            LeafLocalData data = new LeafLocalData();
+
+            data.LeafIndex = i;
+            data.TotalLeafCount = TotalLeafCount;
+
+            data.Rotation = Util.RandomRange(180f);
+
+            data.FinalPosition = DistributeLeafPosition(TotalLeafCount, i, GrownLeafData);
+            data.SproutPosition = leafGrowRelation == LeafGrowRelation.Same ? data.FinalPosition : DistributeLeafPosition(TotalLeafCount, i, SproutLeafData);
+
+            data.FinalScale = GrownLeafData.BaseScale + Util.RandomRange(GrownLeafData.ScaleRandomValue);
+            data.SproutScale = SproutLeafData.BaseScale + Util.RandomRange(SproutLeafData.ScaleRandomValue);
+
+            data.leafColor = !colorData.isRandom ? colorData.Color : Util.GetColorFromRange(colorData.ColorRange1, colorData.ColorRange2);
+
+            data.isSprout = i < TotalSproutLeafCount ? true : false;
+
+            dataList.Add(data);
         }
-        return counts;
+        return dataList;
+    }
+
+    private float DistributeLeafPosition(int leafCount, int i, Vector2 positionRange, float positionRandomPercentage)
+    {
+        float range = positionRange.y - positionRange.x;
+        float interval = range / leafCount;
+
+        float random = Util.RandomRange(positionRandomPercentage);;
+
+        return positionRange.x + (interval * i) + (interval * random);
+    }
+    private float DistributeLeafPosition(int leafCount, int i, LeafData leafData)
+    {
+        if (leafData.isFixed) return leafData.FixedPosition;
+        else
+        {
+            Vector2 positionRange = leafData.PositionRange;
+            float positionRandomPercentage = leafData.PositionRandomPercentage;
+            float range = positionRange.y - positionRange.x;
+            float interval = range / leafCount;
+            float random = Util.RandomRange(positionRandomPercentage);
+
+            return positionRange.x + (interval * i) + (interval * random);
+        }
+
     }
 
     #endregion

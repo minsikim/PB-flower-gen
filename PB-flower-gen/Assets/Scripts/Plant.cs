@@ -21,13 +21,7 @@ public class Plant : MonoBehaviour
     //Flower Data
     //TODO plantFormData를 다 distribute 한다음에 plantLocalData에 다 모아서 저장하자
     private PlantLocalData _d;
-    private string plantName;
-    private string description;
 
-    private float rotation;
-
-    private PlantFormType plantFormType;
-    private FlowerFormType flowerFormType;
 
     private GameObject PetalPrefab;
     private GameObject PistilPrefab;
@@ -44,44 +38,8 @@ public class Plant : MonoBehaviour
     private float PetalMaxOpenTime;
     private float PetalRandomTimeValue;
 
-    //Randomizable Path Data
-    private RandomPath SproutPathData;
-    private RandomPath StemPathData;
-    private RandomPath StemBranchPathData;
-    private RandomPath BranchPathData;
-    private RandomPath TreePathData;
-
-    //Distributed Path Data
-    private Node[] SproutPathNodes;
-    private Node[] StemPathNodes;
-    private Node[] StemBranchPathNodes;
-    private Node[] BranchPathNodes;
-    private Node[] TreePathNodes;
-
     //Constant Mesh Generation Options
-    private const float maxVertexDistance = 1f;
-
-    //Leaf Position Data
-    private Vector2Int LeafCountRange;
-    private Vector2 LeafPositionRange;
-    private float LeafPositionRandomPercentage;
-    private float LeafFixedPosition;
-    private float LeafScaleRandomValue;
-
-    private int LeafCount;
-
-    private LeafGrowRelation leafGrowRelation;
-    private Vector2Int SproutLeafCountRange;
-    private Vector2 SproutLeafPositionRange;
-    private float SproutLeafPositionRandomPercentage;
-    private float SproutLeafScale;
-
-    private int SproutLeafCount;
-
-    //Leaf Positions
-    private List<float> LeafPositionList;
-    private List<float> LeafRotationList;
-    private List<float> SproutPositionList;
+    private const float MAX_VERTEXT_DISTANCE = 1f;
 
     //List of Children by Type
     private List<GameObject> LeavesList;
@@ -99,50 +57,6 @@ public class Plant : MonoBehaviour
     private GameObject Flower;
     private GameObject Flowers;
 
-    private Spline TreeSpline;
-    private Spline CurrentMainSpline;
-
-    //Animation State
-    private FlowerAnimationState currentAnimationState = FlowerAnimationState.Sprout;
-    private DateTime LastStateChangedTime;
-
-    //Animation Durations
-    List<float> durationList;
-    private float durationCycle;
-
-    private float SproutAnimationDuration;
-    private float GrowAniamtionDuration;
-    private float BloomAnimationDuration;
-    private float FallAnimationDuration;
-    private float RebloomAnimationDuration;
-
-    //Animation Process Trackers
-    private float initAnimationPosition = 0f;
-    private float growAnimationPosition = 0f;
-    private float bloomAnimationPosition = 0f;
-    private float fallAnimationPosition = 0f;
-    private float rebloomAnimationPosition = 0f;
-
-    //Animator
-    private Animator animator;
-
-    //Colors
-    private Color TreeColor;
-    private Color BranchColor;
-    private Color StemColor;
-    private Color StemBranchColor;
-    private Color PistilColor;
-    private bool  PetalColorRandom;
-    private Color PetalColor;
-    private Color PetalColorRange1;
-    private Color PetalColorRange2;
-    private bool  LeafColorRandom;
-    private Color LeafColor;
-    private Color[] LeafColors;
-    private Color LeafColorRange1;
-    private Color LeafColorRange2;
-
-    private GameObject SproutParticles;
 
     #endregion
 
@@ -1083,7 +997,7 @@ public class Plant : MonoBehaviour
             throw new MissingComponentException("Mesh Related Component is Missing", e);
         }
 
-        int vertexRingCount = (int)Math.Round(spline.Length * (endTime - startTime) / maxVertexDistance);
+        int vertexRingCount = (int)Math.Round(spline.Length * (endTime - startTime) / MAX_VERTEXT_DISTANCE);
         if (vertexRingCount < 2) vertexRingCount = 2;
         float vertexInterval = (endTime - startTime) / vertexRingCount;
         float thicknessInterval = (maxThickness - minThickness) / vertexRingCount;

@@ -15,12 +15,12 @@ public class PetalLocalData : MonoBehaviour
 
     public float StartTime;
     public float EndTime;
+
+    //delete after LocalData refactoring
     public float FallTime;
 
     public bool isOnFlower = true;
     public bool waitForDisable = false;
-
-    public GameObject parent;
 
     #endregion
 

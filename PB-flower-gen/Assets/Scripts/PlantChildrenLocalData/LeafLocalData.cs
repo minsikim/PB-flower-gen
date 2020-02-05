@@ -7,9 +7,11 @@ public class LeafLocalData : MonoBehaviour
 
     #region Private Variables
 
-    public int StemIndex;
+    public int StemIndex = 0;
     public int LeafIndex;
     public int TotalLeafCount;
+
+    public bool isSprout;
 
     public float SproutPosition;
     public float FinalPosition;

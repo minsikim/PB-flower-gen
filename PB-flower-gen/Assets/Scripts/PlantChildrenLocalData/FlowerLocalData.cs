@@ -26,6 +26,10 @@ public class FlowerLocalData : MonoBehaviour
         }
     }
 
+    public float PetalFallPercentage = 0.2f;
+
+    public Color PetalColor = Color.yellow;
+
     public GameObject parent; // Parent Must be Stem.
 
     #endregion
